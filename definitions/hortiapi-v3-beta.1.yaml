@@ -1,0 +1,1438 @@
+openapi: '3.0.3'
+
+info:
+
+  title: HortiApi
+
+  version: 3.0.0-beta.1
+  #version: v2
+
+  description: |-
+    This is a the HortiApi definition based on the OpenAPI 3.1 specification.
+    You can find out more about HortiApi at [https://hortiapi.com](https://hortiapi.com).
+    In the third iteration of the HortiApi, we've switched to the design first approach!
+
+    Some useful links:
+    - [swagger.io](https://swagger.io)
+    - [The source API definition for the HortiApi](https://github.com/hortiapi/hortiapi/blob/master/schema/hortiapi-v1.yaml)
+  
+  termsOfService: https://hortiapi.com/terms-of-service
+  
+  contact:
+    name: Michael Lakerveld
+    email: apiteam@hortiapi.com
+    url: https://hortiapi.com/
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+externalDocs:
+  description: Find out more about HortiApi
+  url: https://hortiapi.com
+
+servers:
+  - url: http://localhost/horti-api/v3
+  - url: https://test.hortiapi.com/horti-api/v3
+  - url: https://testhortisupply.net/horti-api/v3
+
+
+paths:
+
+# companies
+
+  /companies:
+
+    get:
+      tags:
+        - Companies
+      operationId: HortiApiV3CompaniesGet
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: query
+          name: Kind
+          schema:
+            type: string
+        - in: query
+          name: Gln
+          schema:
+            type: string
+        - in: query
+          name: Name
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+  /companies/{companyId}:
+
+    get:
+      tags:
+        - Companies
+      operationId: HortiApiV3CompaniesGetById
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+# documents
+
+  /documents/{documentId}:
+
+    get:
+      tags:
+        - Documents
+      operationId: HortiApiV3DocumentsGetById
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema: 
+            type: string
+        - in: path
+          name: documentId
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+    delete:
+      tags:
+        - Documents
+      operationId: HortiApiV3DocumentsDelete
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: documentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+  /documents/{documentId}/download:
+
+    get:
+      tags:
+        - Documents
+      operationId: HortiApiV3DocumentsDownload
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: documentId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: authkey
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+                schema:
+                  format: byte
+                  type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+# me
+
+  /me:
+
+    get:
+      tags:
+        - Me
+      operationId: HortiApiV3MeGet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+# orders
+
+  /orders:
+
+    get:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersGet
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: query
+          name: Kind
+          schema:
+            type: string
+        - in: query
+          name: State
+          schema:
+            type: string
+        - in: query
+          name: DateFrom
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: DateTill
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersPost
+#      consumes:
+#        - application/json
+#        - text/json
+#        - application/*+json
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+            
+  /orders/{orderId}:
+
+    get:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersGetById
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: IncludeLines
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersDelete
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+  /orders/{orderId}/lines:
+
+    get:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersLinesGet
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderLine'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersLinesPost
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderLine'
+        # text/json
+        # application/*+json
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+  /orders/{orderId}/lines/{lineId}:
+
+    get:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersLinesGetById
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: lineId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - Orders
+      operationId: HortiApiV3OrdersLinesDelete
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: lineId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+  /supply:
+
+    post:
+      tags:
+        - Supply
+      operationId: HortiApiV3SupplyOutGetSupply
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: query
+          name: supplyOutId
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyOptions'
+        # text/json
+        # application/*+json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Supply'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+# users
+
+  /users:
+
+    get:
+      tags:
+        - Users
+      operationId: HortiApiV3UsersGet
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: query
+          name: Kind
+          schema:
+            type: string
+        - in: query
+          name: Gln
+          schema:
+            type: string
+        - in: query
+          name: Name
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{userId}:
+
+    get:
+      tags:
+        - Users
+      operationId: HortiApiV3UsersGetById
+      parameters:
+        - in: header
+          name: x-floriapp-company-id
+          schema:
+            type: string
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+
+components:
+  schemas:
+
+    Document:
+      required:
+        - createdAt
+        - kind
+      type: object
+      properties:
+        id:
+          type: string
+        owner:
+          type: string
+        kind:
+          type: string
+          description: This is a Resource of type [download/kind]
+          externalDocs:
+            url: https://hortiapi.com/resources/#document/kind          
+        title:
+          type: string
+        urlWithAuth:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          type: string
+      additionalProperties: false
+
+
+    FeaturePrescription:
+      enum:
+        - Empty
+        - Required
+        - Recommended
+        - Allowed
+      type: string
+
+    Amount:
+      required:
+        - value
+      type: object
+      properties:
+        value:
+          format: double
+          type: number
+        currency:
+          type: string
+      additionalProperties: false
+
+
+    Address:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/AddressType'
+        gln:
+          type: string
+        addressLines:
+          type: array
+          items:
+            type: string
+        postalCode:
+          type: string
+        place:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+      additionalProperties: false
+
+    AddressType:
+      enum:
+        - Unknown
+        - Default
+        - Physical
+        - Postal
+        - Delivery
+      type: string
+
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+        vbn:
+          type: string
+        vbnGroup:
+          type: string
+        name:
+          type: string
+        tradeName:
+          type: string
+        f1:
+          type: string
+        f2:
+          type: string
+        f3:
+          type: string
+        f4:
+          type: string
+        f5:
+          type: string
+        f6:
+          type: string
+        f7:
+          type: string
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
+        regulatoryFeatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegulatoryFeature'
+      additionalProperties: false
+
+    Classification:
+      type: object
+      properties:
+        system:
+          type: string
+        value:
+          type: string
+      additionalProperties: false
+
+    Company:
+      required:
+        - kind
+        - role
+      type: object
+      properties:
+        id:
+          type: string
+        role:
+          type: string
+          #$ref: '#/components/schemas/CompanyRole'
+        kind:
+          type: string
+          #$ref: '#/components/schemas/CompanyKind'
+        code:
+          type: string
+        name:
+          type: string
+        legalName:
+          type: string
+        email:
+          type: string
+        logo:
+          type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        ai2AccountNumber:
+          type: string
+        chamberOfCommerce:
+          type: string
+        chamberOfCommerceCountryCode:
+          type: string
+        vatNumber:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyUser'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyContact'
+        registrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyRegistration'
+      additionalProperties: false
+
+    CompanyContact:
+      required:
+        - kind
+      type: object
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+          #$ref: '#/definitions/FloriApp.WebApi.ContactKind'
+          #TODO
+        name:
+          type: string
+        function:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+      additionalProperties: false
+
+    CompanyRegistration:
+      required:
+        - isDefault
+      type: object
+      properties:
+        isDefault:
+          type: boolean
+        tradeName:
+          type: string
+        gln:
+          type: string
+          #TODO
+        ai2:
+          type: string
+        floraHolland:
+          type: string
+        plantion:
+          type: string
+        remark:
+          type: string
+      additionalProperties: false
+
+    CompanyUser:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      additionalProperties: false
+
+    Delivery:
+      type: object
+      additionalProperties: false
+
+    DocumentReference:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      additionalProperties: false
+
+    Feature:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+      additionalProperties: false
+
+    Me:
+      type: object
+      properties:
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeCompany'
+        user:
+          $ref: '#/components/schemas/User'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    MeCompany:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      additionalProperties: false
+
+    Note:
+      type: object
+      properties:
+        code:
+          type: string
+        value:
+          type: string
+      additionalProperties: false
+
+    Order:
+      required:
+        - invoiceDate
+        - orderDate
+        - shipDate
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          description: This is a Resource of type [order/state]
+          type: string
+          externalDocs:
+            url: https://hortiapi.com/resources/#order/state
+        kind:
+          description: This is a Resource of type [order/kind]
+          type: string
+          externalDocs:
+            url: https://hortiapi.com/resources/#order/kind
+        action:
+          description: This is a Resource of type [order/action]
+          type: string
+          externalDocs:
+            url: https://hortiapi.com/resources/#order/action
+        supplier:
+          $ref: '#/components/schemas/Party'
+        customer:
+          $ref: '#/components/schemas/Party'
+        orderDate:
+          format: date-time
+          type: string
+        shipDate:
+          format: date-time
+          type: string
+        invoiceDate:
+          format: date-time
+          type: string
+        description:
+          type: string
+        total:
+          $ref: '#/components/schemas/OrderTotals'
+        resources:
+          $ref: '#/components/schemas/Resources'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLine'
+      additionalProperties: false
+
+    OrderTotals:
+      required:
+        - lines
+        - pieces
+        - price
+      type: object
+      properties:
+        lines:
+          format: double
+          type: number
+        pieces:
+          format: double
+          type: number
+        price:
+          format: double
+          type: number
+      additionalProperties: false
+
+    OrderLine:
+      type: object
+      properties:
+        id:
+          type: string
+        order:
+          type: string
+        state:
+          description: This is a Resource of type [order-line/state]
+          type: string
+          externalDocs:
+            url: https://hortiapi.com/resources/#order-line/state
+        kind:
+          description: This is a Resource of type [order-line/kind]
+          type: string
+          externalDocs:
+            url: https://hortiapi.com/resources/#order-line/kind
+        action:
+          description: This is a Resource of type [order-line/action]
+          type: string
+          externalDocs:
+            url: https://hortiapi.com/resources/#order-line/action
+        supplier:
+          $ref: '#/components/schemas/Party'
+        buyer:
+          $ref: '#/components/schemas/Party'
+        product:
+          $ref: '#/components/schemas/Product'
+        article:
+          $ref: '#/components/schemas/Article'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        packing:
+          $ref: '#/components/schemas/Packing'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhotoUrl'
+        delivery:
+          $ref: '#/components/schemas/Delivery'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Package:
+      required:
+        - quantity
+      type: object
+      properties:
+        code:
+          type: string
+        quantity:
+          format: double
+          type: number
+      additionalProperties: false
+
+    Packing:
+      type: object
+      properties:
+        bunch:
+          $ref: '#/components/schemas/Package'
+        bundle:
+          $ref: '#/components/schemas/Package'
+        box:
+          $ref: '#/components/schemas/Package'
+        layer:
+          $ref: '#/components/schemas/Package'
+        carrier:
+          $ref: '#/components/schemas/Package'
+      additionalProperties: false
+
+    Party:
+      type: object
+      properties:
+        id:
+          type: string
+        gln:
+          type: string
+        name:
+          type: string
+      additionalProperties: false
+
+    PhotoUrl:
+      type: object
+      properties:
+        url:
+          type: string
+      additionalProperties: false
+
+    Price:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PriceType'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        minimum:
+          $ref: '#/components/schemas/Quantity'
+        maximum:
+          $ref: '#/components/schemas/Quantity'
+      additionalProperties: false
+
+    PriceType:
+      enum:
+        - Invoice
+        - Provisional
+        - Consumer
+        - ClockReference
+        - ClockMinimal
+      type: string
+
+    Product:
+      required:
+        - type
+      type: object
+      properties:
+        industryId:
+          type: string
+        customerId:
+          type: string
+        supplierId:
+          type: string
+        manufacturerId:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductType'
+        description:
+          $ref: '#/components/schemas/Text'
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
+        classifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Classification'
+        manufacturer:
+          $ref: '#/components/schemas/Party'
+      additionalProperties: false
+
+    ProductType:
+      enum:
+        - Product
+        - LogisticMeans
+        - Service
+        - Hardware
+      type: string
+
+    Quantity:
+      required:
+        - unit
+        - value
+      type: object
+      properties:
+        unit:
+          $ref: '#/components/schemas/UnitCode'
+        value:
+          format: double
+          type: number
+      additionalProperties: false
+    
+    RegulatoryFeature:
+      required:
+        - p
+      type: object
+      properties:
+        f:
+          type: string
+        p:
+          $ref: '#/components/schemas/FeaturePrescription'
+      additionalProperties: false
+
+    Resources:
+      description: Array with resource identifiers
+      type: array
+      items:
+        type: string
+        description: Resource identifier
+        pattern: '^([a-zA-Z0-9\-]+/[a-zA-Z0-9\-]+):([a-zA-Z0-9\-@.?=]+(,[a-zA-Z0-9\-@.?=]+)*)$'
+
+    StreamRequestType:
+      enum:
+        - All
+        - Updates
+      type: string
+
+    Supply:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          description: This is a Resource of type [supply/state]
+          type: string
+          externalDocs:
+            url: https://hortiapi.com/resources/#supply/state
+        supplier:
+          $ref: '#/components/schemas/Party'
+        product:
+          $ref: '#/components/schemas/Product'
+        article:
+          $ref: '#/components/schemas/Article'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        packing:
+          $ref: '#/components/schemas/Packing'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhotoUrl'
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Delivery'
+      additionalProperties: false
+
+    SupplyOptions:
+      required:
+        - limit
+        - method
+      type: object
+      properties:
+        method:
+          $ref: '#/components/schemas/StreamRequestType'
+        limit:
+          format: int32
+          type: integer
+      additionalProperties: false
+
+    Text:
+      type: object
+      properties:
+        value:
+          type: string
+        language:
+          type: string
+      additionalProperties: false
+
+    UnitCode:
+      enum:
+        - None
+        - Piece
+        - Bunch
+        - Box
+        - Layer
+        - Carrier
+      type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        kind:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        remarks:
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+
+# ProblemDetails / RFC 7807 / ApiError
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: |
+            A URI reference that identifies the problem type. This URI should provide human-readable documentation for the problem type when dereferenced.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+        instance:
+          type: string
+          format: uri
+          description: |
+            A URI reference that identifies the specific occurrence of the problem.
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemDetailsContext'
+      required:
+        - title
+        - status
+
+    ProblemDetailsContext:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the context parameter.
+        value:
+          type: string
+          description: The value of the context parameter.
+
+
+
+
+
+  responses:
+
+    UnauthorizedError:
+      description: Authentication required
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          example:
+            type: "/error/unauthorized/no-authorization-header"
+            title: "Missing authentication header or not starting with Bearer"
+            status: 401
+            detail: "Missing authentication header or not starting with Bearer"
+            instance: "/supply"
+            context: []
+
+    ForbiddenError:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          example:
+            type: "https://example.com/probs/forbidden"
+            title: "Forbidden"
+            status: 403
+            detail: "You do not have permission to access this resource."
+            instance: "/supply"
+            context: [
+              requiredPermission: "Supply.Read"
+            ]
+
+    NotFoundError:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          example:
+            type: "https://example.com/probs/not-found"
+            title: "Resource Not Found"
+            status: 404
+            detail: "The requested resource was not found."
+            instance: "/supply"
+            context: [
+              resourceType: "Supply",
+              resourceId: "12345"
+            ]
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          example:
+            type: "https://example.com/probs/internal-server-error"
+            title: "Internal Server Error"
+            status: 500
+            detail: "An unexpected error occurred on the server."
+            instance: "/supply"
+            context: [
+              errorId: "abcde12345"
+            ]
+
+
+
+  securitySchemes:
+    # ApiKeyAuth:
+    #   type: apiKey
+    #   in: header
+    #   name: Authorization
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: >-
+        Standard Authorization header using the Bearer scheme. Example: "Bearer
+        {token}"
+      
+security:
+  - Bearer: []
+
+# .NET core:
+#
+# var problemDetails = new ProblemDetails
+# {
+#     Title = "An error occurred.",
+#     Status = 500
+# };
+# problemDetails.Extensions["context"] = new Dictionary<string, string>
+# {
+#     { "transactionId", "abc123" },
+#     { "timestamp", DateTime.UtcNow.ToString("o") }
+# };
+
