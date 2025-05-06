@@ -1,0 +1,4178 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "flori.app api",
+    "description": "Predecessor of the HortiApi API, for applications based on the flori.app framework",
+    "termsOfService": "https://hortiapi.com/terms-of-service",
+    "contact": {
+      "name": "Michael Lakerveld",
+      "url": "https://hortiapi.com/"
+    },
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/catalog": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "operationId": "CatalogGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "State"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Catalog"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Catalog"
+        ],
+        "operationId": "CatalogPost",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Catalog"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Catalog"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/{catalogId}": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "operationId": "CatalogGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "catalogId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Catalog"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Catalog"
+        ],
+        "operationId": "CatalogPutById",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "catalogId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Catalog"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Catalog"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Catalog"
+        ],
+        "operationId": "CatalogDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "catalogId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "operationId": "CompaniesGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Company"
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/all": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "operationId": "CompaniesGetAll",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Gln",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Ai2AccountNumber",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "FloraHolland",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Company"
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/{id}": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "operationId": "CompaniesGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Company"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/companies/import": {
+      "get": {
+        "tags": [
+          "Companies"
+        ],
+        "operationId": "CompaniesImport",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/endpoints": {
+      "get": {
+        "tags": [
+          "Endpoints"
+        ],
+        "operationId": "EndpointsGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Company",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Kind"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Endpoint"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders": {
+      "get": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Kind"
+          },
+          {
+            "in": "query",
+            "name": "State"
+          },
+          {
+            "in": "query",
+            "name": "DateFrom",
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "in": "query",
+            "name": "DateTill",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Order"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersPost",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Order"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Order"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "IncludeLines",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Order"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}/lines": {
+      "get": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersLinesGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.OrderLine"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersLinesPost",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.OrderLine"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Order"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}/lines/{lineId}": {
+      "get": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersLinesGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "lineId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Order"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersLinesDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "lineId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}/documents": {
+      "get": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersDocumentsGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Document"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersDocumentsPost",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Document"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Document"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}/documents/{documentId}": {
+      "get": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersDocumentsGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "documentId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Document"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersDocumentsDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "documentId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{orderId}/documents/{documentId}/download": {
+      "get": {
+        "tags": [
+          "OrdersV1"
+        ],
+        "operationId": "OrdersDocumentsDownload",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "documentId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "authkey",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "format": "byte",
+              "type": "string"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/photo": {
+      "get": {
+        "tags": [
+          "Photo"
+        ],
+        "operationId": "PhotoGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Photo"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Photo"
+        ],
+        "operationId": "PhotoPost",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Photo"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Photo"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/photo/{photoId}": {
+      "get": {
+        "tags": [
+          "Photo"
+        ],
+        "operationId": "PhotoGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "photoId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Photo"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Photo"
+        ],
+        "operationId": "PhotoPutById",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "photoId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Photo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Photo"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Photo"
+        ],
+        "operationId": "PhotoDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "photoId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/photo/{photoId}/upload": {
+      "put": {
+        "tags": [
+          "Photo"
+        ],
+        "operationId": "PhotoPutByIdUpload",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "photoId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Photo"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/status": {
+      "get": {
+        "tags": [
+          "Status"
+        ],
+        "operationId": "StatusGet",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Status"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stock": {
+      "get": {
+        "tags": [
+          "Stock"
+        ],
+        "operationId": "StockGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "State"
+          },
+          {
+            "in": "query",
+            "name": "Catalog",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Stock"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Stock"
+        ],
+        "operationId": "StockPost",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Stock"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Stock"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stock/{stockId}": {
+      "get": {
+        "tags": [
+          "Stock"
+        ],
+        "operationId": "StockGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "stockId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Stock"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Stock"
+        ],
+        "operationId": "StockPutById",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "stockId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Stock"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.Stock"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Stock"
+        ],
+        "operationId": "StockDelete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "stockId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/VmpIns": {
+      "get": {
+        "tags": [
+          "SupplyIn"
+        ],
+        "operationId": "SupplyInGetObsolete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Owner",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.VmpIn"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/v1/supply-in": {
+      "get": {
+        "tags": [
+          "SupplyIn"
+        ],
+        "operationId": "SupplyInGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Owner",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.VmpIn"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/VmpIns/{supplyInId}": {
+      "get": {
+        "tags": [
+          "SupplyIn"
+        ],
+        "operationId": "SupplyInGetByIdObsolete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "supplyInId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.VmpIn"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/v1/supply-in/{supplyInId}": {
+      "get": {
+        "tags": [
+          "SupplyIn"
+        ],
+        "operationId": "SupplyInGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "supplyInId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.VmpIn"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/VmpOuts": {
+      "get": {
+        "tags": [
+          "SupplyOut"
+        ],
+        "operationId": "SupplyOutGetObsolete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Owner",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.VmpOut"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/v1/supply-out": {
+      "get": {
+        "tags": [
+          "SupplyOut"
+        ],
+        "operationId": "SupplyOutGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Owner",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.VmpOut"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/VmpOuts/{supplyOutId}": {
+      "get": {
+        "tags": [
+          "SupplyOut"
+        ],
+        "operationId": "SupplyOutGetByIdObsolete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "supplyOutId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.VmpOut"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/v1/supply-out/{supplyOutId}": {
+      "get": {
+        "tags": [
+          "SupplyOut"
+        ],
+        "operationId": "SupplyOutGetById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "supplyOutId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.VmpOut"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/supply-out/{supplyOutId}/supply": {
+      "post": {
+        "tags": [
+          "SupplyOut"
+        ],
+        "operationId": "SupplyOutGetSupply",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "supplyOutId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.SupplyGet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/FloriApp.WebApi.Models.Supply"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/supply-out/{supplyOutId}/order/{supplyId}": {
+      "put": {
+        "tags": [
+          "SupplyOut"
+        ],
+        "operationId": "SupplyOutPutOrder",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-floriapp-company-id",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "supplyOutId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "supplyId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.SupplyOrderPut"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FloriApp.WebApi.Models.SupplyOrderPutResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/HortiApi.Models.ApiError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "FloriApp.WebApi.AddressType": {
+      "enum": [
+        "Unknown",
+        "Default",
+        "Physical",
+        "Postal",
+        "Delivery"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.CatalogKind": {
+      "enum": [
+        "Unknown",
+        "Daily",
+        "Weekly",
+        "Once"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.CatalogState": {
+      "enum": [
+        "Unknown",
+        "Active",
+        "Inactive",
+        "Deleted"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.CompanyKind": {
+      "enum": [
+        "None",
+        "Admin",
+        "Administration",
+        "Agent",
+        "Demo",
+        "Exporter",
+        "Florist",
+        "Grower",
+        "Supplier",
+        "Importer",
+        "LogisticLegacy",
+        "Platform",
+        "Logistic",
+        "Auction",
+        "Floricode",
+        "Manual"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.CompanyRole": {
+      "enum": [
+        "None",
+        "Buyer",
+        "Seller",
+        "Agent",
+        "Transporter",
+        "Other"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.ContactKind": {
+      "enum": [
+        "Unknown",
+        "Sales",
+        "Logistic",
+        "Administration",
+        "Edi",
+        "Other"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.DocumentKind": {
+      "enum": [
+        "PdfUnknown",
+        "PdfTest",
+        "PdfInvoice",
+        "PdfDeliveryNote",
+        "PdfPurchaseNote",
+        "PdfCarrierNote",
+        "PdfPackingNote",
+        "EdiUnknown",
+        "EdiTest",
+        "EdiClockt",
+        "EdiHtrans",
+        "EdiDesadv",
+        "ZplUnknown",
+        "ZplTest",
+        "ZplSupply",
+        "ZplDistribute",
+        "CsvUnknown",
+        "CsvTest",
+        "CsvAuctionTransactions",
+        "CsvCompanies",
+        "TxtUnknown",
+        "TxtTest",
+        "TxtIncasso"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.EndpointKind": {
+      "enum": [
+        "Offline",
+        "Preferred",
+        "Backup"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.FeaturePrescription": {
+      "enum": [
+        "Empty",
+        "Required",
+        "Recommended",
+        "Allowed",
+        "Undefined"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.Models.Address": {
+      "required": [
+        "type"
+      ],
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/FloriApp.WebApi.AddressType"
+        },
+        "gln": {
+          "type": "string"
+        },
+        "addressLines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "place": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string"
+        },
+        "countryName": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Article": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "vbn": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tradeName": {
+          "type": "string"
+        },
+        "f1": {
+          "type": "string"
+        },
+        "f2": {
+          "type": "string"
+        },
+        "f3": {
+          "type": "string"
+        },
+        "f4": {
+          "type": "string"
+        },
+        "f5": {
+          "type": "string"
+        },
+        "f6": {
+          "type": "string"
+        },
+        "f7": {
+          "type": "string"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Article+ArticleFeature"
+          }
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "modifiedBy": {
+          "type": "string"
+        },
+        "modifiedAt": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Article+ArticleFeature": {
+      "required": [
+        "p"
+      ],
+      "type": "object",
+      "properties": {
+        "f": {
+          "type": "string"
+        },
+        "p": {
+          "$ref": "#/definitions/FloriApp.WebApi.FeaturePrescription"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Catalog": {
+      "required": [
+        "kind",
+        "pieces",
+        "price",
+        "state"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.CatalogKind"
+        },
+        "state": {
+          "$ref": "#/definitions/FloriApp.WebApi.CatalogState"
+        },
+        "pieces": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "price": {
+          "format": "double",
+          "type": "number"
+        },
+        "vbn": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "addText": {
+          "type": "string"
+        },
+        "article": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Article"
+        },
+        "vbnGroup": {
+          "type": "string"
+        },
+        "supplierId": {
+          "type": "string"
+        },
+        "manufacturerId": {
+          "type": "string"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Feature"
+          }
+        },
+        "manufacturer": {
+          "type": "string"
+        },
+        "foto": {
+          "type": "string"
+        },
+        "photoIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "variations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Catalog+Variation"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Catalog+Variation": {
+      "required": [
+        "apE",
+        "price"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "apE": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "price": {
+          "format": "double",
+          "type": "number"
+        },
+        "addText": {
+          "type": "string"
+        },
+        "packing": {
+          "type": "string"
+        },
+        "photoIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Company": {
+      "required": [
+        "kind",
+        "role"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/definitions/FloriApp.WebApi.CompanyRole"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.CompanyKind"
+        },
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "legalName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Address"
+          }
+        },
+        "ai2AccountNumber": {
+          "type": "string"
+        },
+        "chamberOfCommerce": {
+          "type": "string"
+        },
+        "chamberOfCommerceCountryCode": {
+          "type": "string"
+        },
+        "vatNumber": {
+          "type": "string"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Company+User"
+          }
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Company+Contact"
+          }
+        },
+        "registrations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Company+Registration"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Company+Contact": {
+      "required": [
+        "kind"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.ContactKind"
+        },
+        "name": {
+          "type": "string"
+        },
+        "function": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Company+Registration": {
+      "required": [
+        "isDefault"
+      ],
+      "type": "object",
+      "properties": {
+        "isDefault": {
+          "type": "boolean"
+        },
+        "tradeName": {
+          "type": "string"
+        },
+        "gln": {
+          "type": "string"
+        },
+        "floraHolland": {
+          "type": "string"
+        },
+        "plantion": {
+          "type": "string"
+        },
+        "remark": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Company+User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Document": {
+      "required": [
+        "createdAt",
+        "kind"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.DocumentKind"
+        },
+        "title": {
+          "type": "string"
+        },
+        "urlWithAuth": {
+          "type": "string"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.DocumentReference": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Endpoint": {
+      "required": [
+        "kind",
+        "unsecured"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "hostname": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.EndpointKind"
+        },
+        "description": {
+          "type": "string"
+        },
+        "unsecured": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Feature": {
+      "required": [
+        "key",
+        "value"
+      ],
+      "type": "object",
+      "properties": {
+        "key": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "value": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Manufacturer": {
+      "type": "object",
+      "properties": {
+        "gln": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "place": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Order": {
+      "required": [
+        "customer",
+        "invoiceDate",
+        "kind",
+        "number",
+        "orderDate",
+        "shipDate",
+        "state",
+        "supplier",
+        "totalLines",
+        "totalPieces",
+        "totalPrice"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "supplier": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "customer": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "enteredBy": {
+          "type": "string"
+        },
+        "number": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "state": {
+          "$ref": "#/definitions/FloriApp.WebApi.OrderState"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.OrderKind"
+        },
+        "orderDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "shipDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "invoiceDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "totalLines": {
+          "format": "double",
+          "type": "number"
+        },
+        "totalPieces": {
+          "format": "double",
+          "type": "number"
+        },
+        "totalPrice": {
+          "format": "double",
+          "type": "number"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.OrderLine"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.OrderLine": {
+      "required": [
+        "amount",
+        "apE",
+        "ekt",
+        "features",
+        "packing",
+        "price",
+        "state",
+        "vbn"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "order": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/FloriApp.WebApi.OrderLineState"
+        },
+        "amount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "apE": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "price": {
+          "format": "double",
+          "type": "number"
+        },
+        "vbn": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "addText": {
+          "type": "string"
+        },
+        "article": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Article"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Feature"
+          }
+        },
+        "packing": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "acl": {
+          "type": "string"
+        },
+        "on": {
+          "type": "string"
+        },
+        "vn": {
+          "type": "string"
+        },
+        "ekt": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Photo": {
+      "required": [
+        "state"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/FloriApp.WebApi.PhotoState"
+        },
+        "description": {
+          "type": "string"
+        },
+        "sizes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Photo+Size"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Photo+Size": {
+      "required": [
+        "format"
+      ],
+      "type": "object",
+      "properties": {
+        "format": {
+          "$ref": "#/definitions/FloriApp.WebApi.PhotoFormat"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Price": {
+      "required": [
+        "currency",
+        "value"
+      ],
+      "type": "object",
+      "properties": {
+        "currency": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "value": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Quantity": {
+      "required": [
+        "unit",
+        "value"
+      ],
+      "type": "object",
+      "properties": {
+        "value": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "unit": {
+          "$ref": "#/definitions/FloriApp.WebApi.UnitCode"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Status": {
+      "required": [
+        "now",
+        "state"
+      ],
+      "type": "object",
+      "properties": {
+        "now": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.StatusState"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.StatusState": {
+      "enum": [
+        "Unknown",
+        "Healthy",
+        "Unhealthy",
+        "Initializing"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.Models.Stock": {
+      "required": [
+        "amount",
+        "apE",
+        "date",
+        "piecesAvailable",
+        "piecesTotal",
+        "price",
+        "remaining",
+        "state"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "supplier": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/FloriApp.WebApi.StockState"
+        },
+        "catalog": {
+          "type": "string"
+        },
+        "amount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "apE": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "remaining": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "price": {
+          "format": "double",
+          "type": "number"
+        },
+        "piecesAvailable": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "piecesTotal": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "vbn": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "addText": {
+          "type": "string"
+        },
+        "article": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Article"
+        },
+        "vbnGroup": {
+          "type": "string"
+        },
+        "supplierId": {
+          "type": "string"
+        },
+        "manufacturerId": {
+          "type": "string"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Feature"
+          }
+        },
+        "packing": {
+          "type": "string"
+        },
+        "manufacturer": {
+          "type": "string"
+        },
+        "foto": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.Supply": {
+      "required": [
+        "date",
+        "packing",
+        "ppB",
+        "price",
+        "state"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "supplier": {
+          "type": "string"
+        },
+        "manufacturer": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Manufacturer"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/FloriApp.WebApi.SupplyState"
+        },
+        "available": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Quantity"
+        },
+        "ppB": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "price": {
+          "format": "double",
+          "type": "number"
+        },
+        "vbn": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "addText": {
+          "type": "string"
+        },
+        "article": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Article"
+        },
+        "vbnGroup": {
+          "type": "string"
+        },
+        "vbnGroupCode": {
+          "type": "string"
+        },
+        "supplierId": {
+          "type": "string"
+        },
+        "manufacturerId": {
+          "type": "string"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.Feature"
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.DocumentReference"
+          }
+        },
+        "prices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.SupplyPrice"
+          }
+        },
+        "packing": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.SupplyPacking"
+        },
+        "deliveries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.SupplyDelivery"
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.SupplyPhoto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.SupplyDelivery": {
+      "required": [
+        "latestDelivery",
+        "latestOrder",
+        "location"
+      ],
+      "type": "object",
+      "properties": {
+        "location": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "latestOrder": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "latestDelivery": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.SupplyGet": {
+      "required": [
+        "limit",
+        "method"
+      ],
+      "type": "object",
+      "properties": {
+        "method": {
+          "$ref": "#/definitions/FloriApp.WebApi.SupplyGetMethod"
+        },
+        "limit": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.SupplyOrderPut": {
+      "required": [
+        "price",
+        "quantity"
+      ],
+      "type": "object",
+      "properties": {
+        "supplyId": {
+          "type": "string"
+        },
+        "buyer": {
+          "type": "string"
+        },
+        "quantity": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Quantity"
+        },
+        "price": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Price"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.DocumentReference"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.SupplyOrderPutResponse": {
+      "required": [
+        "success"
+      ],
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "supplyId": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.SupplyPacking": {
+      "required": [
+        "boxCode",
+        "boxQuantity",
+        "bunchQuantity",
+        "carrierQuantity",
+        "layerQuantity"
+      ],
+      "type": "object",
+      "properties": {
+        "bunchQuantity": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "boxCode": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "boxQuantity": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "layerCode": {
+          "type": "string"
+        },
+        "layerQuantity": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "carrierCode": {
+          "type": "string"
+        },
+        "carrierQuantity": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.SupplyPhoto": {
+      "required": [
+        "url"
+      ],
+      "type": "object",
+      "properties": {
+        "url": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.SupplyPrice": {
+      "required": [
+        "piecePrice"
+      ],
+      "type": "object",
+      "properties": {
+        "piecePrice": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Price"
+        },
+        "minimumQuantity": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Quantity"
+        },
+        "maximumQuantity": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.Quantity"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.VmpIn": {
+      "required": [
+        "agent",
+        "authentication",
+        "buyAs",
+        "mode",
+        "software",
+        "status",
+        "uniqueId",
+        "version"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "supplier": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "authentication": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpAuthentication"
+        },
+        "status": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpStatus"
+        },
+        "software": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpSoftware"
+        },
+        "agent": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpAgent"
+        },
+        "agentGln": {
+          "type": "string"
+        },
+        "buyAs": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpParty"
+        },
+        "mode": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpInMode"
+        },
+        "version": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpVersion"
+        },
+        "uniqueId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "options": {
+          "$ref": "#/definitions/FloriApp.WebApi.Models.VmpIn+OptionsBag"
+        },
+        "remarks": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "modifiedBy": {
+          "type": "string"
+        },
+        "modifiedAt": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.VmpIn+OptionsBag": {
+      "required": [
+        "articleDescriptionHandling",
+        "autoStart",
+        "extraTextHandling",
+        "filterDuplicates",
+        "filterExpired",
+        "fixDeliveries",
+        "fixStartTime",
+        "isTest",
+        "logMessages",
+        "overrideManufacturerGln",
+        "overrideSupplierGln"
+      ],
+      "type": "object",
+      "properties": {
+        "resetSchedule": {
+          "type": "string"
+        },
+        "updateEvery": {
+          "type": "string"
+        },
+        "logMessages": {
+          "type": "boolean"
+        },
+        "isTest": {
+          "type": "boolean"
+        },
+        "autoStart": {
+          "type": "boolean"
+        },
+        "filterDuplicates": {
+          "type": "boolean"
+        },
+        "filterExpired": {
+          "type": "boolean"
+        },
+        "fixStartTime": {
+          "type": "boolean"
+        },
+        "fixDeliveries": {
+          "type": "boolean"
+        },
+        "articleDescriptionHandling": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpArticleDescriptionHandling"
+        },
+        "extraTextHandling": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpExtraTextHandling"
+        },
+        "overrideSupplierGln": {
+          "type": "boolean"
+        },
+        "supplierGln": {
+          "type": "string"
+        },
+        "overrideManufacturerGln": {
+          "type": "boolean"
+        },
+        "manufacturerGln": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.VmpOut": {
+      "required": [
+        "authentication",
+        "getSupply",
+        "getSupplyAllowMutationWithoutGetAll",
+        "getSupplyBatchSize",
+        "getSupplyDisableValidation",
+        "getSupplyFilter",
+        "getSupplyLog",
+        "getSupplyLogIncludeResponse",
+        "getSupplyOverrideBatchSize",
+        "getSupplySendAgentAsSupplier",
+        "getSupplySendDummy",
+        "kind",
+        "mode",
+        "packing",
+        "putOrder",
+        "putOrderDisableOwnerIssuerCheck",
+        "software",
+        "timeout",
+        "version"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "ipAddress": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpOutKind"
+        },
+        "getSupply": {
+          "type": "boolean"
+        },
+        "putOrder": {
+          "type": "boolean"
+        },
+        "authentication": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpAuthentication"
+        },
+        "software": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpSoftware"
+        },
+        "mode": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpOutMode"
+        },
+        "version": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpVersion"
+        },
+        "timeout": {
+          "format": "time-span",
+          "type": "string"
+        },
+        "packing": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpOutPacking"
+        },
+        "getSupplyLog": {
+          "type": "boolean"
+        },
+        "getSupplyLogIncludeResponse": {
+          "type": "boolean"
+        },
+        "getSupplyDisableValidation": {
+          "type": "boolean"
+        },
+        "getSupplyAllowMutationWithoutGetAll": {
+          "type": "boolean"
+        },
+        "getSupplyFilter": {
+          "type": "boolean"
+        },
+        "getSupplySendDummy": {
+          "type": "boolean"
+        },
+        "getSupplyOverrideBatchSize": {
+          "type": "boolean"
+        },
+        "getSupplyBatchSize": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "getSupplySendAgentAsSupplier": {
+          "type": "boolean"
+        },
+        "putOrderDisableOwnerIssuerCheck": {
+          "type": "boolean"
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FloriApp.WebApi.Models.VmpOut+Connection"
+          }
+        },
+        "remarks": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "modifiedBy": {
+          "type": "string"
+        },
+        "modifiedAt": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.Models.VmpOut+Connection": {
+      "required": [
+        "active",
+        "kind"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/FloriApp.WebApi.VmpOutConnectionKind"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "remark": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FloriApp.WebApi.OrderKind": {
+      "enum": [
+        "None",
+        "Sales",
+        "Purchase",
+        "Agent"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.OrderLineState": {
+      "enum": [
+        "Default",
+        "Sales",
+        "Ordering",
+        "Ordered",
+        "OrderingFailed",
+        "AgentOrdering",
+        "AgentOrdered",
+        "AgentOrderingFailed"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.OrderState": {
+      "enum": [
+        "None",
+        "Open",
+        "Ready",
+        "Closed",
+        "Invoiced",
+        "Deleted"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.PhotoFormat": {
+      "enum": [
+        "Unknown",
+        "SquareLimitedTo1000X1000"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.PhotoState": {
+      "enum": [
+        "Unknown",
+        "WaitForUpload",
+        "Validating",
+        "Ready",
+        "Deleted"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.StockState": {
+      "enum": [
+        "NotAvailable",
+        "Expected",
+        "NeedPricing",
+        "Available"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.SupplyGetMethod": {
+      "enum": [
+        "All",
+        "Updates"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.SupplyState": {
+      "enum": [
+        "New",
+        "Update",
+        "Delete"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.UnitCode": {
+      "enum": [
+        "None",
+        "Piece",
+        "Bunch",
+        "Box",
+        "Layer",
+        "Carrier"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpAgent": {
+      "enum": [
+        "None",
+        "FbsToday",
+        "DirectConnect",
+        "DirectTrade",
+        "FbsTrade",
+        "Ai2",
+        "HortiNL",
+        "GlnOwner",
+        "Gln",
+        "CotradrAalsmeer",
+        "CotradrNaaldwijk",
+        "CotradrRijnsburg",
+        "TestKweker",
+        "TestKoper",
+        "FloricodeTestCenter",
+        "AlgemeenAgent",
+        "AlgemeenKoper",
+        "AlgemeenTransporteur",
+        "AlgemeenVerkoper",
+        "FloraMondoKlokvoorverkoop"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpArticleDescriptionHandling": {
+      "enum": [
+        "None",
+        "RemoveSendDescription"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpAuthentication": {
+      "enum": [
+        "Default",
+        "None",
+        "Basic",
+        "Message"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpExtraTextHandling": {
+      "enum": [
+        "None",
+        "RemoveExtraText"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpInMode": {
+      "enum": [
+        "Default",
+        "RequestResponse",
+        "Streaming",
+        "RequestResponseNotified"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpOutConnectionKind": {
+      "enum": [
+        "Unknown",
+        "OwnSupply",
+        "VmpIn",
+        "VmpInPrivate",
+        "AuctionSupply"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpOutKind": {
+      "enum": [
+        "None",
+        "Internal",
+        "Private",
+        "Public"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpOutMode": {
+      "enum": [
+        "Default",
+        "RequestResponse",
+        "Streaming",
+        "RequestResponseNotified",
+        "RequestResponseDeDuplication"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpOutPacking": {
+      "enum": [
+        "DefaultRemove800Bunches",
+        "IncludeBunches"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpParty": {
+      "enum": [
+        "Default",
+        "Manufacturer",
+        "Seller",
+        "Buyer",
+        "Supplier",
+        "Customer",
+        "EndUser"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpSoftware": {
+      "enum": [
+        "Unknown",
+        "FloriApp",
+        "FbsTrade",
+        "AdfocomGreenline",
+        "AdProAdVert",
+        "AdvisorMatchOnlineKoper",
+        "AdvisorMatchOnlineKweker",
+        "AlfaPro",
+        "AntEaterGreenFinger",
+        "AxerrioBusinessSoftware",
+        "BloemenOnlineNl",
+        "BrandsmaItFlorinet",
+        "EdvRingBluWebshop",
+        "EasyFlor",
+        "FloraConnectUniware",
+        "FloraHollandFloraMondo",
+        "FloraXchange",
+        "Floranti",
+        "Florisoft",
+        "FlowerswaveFlowerAuctions",
+        "FreshPortal",
+        "GasaGroupDynamics",
+        "KoperKbtPro",
+        "LogiFlora",
+        "MasterPlantiBrasil",
+        "Move2GrowEfleur",
+        "NewGreenMarket",
+        "GreenMaster9Knots",
+        "PremiumFlowersPcBiznes",
+        "RendexFlowmax",
+        "SmartBisKpsSales",
+        "SdfFloranti",
+        "SdfProfice",
+        "SdfLogice",
+        "ThreeWtNevolution",
+        "TradeSpaceYourTradeSpace",
+        "VvDecofleur",
+        "VerdnaturaHolland",
+        "Why",
+        "Other1",
+        "Other2",
+        "Other3"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpStatus": {
+      "enum": [
+        "Offline",
+        "Testing",
+        "Ready",
+        "Production"
+      ],
+      "type": "string"
+    },
+    "FloriApp.WebApi.VmpVersion": {
+      "enum": [
+        "Default",
+        "CcVmp0p7",
+        "CcVmp1p0",
+        "CcVmp1p1"
+      ],
+      "type": "string"
+    },
+    "HortiApi.Models.ApiError": {
+      "required": [
+        "status"
+      ],
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        },
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HortiApi.Models.ApiError+ApiErrorContext"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "HortiApi.Models.ApiError+ApiErrorContext": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Standard Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}
