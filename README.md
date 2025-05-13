@@ -26,7 +26,7 @@ Import the OpenAPI file into your tool of choice:
 * **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
 * **Python/Java**: OpenAPI Generator templates
 
-Use [`definitions/hortiapi-v3-rc.2.yaml`](/definitions/hortiapi-v3-rc.2.yaml) for the latest.
+Use [`definitions/hortiapi-v3-rc.3.yaml`](/definitions/hortiapi-v3-rc.3.yaml) for the latest.
 
 ### 🧩 Ready-made .NET Packages
 
