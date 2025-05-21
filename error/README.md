@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Error Index
-permalink: /error/
 ---
 
 # All errors
