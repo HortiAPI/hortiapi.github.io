@@ -1,14 +1,19 @@
 ---
 layout: default
 title: Error Index
+permalink: /error
 ---
 
 # All errors
 
-{% assign resource_pages = site.pages | where_exp: "page", "page.url contains '/error/' and page.url != '/error/'" %}
+{% assign error_pages = site.pages | 
+     where_exp: "page", "page.url contains '/error/'" | 
+     sort: "title" %}
 
-<ul>
-  {% for page in resource_pages %}
-    <li><a href="{{ page.url }}">{{ page.title | default: page.name }}</a></li>
-  {% endfor %}
+{% for page in error_pages %}
+* [{{ page.title | default: page.name }}]({{ page.url }})
+{% endfor %}
+
+<ul>{% for page in error_pages %}
+  <li><a href="{{ page.url }}">{{ page.title | default: page.name }}</a></li>{% endfor %}
 </ul>
