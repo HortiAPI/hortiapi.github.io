@@ -1,16 +1,15 @@
 ---
 layout: default
 title: Error Index
-permalink: /error
+permalink: /error/
 ---
 
 # All errors
 
-{% assign resource_docs = site.docs
-   | where_exp: "doc", "doc.url contains '/error/'" %}
+{% assign resource_pages = site.pages | where_exp: "page", "page.url contains '/error/' and page.url != '/error/'" %}
 
 <ul>
-  {% for doc in resource_docs %}
-    <li><a href="{{ doc.url }}">{{ doc.title }}</a></li>
+  {% for page in resource_pages %}
+    <li><a href="{{ page.url }}">{{ page.title | default: page.name }}</a></li>
   {% endfor %}
 </ul>
