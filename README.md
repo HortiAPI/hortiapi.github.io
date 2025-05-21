@@ -6,7 +6,7 @@ Supports the Linnaeus model for standardized flower & plant classification. Lin
 
 ## ▶️ Versioned API Docs
 
-* [HortiApi v3](/v3) *OpenAPI 3.1 schema*
+* [HortiApi v3 (latest)](/v3) *OpenAPI 3.1 schema*
 * [HortiApi v2 (legacy)](/v2) *swagger 2.0 schema*
 * [HortiApi v1 (legacy)](/v1) *swagger 2.0 schema*
 
@@ -26,7 +26,7 @@ Import the OpenAPI file into your tool of choice:
 * **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
 * **Python/Java**: OpenAPI Generator templates
 
-Use [`definitions/hortiapi-v3-rc.3.yaml`](/definitions/hortiapi-v3-rc.3.yaml) for the latest.
+Use [`definitions/hortiapi-v3-rc.11.yaml`](/definitions/hortiapi-v3-rc.11.yaml) for the latest.
 
 ### 🧩 Ready-made .NET Packages
 
@@ -39,14 +39,31 @@ For C#/.NET consumers and servers, HortiAPI publishes these NuGet packages:
 | [`HortiApi.Client.Rest`](https://www.nuget.org/packages/HortiApi.Client.Rest) | Client implementation for HortiAPI endpoints      |
 | [`HortiApi.Server`](https://www.nuget.org/packages/HortiApi.Server)           | Abstract ASP.NET 8.0 server base classes          |
 
+## 📚 Samples
+
+Check out the request/response [samples](/sample). These include:
+
+* Connecting
+* Get supply
+* Handle order
+* ...
+
 ## 📚 Resources
 
-The v3 schema references shared [resources](/resources). These include:
+The v3 schema references shared [resource](/resource). These include:
 
 * Company kinds, roles, and statuses
 * Order states and document types
 
 They ensure consistency across implementations.
+
+## 📚 Errors
+
+The response problem details references to the following [error](/error) links. These include:
+
+* Bad Request
+* Forbidden
+* Not Implemented
 
 ## ℹ️ Support
 
