@@ -18,17 +18,7 @@ Each version’s viewer provides:
 * **Schema details**: Field definitions, data types, and resource references
 * **Try-it-out**: Execute sample requests against your local or staging HortiAPI server
 
-## ⚙️ Generating Clients
-
-Import the OpenAPI file into your tool of choice:
-
-* **.NET**: NSwag or AutoRest → generates C# client/server stubs
-* **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
-* **Python/Java**: OpenAPI Generator templates
-
-Use [`definitions/hortiapi-v3-rc.11.yaml`](/definitions/hortiapi-v3-rc.11.yaml) for the latest.
-
-### 🧩 Ready-made .NET Packages
+## 🧩 Official .NET Libraries
 
 For C#/.NET consumers and servers, HortiAPI publishes these NuGet packages:
 
@@ -39,14 +29,24 @@ For C#/.NET consumers and servers, HortiAPI publishes these NuGet packages:
 | [`HortiApi.Client.Rest`](https://www.nuget.org/packages/HortiApi.Client.Rest) | Client implementation for HortiAPI endpoints      |
 | [`HortiApi.Server`](https://www.nuget.org/packages/HortiApi.Server)           | Abstract ASP.NET 8.0 server base classes          |
 
-## 📚 Samples
+## ⚙️ Generating other clients
 
-Check out the request/response [samples](/sample). These include:
+Import the OpenAPI file into your tool of choice:
+
+* **.NET**: NSwag or AutoRest → generates C# client/server stubs
+* **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
+* **Python/Java**: OpenAPI Generator templates
+
+Use [`definitions/hortiapi-v3-rc.11.yaml`](/definitions/hortiapi-v3-rc.11.yaml) for the latest.
+
+## 📋 Samples
+
+See the API in action with these practical [example](/sample) scenarios. These include:
 
 * Connecting
 * Get supply
 * Handle order
-* ...
+* much more...
 
 ## 📚 Resources
 
@@ -55,11 +55,11 @@ The v3 schema references shared [resource](/resource). These include:
 * Company kinds, roles, and statuses
 * Order states and document types
 
-They ensure consistency across implementations.
+These standardized identifiers ensure semantic consistency across all implementations.
 
-## 📚 Errors
+## ⚠️ Errors
 
-The response problem details references to the following [error](/error) links. These include:
+HortiAPI uses structured error responses (RFC7807 Problem Details) that reference these standardized [error](/error) types. These include:
 
 * Bad Request
 * Forbidden
