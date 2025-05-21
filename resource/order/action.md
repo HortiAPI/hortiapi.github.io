@@ -10,4 +10,4 @@ permalink: /resource/order/action
 The action to execute on this order
 
 Currently defined actions
-- 
+- order/action:send-clockt

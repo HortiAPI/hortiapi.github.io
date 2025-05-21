@@ -9,7 +9,7 @@ permalink: /resource/order/state
 
 The state of this order
 
-Currently defined actions
+Currently defined states
 - order/state:open
 - order/state:closed
 - order/state:invoiced

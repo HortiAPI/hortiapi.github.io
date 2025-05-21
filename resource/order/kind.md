@@ -7,7 +7,7 @@ permalink: /resource/order/kind
 # order
 ## kind
 
-The kind off this order
+The kind of this order
 
 Currently defined kinds
 - order/kind:purchase

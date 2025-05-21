@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Error Index
-permalink: /error
+title: Resource Index
+permalink: /resource
 ---
 
-# All errors
+# All defined resources
 
 {% assign error_pages = site.pages | 
-     where_exp: "page", "page.url contains '/error/'" | 
+     where_exp: "page", "page.url contains '/resource/'" | 
      sort: "title" %}
 
 <ul>{% for page in error_pages %}
