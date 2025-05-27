@@ -14,7 +14,7 @@ Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.11; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.12; .NET 8.0.12; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -26,14 +26,13 @@ Request content
   "resources": [],
   "id": "",
   "state": "",
-  "manufacturer": null,
   "method": "none",
   "limit": 1000
 }
 ```
-Response headers
+Response headers (200)
 ```
-Date: Wed, 21 May 2025 22:15:42 GMT
+Date: Tue, 27 May 2025 10:26:46 GMT
 Transfer-Encoding: chunked
 Content-Type: application/json; charset=utf-8
 ```
@@ -167,7 +166,10 @@ Response content
     "prices": [
       {
         "type": "provisional",
-        "minimum": null,
+        "minimum": {
+          "unit": "box",
+          "value": 1
+        },
         "maximum": null,
         "amount": {
           "value": 1,
@@ -175,12 +177,7 @@ Response content
         }
       }
     ],
-    "references": [
-      {
-        "name": "IRN",
-        "value": "6ctjog7aulueje5b6ottz3zcji"
-      }
-    ],
+    "references": [],
     "notes": [],
     "photos": [
       {

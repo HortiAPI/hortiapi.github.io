@@ -14,13 +14,13 @@ Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.11; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.12; .NET 8.0.12; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
-Response headers
+Response headers (200)
 ```
-Date: Wed, 21 May 2025 22:15:39 GMT
+Date: Tue, 27 May 2025 10:26:46 GMT
 Transfer-Encoding: chunked
 Content-Type: application/json; charset=utf-8
 ```
