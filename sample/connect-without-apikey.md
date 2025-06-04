@@ -8,12 +8,12 @@ permalink: /sample/connect-without-apikey
 
 Connecting to the HortiApi without apikey
 
-# GET https://sandbox.hortiapi.net/v3/me
+# GET https://v3.sandbox.hortiapi.net/me
 
 Request headers
 ```
 Accept: application/json
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.12; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.14; .NET 8.0.12; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
@@ -37,6 +37,7 @@ Response content
     "name": "sandbox.hortiapi.com application"
   },
   "companies": null,
+  "company": null,
   "user": null
 }
 ```

@@ -8,13 +8,14 @@ permalink: /sample/catalog-search
 
 Get all catalog items with HortiApi
 
-# POST https://sandbox.hortiapi.net/v3/catalog/search
+# POST https://v3.sandbox.hortiapi.net/catalog/search
 
 Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.12; .NET 8.0.12; +https://hortiapi.com)
+x-company-id: uWXsD0b-UEiIjVKA3smDDg
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.14; .NET 8.0.12; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -181,7 +182,7 @@ Response content
     "notes": [],
     "photos": [
       {
-        "url": "https://vmp4dev.app/photo/sq1k/8KaXG-Ci6ESTofOnPO8iSg.jpg"
+        "url": "https://sandbox.hortiapi.com/photo/sq1k/8KaXG-Ci6ESTofOnPO8iSg.jpg"
       }
     ]
   }

@@ -8,13 +8,14 @@ permalink: /sample/get-supply-and-order
 
 Retrieve a supply stream and order 1 box of the last supply line
 
-# POST https://sandbox.hortiapi.net/v3/supply
+# POST https://v3.sandbox.hortiapi.net/supply
 
 Request headers
 ```
 Accept: application/vnd.hortiapi.event+json
 Authorization: bearer set_here_your_api__key
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.12; .NET 8.0.12; +https://hortiapi.com)
+x-company-id: uWXsD0b-UEiIjVKA3smDDg
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.14; .NET 8.0.12; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -185,7 +186,7 @@ Response content
       "notes": [],
       "photos": [
         {
-          "url": "https://vmp4dev.app/photo/sq1k/8KaXG-Ci6ESTofOnPO8iSg.jpg"
+          "url": "https://sandbox.hortiapi.com/photo/sq1k/8KaXG-Ci6ESTofOnPO8iSg.jpg"
         }
       ],
       "deliveries": [],
@@ -195,13 +196,14 @@ Response content
 ]
 ```
 
-# POST https://sandbox.hortiapi.net/v3/supply/order
+# POST https://v3.sandbox.hortiapi.net/supply/order
 
 Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.12; .NET 8.0.12; +https://hortiapi.com)
+x-company-id: uWXsD0b-UEiIjVKA3smDDg
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.14; .NET 8.0.12; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -226,14 +228,22 @@ Request content
   }
 }
 ```
-Response headers (404)
+Response headers (501)
 ```
 Date: Tue, 27 May 2025 10:26:46 GMT
-Content-Length: 0
+Transfer-Encoding: chunked
+Content-Type: application/problem+json
 ```
 
 Response content
-```
-
+``` json
+{
+  "context": [],
+  "type": "https://hortiapi.com/error/not-implemented",
+  "title": "Not Implemented",
+  "status": 501,
+  "detail": "The endpoint \u0027/horti-api/v3/supply/order\u0027 is not implemented yet.",
+  "instance": "/horti-api/v3/supply/order"
+}
 ```
 

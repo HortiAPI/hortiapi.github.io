@@ -37,16 +37,16 @@ Import the OpenAPI file into your tool of choice:
 * **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
 * **Python/Java**: OpenAPI Generator templates
 
-Use [`definitions/hortiapi-v3-rc.12.yaml`](/definitions/hortiapi-v3-rc.12.yaml) for the latest.
+Use [`definitions/hortiapi-v3-rc.14.yaml`](/definitions/hortiapi-v3-rc.14.yaml) for the latest.
 
 ## 📋 Samples
 
 See the API in action with these practical [example](/sample) scenarios. These include:
 
-* Connecting
-* Get supply
-* Handle order
-* much more...
+* [Connecting](/sample/connect.md)
+* [Catalog search](/sample/catalog-search.md)
+* [Get supply and order](/sample/get-supply-and-order.md)
+* [much more...](/sample)
 
 ## 📚 Resources
 
