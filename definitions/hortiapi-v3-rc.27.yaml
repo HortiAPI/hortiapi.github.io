@@ -1,0 +1,3542 @@
+openapi: '3.1.0'
+
+info:
+
+  title: HortiApi
+
+  version: 3.0.0-rc.27
+
+  description: |-
+    Definition of the HortiApi, OpenAPI 3.1-compliant YAML document describing horticultural API endpoints.
+    Visit [https://hortiapi.com](https://hortiapi.com) for details.
+
+    Some useful links:
+    - [hortiapi.com](https://hortiapi.com)
+    - [github.com/hortiapi](https://github.com/hortiapi)
+    - [rapidocweb.com](https://rapidocweb.com)
+    - [swagger.io](https://swagger.io)
+  
+  termsOfService: https://hortiapi.com/terms-of-service
+  
+  contact:
+    name: Michael Lakerveld
+    email: apiteam@hortiapi.com
+    url: https://hortiapi.com/
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+externalDocs:
+  description: Find out more about HortiApi
+  url: https://hortiapi.com
+
+servers:
+  - url: http://localhost/horti-api/v3
+  - url: https://v3.sandbox.hortiapi.net
+  - url: https://v3.hortiapi.net
+  - url: https://api.ai2.nl/v3
+
+tags:
+  - name: Article
+    description: |
+      Definitions of products including classification, names
+      and other relevant properties.
+
+  - name: Catalog
+    description: |
+      Create, modify and search for catalog items which can be used as the 
+      template for stock or orderlines.
+
+  - name: Company
+    description: |
+      Lookup and search for companies active in the horticulture sector,
+      including their identifiers and types.
+
+  - name: Data
+    description: |
+      Lookup generic structured reference data such as countries, currencies, 
+      and units used throughout the API.
+
+  - name: Document
+    description: |
+      Supporting documents such as invoices, delivery notes and other related
+      documents linked to entities in the system.
+
+  - name: Feature
+    description: |
+      Characteristics that define article variations, such as stem length,
+      number of buds, or flower color.
+
+  - name: Me
+    description: |
+      Details about the authenticated user, including linked companies
+      and applications with granted access.
+
+  - name: Order
+    description: |
+      Create, modify and search for orders between customers and suppliers that
+      describe specific conditions about grouped orderlines in an order such
+      as delivery and payment details.
+
+  - name: OrderLine
+    description: |
+      Create, modify and search for orderlines that describe specific articles,
+      quantities, pricing and other options.
+
+  - name: Stock
+    description: |
+      Create, modify and search for stock availability already in storage or 
+      in transit and check product specifications.
+
+  - name: Supply
+    description: |
+      Real-time availability of products offered by growers or suppliers,
+      which can be viewed and used to place or cancel orders. Transaction
+      records can be checked for the latest state and/or view the history.
+
+  - name: User
+    description: |
+      Lookup and search for users active in the horticulture sector,
+      including their identifiers and companies.
+
+paths:
+
+# article
+
+  /article:
+
+    post:
+      tags:
+        - Article
+      operationId: HAPI3ArticleUpdate
+      summary: Create or update article
+      description: |-
+        Create a new article when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /article/{articleId}:
+
+    get:
+      tags:
+        - Article
+      operationId: HAPI3ArticleGet
+      summary: Get article by ID
+      description: |-
+        Retrieve the details of the article with the specified `articleId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: articleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Article
+      operationId: HAPI3ArticleDelete
+      summary: Delete article by ID
+      description: |-
+        Remove the article identified by `articleId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: articleId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /article/search:
+
+    post:
+      tags:
+        - Article
+      operationId: HAPI3ArticleSearch
+      summary: Search article items
+      description: |-
+        Find articles matching given criteria (e.g. name, group, code).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# catalog
+
+  /catalog:
+
+    post:
+      tags:
+        - Catalog
+      operationId: HAPI3CatalogUpdate
+      summary: Create or update catalog
+      description: |-
+        Create a new catalog when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Catalog'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /catalog/{catalogId}:
+
+    get:
+      tags:
+        - Catalog
+      operationId: HAPI3CatalogGet
+      summary: Get catalog by ID
+      description: |-
+        Retrieve the details of the catalog with the specified `catalogId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: catalogId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Catalog
+      operationId: HAPI3CatalogDelete
+      summary: Delete catalog by ID
+      description: |-
+        Remove the catalog identified by `catalogId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: catalogId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /catalog/search:
+
+    post:
+      tags:
+        - Catalog
+      operationId: HAPI3CatalogSearch
+      summary: Search catalog items
+      description: |-
+        Find catalog items matching given criteria (e.g. product, kind, features).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Catalog'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CatalogEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# company
+
+  /company:
+
+    post:
+      tags:
+        - Company
+      operationId: HAPI3CompanyUpdate
+      summary: Create or update company
+      description: |-
+        Create a new company when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /company/{companyId}:
+
+    get:
+      tags:
+        - Company
+      operationId: HAPI3CompanyGet
+      summary: Get company by ID
+      description: |-
+        Retrieve the details of the company with the specified `companyId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Company
+      operationId: HAPI3CompanyDelete
+      summary: Delete company by ID
+      description: |-
+        Remove the company identified by `companyId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /company/search:
+
+    post:
+      tags:
+        - Company
+      operationId: HAPI3CompanySearch
+      summary: Search companies
+      description: |-
+        Find companies matching given criteria (e.g. kind, gln, name).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# data
+
+  /data:
+
+    post:
+      tags:
+        - Data
+      operationId: HAPI3DataUpdate
+      summary: Create or update data
+      description: |-
+        Create a new data when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Data'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /data/{dataId}:
+
+    get:
+      tags:
+        - Data
+      operationId: HAPI3DataGet
+      summary: Get data by ID
+      description: |-
+        Retrieve the details of the data with the specified `dataId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: dataId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Data
+      operationId: HAPI3DataDelete
+      summary: Delete data by ID
+      description: |-
+        Remove the data identified by `dataId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: dataId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /data/search:
+
+    post:
+      tags:
+        - Data
+      operationId: HAPI3DataSearch
+      summary: Search data items
+      description: |-
+        Find data matching given criteria (e.g. kind, ...).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Data'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# document
+
+  /document/{documentId}:
+
+    get:
+      tags:
+        - Document
+      operationId: HAPI3DocumentGet
+      summary: Get document by ID
+      description: |-
+        Retrieve the details of the document with the specified `documentId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: documentId
+          required: true
+          schema: 
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Document
+      operationId: HAPI3DocumentDelete
+      summary: Delete document by ID
+      description: |-
+        Remove the document identified by `documentId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: documentId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+  /document/{documentId}/download:
+
+    get:
+      tags:
+        - Document
+      operationId: HAPI3DocumentDownload
+      summary: Download document by ID
+      description: |-
+        Retrieve the file of the document with the specified `orderId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: documentId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+        - in: query
+          name: authkey
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+                schema:
+                  type: string
+                  format: binary
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# feature
+
+  /feature:
+
+    post:
+      tags:
+        - Feature
+      operationId: HAPI3FeatureUpdate
+      summary: Create or update feature
+      description: |-
+        Create a new feature when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feature'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /feature/{featureId}:
+
+    get:
+      tags:
+        - Feature
+      operationId: HAPI3FeatureGet
+      summary: Get feature by ID
+      description: |-
+        Retrieve the details of the feature with the specified `featureId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: featureId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Feature
+      operationId: HAPI3FeatureDelete
+      summary: Delete feature by ID
+      description: |-
+        Remove the feature identified by `featureId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: featureId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /feature/search:
+
+    post:
+      tags:
+        - Feature
+      operationId: HAPI3FeatureSearch
+      summary: Search feature items
+      description: |-
+        Find features matching given criteria (e.g. name, group, code).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feature'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# me
+
+  /me:
+
+    get:
+      tags:
+        - Me
+      operationId: HAPI3MeGet
+      summary: Get identity
+      description: |-
+        Retrieve the identity tied to the provided API token, returning the authenticated user’s details—including applications, companies and defined resources.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+# order
+
+  /order:
+
+    post:
+      tags:
+        - Order
+      operationId: HAPI3OrderUpdate
+      summary: Create or update order
+      description: |-
+        Create a new order when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /order/{orderId}:
+
+    get:
+      tags:
+        - Order
+      operationId: HAPI3OrderGet
+      summary: Get order by ID
+      description: |-
+        Retrieve the details of the order with the specified `orderId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+        - in: query
+          name: IncludeLines
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Order
+      operationId: HAPI3OrderDelete
+      summary: Delete order by ID
+      description: |-
+        Remove the order identified by `orderId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /order/search:
+
+    post:
+      tags:
+        - Order
+      operationId: HAPI3OrderSearch
+      summary: Search orders
+      description: |-
+        Find orders matching given criteria (e.g. date range, state, customer).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# order-line
+
+  /order-line:
+
+    post:
+      tags:
+        - OrderLine
+      operationId: HAPI3OrderLineUpdate
+      summary: Create or update orderline
+      description: |-
+        Create a new orderline when no `id` is supplied; update existing when `id` is present.
+        The orderId is used to determine the order to which the orderline belongs.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderLine'
+        # text/json
+        # application/*+json
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderLine'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderLine'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /order-line/{orderLineId}:
+
+    get:
+      tags:
+        - OrderLine
+      operationId: HAPI3OrderLineGet
+      summary: Get orderline by ID
+      description: |-
+        Retrieve the details of the orderline with the specified `orderLineId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: orderLineId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderLine'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - OrderLine
+      operationId: HAPI3OrderLineDelete
+      summary: Delete orderline by ID
+      description: |-
+        Remove the orderline identified by `orderLineId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: orderLineId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /order-line/search:
+
+    post:
+      tags:
+        - OrderLine
+      operationId: HAPI3OrderLineSearch
+      summary: Search orderlines
+      description: |-
+        Find orderlines matching given criteria (e.g. orderId, state, customer).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderLineFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderLine'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderLineEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# stock
+
+  /stock:
+
+    post:
+      tags:
+        - Stock
+      operationId: HAPI3StockUpdate
+      summary: Create or update stock
+      description: |-
+        Create a new stock when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Stock'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /stock/{stockId}:
+
+    get:
+      tags:
+        - Stock
+      operationId: HAPI3StockGet
+      summary: Get stock by ID
+      description: |-
+        Retrieve the details of the stock with the specified `stockId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: stockId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - Stock
+      operationId: HAPI3StockDelete
+      summary: Delete stock by ID
+      description: |-
+        Remove the stock identified by `stockId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: stockId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /stock/search:
+
+    post:
+      tags:
+        - Stock
+      operationId: HAPI3StockSearch
+      summary: Search stock items
+      description: |-
+        Find stock items matching given criteria (e.g. product, kind, features).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stock'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# supply
+
+  /supply:
+
+    post:
+      tags:
+        - Supply
+      operationId: HAPI3SupplyObserve
+      summary: Observe supply stream
+      description: |-
+        Retreive a (live) supply stream identified by `streamId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            # application/json:
+            #   schema:
+            #     type: array
+            #     items:
+            #       $ref: '#/components/schemas/Supply'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplyEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /supply/order:
+
+    post:
+      tags:
+        - Supply
+      operationId: HAPI3SupplyOrder
+      summary: Order supply from a supply stream
+      description: |-
+        Order supply from a supply stream. When no `id` is supplied, a new supply order is created; when `id` is present, the existing supply order is returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyOrder'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyOrder'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /supply/transaction/search:
+
+    post:
+      tags:
+        - Supply
+      operationId: HAPI3SupplyTransactionSearch
+      summary: Search supply transactions
+      description: |-
+        Find supply transactions matching given criteria (e.g. date, kind, buyer, supplier).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyTransactionFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplyTransaction'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplyTransactionEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+# user
+
+  /user:
+
+    post:
+      tags:
+        - User
+      operationId: HAPI3UserUpdate
+      summary: Create or update user
+      description: |-
+        Create a new user when no `id` is supplied; update existing when `id` is present.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /user/{userId}:
+
+    get:
+      tags:
+        - User
+      operationId: HAPI3UserGet
+      summary: Get user by ID
+      description: |-
+        Retrieve the details of the user with the specified `userId`. If not found, a 404 error will be returned.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: userId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+    delete:
+      tags:
+        - User
+      operationId: HAPI3UserDelete
+      summary: Delete user by ID
+      description: |-
+        Remove the user identified by `userId` from the system.
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - in: path
+          name: userId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+  /user/search:
+
+    post:
+      tags:
+        - User
+      operationId: HAPI3UserSearch
+      summary: Search users
+      description: |-
+        Find users matching given criteria (e.g. ...).
+      parameters:
+        - $ref: '#/components/parameters/x-company-id'
+        - $ref: '#/components/parameters/x-sync-session-key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+            "application/vnd.hortiapi.event+json":
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserEvent'
+        '205':
+          description: Reset Content
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
+
+
+
+components:
+
+  parameters:
+
+    x-company-id:
+      name: x-company-id
+      in: header
+      required: false
+      description: The company ID to use when a user has access rights for multiple companies.
+      schema:
+        $ref: '#/components/schemas/Id'
+
+    x-sync-session-key:
+      name: x-sync-session-key
+      in: header
+      required: false
+      description: The session key to use when a user needs multiple search sessions instead of one per ip address.
+      default: ''
+      schema:
+        $ref: '#/components/schemas/Id'
+
+  schemas:
+
+    Address:
+      required:
+        - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/AddressType'
+        gln:
+          type: string
+        hub:
+          type: string
+          description: gln of the hub where the address is located or empty if there is none
+        addressLines:
+          type: array
+          items:
+            type: string
+        postalCode:
+          type: string
+        place:
+          type: string
+        state:
+          type: string
+        countryCode:
+          type: string
+        countryName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+      additionalProperties: false
+
+    AddressType:
+      enum:
+        - unknown
+        - default
+        - physical
+        - postal
+        - delivery
+      type: string
+
+    Amount:
+      required:
+        - value
+      type: object
+      properties:
+        value:
+          format: double
+          type: number
+          example: 1.75
+        currency:
+          type: string
+          default: EUR
+      additionalProperties: false
+
+    Application:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        value:
+          type: string
+          default: ''
+          example: 'Application XYZ'
+      additionalProperties: false
+
+    Article:
+      type: object
+      nullable: true
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        list:
+          $ref: '#/components/schemas/ArticleList'
+        code:
+          type: string
+          description: ID of the article assigned by the industry such as 'VBN code'
+          nullable: true
+          example: '27157'
+        group:
+          $ref: '#/components/schemas/ArticleGroup'
+        groupCode:
+          type: string
+          description: ID of the article group assigned by the industry system such as 'VBN group'
+          nullable: true
+          example: '10100101'
+        name:
+          type: string
+          example: 'Rosa grootbloemig Red Naomi!'
+        tradeName:
+          type: string
+          example: 'R GR RED NAOMI!'
+        genus:
+          type: string
+          nullable: true
+          example: 'Rosa'
+        species:
+          type: string
+          nullable: true
+        cultivar:
+          type: string
+          nullable: true
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemFeature'
+        regulatoryFeatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleRegulatoryFeature'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    ArticleEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/Article'
+      additionalProperties: false
+
+    ArticleFeaturePrescription:
+      enum:
+        - empty
+        - required
+        - recommended
+        - allowed
+      type: string
+      example: 'required'
+      default: 'empty'
+
+    ArticleFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        list:
+          $ref: '#/components/schemas/ArticleList'
+        code:
+          type: string
+          default: ''
+          example: '27157'
+        name:
+          type: string
+          default: ''
+          example: 'Red Naomi'
+        tradeName:
+          type: string
+          default: ''
+          example: 'RED NAOMI'
+        group:
+          $ref: '#/components/schemas/ArticleGroup'
+        groupCode:
+          type: string
+          default: ''
+          example: '10100101'
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    ArticleGroup:
+      enum:
+        - none
+
+        # core
+        - cut-flowers
+        - house-plants
+        - garden-plants
+
+        # bouquets/arrangements
+        - bouquets
+        - house-plant-arrangements
+        - garden-plant-arrangements
+
+        # other
+        - cut-foliage
+        - decorative-materials
+        - bulbs
+        - packaging-materials
+      type: string
+      example: 'cut-flowers'
+      default: 'none'
+
+    ArticleList:
+      enum:
+        - vbn
+        - plu
+        - cn
+        - custom
+      type: string
+      default: vbn
+      example: vbn
+
+    ArticleRegulatoryFeature:
+      required:
+        - f
+        - p
+      type: object
+      properties:
+        f:
+          type: string
+          example: 'S20'
+          default: ''
+        p:
+          $ref: '#/components/schemas/ArticleFeaturePrescription'
+      additionalProperties: false
+
+    Catalog:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this catalog item, is a Resource of type [catalog/kind](https://hortiapi.com/resource/catalog/kind)
+          type: string
+          default: ''
+          x-resource: catalog/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/catalog/kind
+        state:
+          description: State of this catalog, is a Resource of type [catalog/state](https://hortiapi.com/resource/catalog/state)
+          type: string
+          default: ''
+          x-resource: catalog/state
+          externalDocs:
+            url: https://hortiapi.com/resource/catalog/state
+        supplier:
+          $ref: '#/components/schemas/Party'
+        product:
+          $ref: '#/components/schemas/Product'
+        article:
+          $ref: '#/components/schemas/Article'
+        packing:
+          $ref: '#/components/schemas/Packing'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhotoUrl'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    CatalogEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/Catalog'
+      additionalProperties: false
+
+    CatalogFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this catalog item, is a Resource of type [catalog/kind](https://hortiapi.com/resource/catalog/kind)
+          type: string
+          default: ''
+          x-resource: catalog/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/catalog/kind
+        state:
+          description: State of the catalog, is a Resource of type [catalog/state](https://hortiapi.com/resource/catalog/state)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: catalog/state
+          externalDocs:
+            url: https://hortiapi.com/resource/catalog/state
+        manufacturer:
+          $ref: '#/components/schemas/Party'
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Classification:
+      type: object
+      properties:
+        system:
+          type: string
+          default: ''
+          description: Classification system (SystemId)
+          example: 'CBS'
+        value:
+          type: string
+          default: ''
+          description: Classification code (ClassCode)
+          example: '06031100'
+      additionalProperties: false
+
+    Company:
+      required:
+        - kind
+        - role
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        role:
+          description: Role of this company, is a Resource of type [company/role](https://hortiapi.com/resource/company/role)
+          type: string
+          default: ''
+          x-resource: company/role
+          externalDocs:
+            url: https://hortiapi.com/resource/company/role
+        kind:
+          description: Kind of this company, is a Resource of type [company/kind](https://hortiapi.com/resource/company/kind)
+          type: string
+          default: ''
+          x-resource: company/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/company/kind
+        code:
+          type: string
+        name:
+          type: string
+        legalName:
+          type: string
+        email:
+          type: string
+        logo:
+          type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyUser'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyContact'
+        registrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyRegistration'
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyApplication'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    CompanyApplication:
+      required:
+        - isDefault
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    CompanyContact:
+      required:
+        - kind
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this company contact, is a Resource of type [company-contact/kind](https://hortiapi.com/resource/company-contact/kind)
+          type: string
+          default: ''
+          x-resource: company-contact/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/company-contact/kind
+        name:
+          type: string
+          nullable: true
+        function:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+      additionalProperties: false
+
+    CompanyEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/Company'
+      additionalProperties: false
+
+    CompanyFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        role:
+          description: Role of this company, is a Resource of type [company/role](https://hortiapi.com/resource/company/role)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: company/role
+          externalDocs:
+            url: https://hortiapi.com/resource/company/role
+        kind:
+          description: Kind of this company, is a Resource of type [company/kind](https://hortiapi.com/resource/company/kind)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: company/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/company/kind
+        code:
+          type: string
+        gln:
+          type: string
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    CompanyRegistration:
+      type: object
+      properties:
+        kind:
+          description: Kind of this company registration, is a Resource of type [company-registration/kind](https://hortiapi.com/resource/company-registration/kind)
+          type: string
+          default: ''
+          x-resource: company-registration/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/company-registration/kind
+        tradeName:
+          type: string
+        gln:
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    CompanyUser:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Data:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this data, is a Resource of type [data/kind](https://hortiapi.com/resource/data/kind)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: data/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/data/kind
+        name:
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    DataFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this data, is a Resource of type [data/kind](https://hortiapi.com/resource/data/kind)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: data/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/data/kind
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Delivery:
+      type: object
+      properties:
+        terms:
+          $ref: '#/components/schemas/Incoterms'
+        tradeLocation:
+          $ref: '#/components/schemas/Location'
+        latestOrder:
+          format: date-time
+          type: string
+          nullable: true
+        earliestDispatch:
+          format: date-time
+          type: string
+          nullable: true
+        latestDispatch:
+          format: date-time
+          type: string
+          nullable: true
+        earliestDelivery:
+          format: date-time
+          type: string
+          nullable: true
+        latestDelivery:
+          format: date-time
+          type: string
+          nullable: true
+        deliveryLocation:
+          $ref: '#/components/schemas/Location'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Document:
+      required:
+        - kind
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        owner:
+          type: string
+        kind:
+          type: string
+          description: This is a Resource of type [download/kind](https://hortiapi.com/resource/document/kind  )
+          externalDocs:
+            url: https://hortiapi.com/resource/document/kind          
+        title:
+          type: string
+        urlWithAuth:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          type: string
+      additionalProperties: false
+
+    DocumentReference:
+      type: object
+      properties:
+        name:
+          type: string
+          default: ''
+        value:
+          type: string
+          default: ''
+      additionalProperties: false
+
+    Feature:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        list:
+          $ref: '#/components/schemas/ArticleList'
+        type:
+          type: string
+          default: ''
+          example: 'S20'
+        description:
+          type: string
+          default: ''
+          example: 'Minimum length of flower stem'
+        values:
+          type: array
+          description: The available values for this feature
+          items:
+            $ref: '#/components/schemas/FeatureValue'
+      additionalProperties: false
+
+    FeatureFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        list:
+          $ref: '#/components/schemas/ArticleList'
+        type:
+          type: string
+          default: ''
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    FeatureValue:
+      type: object
+      properties:
+        value:
+          type: string
+          default: ''
+          example: '060'
+        description:
+          type: string
+          default: ''
+          example: '60 cm'
+      additionalProperties: false
+
+    Id:
+        type: string
+        default: ''
+        description: ID of the entity. A 128‑bit GUID (UUID) encoded in Base64‐URL (RFC 4648 §5), without “+” or “/” (uses “-” and “_”), no padding, exactly 22 characters.
+        example: ''
+        pattern: '^[A-Za-z0-9_-]{22}$'
+        nullable: true
+
+    Incoterms:
+      enum:
+        - undefined
+        - exw
+        - fca
+        - fas
+        - fob
+        - cpt
+        - cfr
+        - cif
+        - cip
+        - dpu
+        - dap
+        - ddp
+      type: string
+      default: 'undefined'
+      example: 'ddp'
+
+    ItemFeature:
+      type: object
+      properties:
+        type:
+          type: string
+          default: ''
+          example: 'S20'
+        value:
+          type: string
+          default: ''
+          example: '060'
+      additionalProperties: false
+
+    Location:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        gln:
+          type: string
+          default: '8714231208631'
+        name:
+          type: string
+          default: ''
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Me:
+      type: object
+      description: Identity of the api-token, user information, available companies, available endpoints
+      properties:
+        application:
+          $ref: '#/components/schemas/MeApplication'
+        companies:
+          type: array
+          description: The available companies for this user
+          items:
+            $ref: '#/components/schemas/MeCompany'
+        company:
+          $ref: '#/components/schemas/MeCompany'
+        user:
+          $ref: '#/components/schemas/MeUser'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    MeApplication:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    MeCompany:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeApplication'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    MeUser:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Note:
+      type: object
+      properties:
+        code:
+          type: string
+          default: ''
+        value:
+          type: string
+          default: ''
+      additionalProperties: false
+
+    Order:
+      required:
+        - invoiceDate
+        - orderDate
+        - shipDate
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        state:
+          description: State of this order, is a Resource of type [order/state](https://hortiapi.com/resource/order/state)
+          type: string
+          default: ''
+          x-resource: order/state
+          externalDocs:
+            url: https://hortiapi.com/resource/order/state
+        kind:
+          description: Kind of this order, is a Resource of type [order/kind](https://hortiapi.com/resource/order/kind)
+          type: string
+          x-resource: order/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/order/kind
+        action:
+          description: Action for this order, is a Resource of type [order/action](https://hortiapi.com/resource/order/action)
+          type: string
+          default: ''
+          x-resource: order/action
+          externalDocs:
+            url: https://hortiapi.com/resource/order/action
+        supplier:
+          $ref: '#/components/schemas/Party'
+        customer:
+          $ref: '#/components/schemas/Party'
+        orderDate:
+          format: date-time
+          type: string
+        shipDate:
+          format: date-time
+          type: string
+        invoiceDate:
+          format: date-time
+          type: string
+        description:
+          type: string
+          default: ''
+        total:
+          $ref: '#/components/schemas/OrderTotals'
+        resources:
+          $ref: '#/components/schemas/Resources'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLine'
+      additionalProperties: false
+
+    OrderEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/Order'
+      additionalProperties: false
+
+    OrderFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        state:
+          description: State of the orders, is a Resource of type [order/state](https://hortiapi.com/resource/order/state)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: order/state
+          externalDocs:
+            url: https://hortiapi.com/resource/order/state
+        kind:
+          description: Kind of the orders, is a Resource of type [order/kind](https://hortiapi.com/resource/order/kind)
+          type: string
+          nullable: true
+          x-resource: order/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/order/kind
+        supplier:
+          $ref: '#/components/schemas/Party'
+        customer:
+          $ref: '#/components/schemas/Party'
+        orderDateFrom:
+          format: date-time
+          type: string
+          nullable: true
+        orderDateTill:
+          format: date-time
+          type: string
+          nullable: true
+        shipDateFrom:
+          format: date-time
+          type: string
+          nullable: true
+        shipDateTill:
+          format: date-time
+          type: string
+          nullable: true
+        invoiceDateFrom:
+          format: date-time
+          type: string
+          nullable: true
+        invoiceDateTill:
+          format: date-time
+          type: string
+          nullable: true
+        # description:
+        #   type: string
+        #   default: ''
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    OrderTotals:
+      required:
+        - lines
+        - pieces
+        - price
+      type: object
+      properties:
+        lines:
+          format: double
+          type: number
+        pieces:
+          format: double
+          type: number
+        price:
+          format: double
+          type: number
+      additionalProperties: false
+
+    OrderLine:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        order:
+          type: string
+          default: ''
+          description: Id of the order containing the orderline, or empty to use the default
+        state:
+          description: State of this orderline, is a Resource of type [order-line/state](https://hortiapi.com/resource/order-line/state)
+          type: string
+          default: ''
+          x-resource: order-line/state
+          externalDocs:
+            url: https://hortiapi.com/resource/order-line/state
+        kind:
+          description: Kind of this orderline, is a Resource of type [order-line/kind](https://hortiapi.com/resource/order-line/kind)
+          type: string
+          default: ''
+          x-resource: order-line/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/order-line/kind
+        action:
+          description: Action for this orderline, is a Resource of type [order-line/action](https://hortiapi.com/resource/order-line/action)
+          type: string
+          default: ''
+          x-resource: order-line/action
+          externalDocs:
+            url: https://hortiapi.com/resource/order-line/action
+        supplier:
+          $ref: '#/components/schemas/Party'
+        customer:
+          $ref: '#/components/schemas/Party'
+        product:
+          $ref: '#/components/schemas/Product'
+        article:
+          $ref: '#/components/schemas/Article'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        packing:
+          $ref: '#/components/schemas/Packing'
+        price:
+          $ref: '#/components/schemas/Price'
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhotoUrl'
+        delivery:
+          $ref: '#/components/schemas/Delivery'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    OrderLineEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/OrderLine'
+      additionalProperties: false
+
+    OrderLineFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        order:
+          type: string
+          default: ''
+          nullable: true
+          description: Id of the order for the orderlines
+        state:
+          description: State of the orderlines, is a Resource of type [order-line/state](https://hortiapi.com/resource/order-line/state)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: order-line/state
+          externalDocs:
+            url: https://hortiapi.com/resource/order-line/state
+        kind:
+          description: Kind of the orderlines, is a Resource of type [order-line/kind](https://hortiapi.com/resource/order-line/kind)
+          type: string
+          nullable: true
+          x-resource: order-line/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/order-line/kind
+        supplier:
+          $ref: '#/components/schemas/Party'
+        customer:
+          $ref: '#/components/schemas/Party'
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Package:
+      required:
+        - quantity
+      type: object
+      nullable: true
+      properties:
+        code:
+          type: string
+          default: ''
+        quantity:
+          format: double
+          type: number
+          default: 1
+      additionalProperties: false
+
+    Packing:
+      type: object
+      properties:
+        bunch:
+          $ref: '#/components/schemas/Package'
+        bundle:
+          $ref: '#/components/schemas/Package'
+        box:
+          $ref: '#/components/schemas/Package'
+        layer:
+          $ref: '#/components/schemas/Package'
+        carrier:
+          $ref: '#/components/schemas/Package'
+      additionalProperties: false
+
+    Party:
+      type: object
+      nullable: true
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        gln:
+          type: string
+          default: '8718288056689'
+        name:
+          type: string
+          default: ''
+          example: 'Company ABC'
+      additionalProperties: false
+
+    PhotoUrl:
+      type: object
+      properties:
+        url:
+          type: string
+          default: ''
+          example: 'https://hortiapi.com/photos/1234567890.jpg'
+      additionalProperties: false
+
+    Price:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PriceType'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        minimum:
+          $ref: '#/components/schemas/Quantity'
+        maximum:
+          $ref: '#/components/schemas/Quantity'
+      additionalProperties: false
+
+    PriceType:
+      enum:
+        - invoice
+        - provisional
+        - consumer
+        - clock-reference
+        - clock-minimal
+      type: string
+      default: 'invoice'
+      example: 'invoice'
+
+    Product:
+      required:
+        - type
+      type: object
+      properties:
+        industryId:
+          type: string
+          description: ID of the article assigned by the industry such as 'VBN code'
+          nullable: true
+          example: '27157'
+          default: '1999'
+        supplierId:
+          type: string
+          description: ID of the article assigned by the supplier
+          nullable: true
+          example: null
+        customerId:
+          type: string
+          description: ID of the article assigned by the customer
+          nullable: true
+          example: 'my-rosa-code-1'
+        manufacturerId:
+          type: string
+          description: ID of the article assigned by the manufacturer
+          nullable: true
+          example: 'RGRNAOMI80'
+        type:
+          $ref: '#/components/schemas/ProductType'
+        description:
+          $ref: '#/components/schemas/Text'
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemFeature'
+        classifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Classification'
+        manufacturer:
+          $ref: '#/components/schemas/Party'
+      additionalProperties: false
+
+    ProductType:
+      enum:
+        - product
+        - logisticMeans
+        - service
+        - hardware
+      type: string
+      example: 'product'
+      default: 'product'
+
+    Quantity:
+      required:
+        - unit
+        - value
+      type: object
+      nullable: true
+      properties:
+        unit:
+          $ref: '#/components/schemas/UnitCode'
+        value:
+          format: double
+          type: number
+          default: 0
+          example: 1
+      additionalProperties: false
+    
+    Resources:
+      description: Array with resource identifiers
+      externalDocs:
+        url: https://hortiapi.com/resource/
+      type: array
+      nullable: true
+      example: 
+      - 'custom/name:value1'
+      - 'custom/name:value2'
+      items:
+        type: string
+        description: Resource identifier
+        pattern: '^([a-zA-Z0-9\-]+/[a-zA-Z0-9\-]+):([a-zA-Z0-9\-@.?=]+(,[a-zA-Z0-9\-@.?=]+)*)$'
+
+    StreamEventType:
+        enum:
+            - reset
+            - add
+            - update
+            - delete
+            - live
+        type: string
+        default: 'add'
+        example: 'add'
+        nullable: false
+
+    SyncLimit:
+        type: integer
+        default: 1000
+        description: Limit the number of items to return
+        example: '500'
+        nullable: true
+
+    SyncMethod:
+        enum:
+            - none
+            - sync-start
+            - sync-updates
+        type: string
+        default: 'none'
+        example: 'none'
+        nullable: true
+
+    Stock:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this stock item, is a Resource of type [stock/kind](https://hortiapi.com/resource/stock/kind)
+          type: string
+          default: ''
+          x-resource: stock/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/stock/kind
+        state:
+          description: State of this stock, is a Resource of type [stock/state](https://hortiapi.com/resource/stock/state)
+          type: string
+          default: ''
+          x-resource: stock/state
+          externalDocs:
+            url: https://hortiapi.com/resource/stock/state
+        supplier:
+          $ref: '#/components/schemas/Party'
+        product:
+          $ref: '#/components/schemas/Product'
+        article:
+          $ref: '#/components/schemas/Article'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        packing:
+          $ref: '#/components/schemas/Packing'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhotoUrl'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    StockEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/Stock'
+      additionalProperties: false
+
+    StockFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this stock item, is a Resource of type [stock/kind](https://hortiapi.com/resource/stock/kind)
+          type: string
+          default: ''
+          x-resource: stock/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/stock/kind
+        state:
+          description: State of the stock, is a Resource of type [stock/state](https://hortiapi.com/resource/stock/state)
+          type: string
+          default: ''
+          nullable: true
+          x-resource: stock/state
+          externalDocs:
+            url: https://hortiapi.com/resource/stock/state
+        manufacturer:
+          $ref: '#/components/schemas/Party'
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Supply:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        state:
+          description: State of this supply, is a Resource of type [supply/state](https://hortiapi.com/resource/supply/state)
+          type: string
+          default: ''
+          x-resource: supply/state
+          externalDocs:
+            url: https://hortiapi.com/resource/supply/state
+        supplier:
+          $ref: '#/components/schemas/Party'
+        product:
+          $ref: '#/components/schemas/Product'
+        article:
+          $ref: '#/components/schemas/Article'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        packing:
+          $ref: '#/components/schemas/Packing'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhotoUrl'
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Delivery'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    SupplyEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/Supply'
+      additionalProperties: false
+
+    SupplyFilter:
+      required:
+        - limit
+        - method
+      type: object
+      properties:
+        streamId:
+          $ref: '#/components/schemas/Id'
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    SupplyOrder:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        supply:
+          $ref: '#/components/schemas/Id'
+        state:
+          description: State of this supply order, is a Resource of type [supply-order/state](https://hortiapi.com/resource/supply-order/state)
+          type: string
+          default: ''
+          x-resource: supply-order/state
+          externalDocs:
+            url: https://hortiapi.com/resource/supply-order/state
+        supplier:
+          $ref: '#/components/schemas/Party'
+        customer:
+          $ref: '#/components/schemas/Party'
+        product:
+          $ref: '#/components/schemas/Product'
+        article:
+          $ref: '#/components/schemas/Article'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        packing:
+          $ref: '#/components/schemas/Packing'
+        price:
+          $ref: '#/components/schemas/Price'
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentReference'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhotoUrl'
+        delivery:
+          $ref: '#/components/schemas/Delivery'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    SupplyTransaction:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        date:
+          format: date-time
+          type: string
+        state:
+          description: State of this transaction, is a Resource of type [supply-transaction/state](https://hortiapi.com/resource/supply-transaction/state)
+          type: string
+          default: ''
+          x-resource: supply-transaction/state
+          externalDocs:
+            url: https://hortiapi.com/resource/supply-transaction/state
+        interactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplyTransactionInteraction'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    SupplyTransactionEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/SupplyTransaction'
+      additionalProperties: false
+
+    SupplyTransactionInteraction:
+      type: object
+      properties:
+        startDate:
+          format: date-time
+          type: string
+        request:
+          $ref: '#/components/schemas/SupplyOrder'
+        response:
+          $ref: '#/components/schemas/SupplyOrder'
+        endDate:
+          format: date-time
+          type: string
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    SupplyTransactionFilter:
+      required:
+        - limit
+        - method
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        state:
+          description: State of this transaction, is a Resource of type [supply-transaction/state](https://hortiapi.com/resource/supply-transaction/state)
+          type: string
+          default: ''
+          x-resource: supply-transaction/state
+          externalDocs:
+            url: https://hortiapi.com/resource/supply-transaction/state
+        supplier:
+          $ref: '#/components/schemas/Party'
+        customer:
+          $ref: '#/components/schemas/Party'
+        dateFrom:
+          format: date-time
+          type: string
+          nullable: true
+        dateTill:
+          format: date-time
+          type: string
+          nullable: true
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    Text:
+      type: object
+      properties:
+        value:
+          type: string
+          example: 'Rosa grootbloemig Red Naomi!'
+        language:
+          type: string
+          example: 'NL'
+      additionalProperties: false
+
+    UnitCode:
+      enum:
+        - none
+        - piece
+        - bunch
+        - box
+        - layer
+        - carrier
+      type: string
+      example: 'box'
+
+    User:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          example: 'John Doe'
+        # role:
+        #   type: string
+        kind:
+          description: Kind of this user, is a Resource of type [user/kind](https://hortiapi.com/resource/user/kind)
+          type: string
+          default: ''
+          x-resource: user/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/user/kind
+        username:
+          type: string
+          example: 'johndoe@example.com'
+        email:
+          type: string
+          example: 'johndoe@example.com'
+        phone:
+          type: string
+          example: '+31 6 12345678'
+        remarks:
+          type: string
+          example: 'This is a remark'
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserCompany'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+    UserCompany:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+      additionalProperties: false
+
+    UserEvent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/StreamEventType'
+        entity:
+          $ref: '#/components/schemas/User'
+      additionalProperties: false
+
+    UserFilter:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        kind:
+          description: Kind of this user, is a Resource of type [user/kind](https://hortiapi.com/resource/user/kind)
+          type: string
+          default: ''
+          x-resource: user/kind
+          externalDocs:
+            url: https://hortiapi.com/resource/user/kind
+        method:
+          $ref: '#/components/schemas/SyncMethod'
+        limit:
+          $ref: '#/components/schemas/SyncLimit'
+        resources:
+          $ref: '#/components/schemas/Resources'
+      additionalProperties: false
+
+
+
+# ProblemDetails / RFC 7807 / ApiError
+    HortiApiProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference that identifies the problem type. This URI should provide human-readable documentation for the problem type when dereferenced.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+        instance:
+          type: string
+          format: uri
+          description: A URI reference that identifies the specific occurrence of the problem.
+        context:
+          type: array
+          items:
+            $ref: '#/components/schemas/HortiApiProblemDetailsContext'
+      required:
+        - title
+        - status
+
+    HortiApiProblemDetailsContext:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the context parameter.
+        value:
+          type: string
+          description: The value of the context parameter.
+
+
+  responses:
+
+    BadRequestError:
+      description: Bad request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HortiApiProblemDetails'
+          example:
+            type: "https://hortiapi.com/error/bad-request/no-accept-encoding-header"
+            title: "HortiApi request must include a Accept-Encoding header"
+            status: 401
+            detail: "HortiApi request must include a Accept-Encoding header"
+            instance: "/supply"
+            context: []
+
+    UnauthorizedError:
+      description: Authentication required
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HortiApiProblemDetails'
+          example:
+            type: "https://hortiapi.com/error/unauthorized/no-authorization-header"
+            title: "Missing authentication header or not starting with Bearer"
+            status: 401
+            detail: "Missing authentication header or not starting with Bearer"
+            instance: "/supply"
+            context: []
+
+    ForbiddenError:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HortiApiProblemDetails'
+          example:
+            type: "https://hortiapi.com/error/forbidden"
+            title: "Forbidden"
+            status: 403
+            detail: "You do not have permission to access this resource."
+            instance: "/supply"
+            context: [
+              requiredPermission: "Supply.Read"
+            ]
+
+    NotFoundError:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HortiApiProblemDetails'
+          example:
+            type: "https://hortiapi.com/error/not-found"
+            title: "Resource Not Found"
+            status: 404
+            detail: "The requested resource was not found."
+            instance: "/supply"
+            context: [
+              resourceType: "Supply",
+              resourceId: "12345"
+            ]
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HortiApiProblemDetails'
+          example:
+            type: "https://hortiapi.com/error/internal-server-error"
+            title: "Internal Server Error"
+            status: 500
+            detail: "An unexpected error occurred on the server."
+            instance: "/supply"
+            context: [
+              errorId: "abcde12345"
+            ]
+
+    NotImplemented:
+      description: Not Implemented
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HortiApiProblemDetails'
+          example:
+            type: "https://hortiapi.com/error/not-implemented"
+            title: "Not Implemented"
+            status: 501
+            detail: "The endpoint '/feature' is not implemented yet."
+            instance: "/feature"
+            context: [
+            ]
+
+
+
+  securitySchemes:
+    # ApiKeyAuth:
+    #   type: apiKey
+    #   in: header
+    #   name: Authorization
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: >-
+        Standard Authorization header using the Bearer scheme. Example: "Bearer
+        {token}"
+      
+security:
+  - Bearer: []
+
+# .NET core:
+#
+# var problemDetails = new ProblemDetails
+# {
+#     Title = "An error occurred.",
+#     Status = 500
+# };
+# problemDetails.Extensions["context"] = new Dictionary<string, string>
+# {
+#     { "transactionId", "abc123" },
+#     { "timestamp", DateTime.UtcNow.ToString("o") }
+# };
+

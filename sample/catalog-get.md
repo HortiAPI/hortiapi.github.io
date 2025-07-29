@@ -15,7 +15,7 @@ Request headers
 Accept: application/json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.14; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.27; .NET 8.0.12; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
@@ -31,6 +31,7 @@ Response content
 {
   "resources": [],
   "id": "ePmGqwO54kuKVBWCJk9BSA",
+  "kind": "",
   "state": "",
   "supplier": {
     "id": "uWXsD0b-UEiIjVKA3smDDg",
@@ -77,13 +78,6 @@ Response content
     "classifications": []
   },
   "article": {
-    "f1": "S20",
-    "f2": "",
-    "f3": "S05",
-    "f4": "S19",
-    "f5": "L11",
-    "f6": "",
-    "f7": "",
     "features": [
       {
         "type": "B01",
@@ -128,9 +122,13 @@ Response content
     "id": "2fd8Au0fvEC97JpuHP6iSA",
     "list": "vbn",
     "code": "27157",
-    "group": null,
+    "group": "cut-flowers",
+    "groupCode": "10100101",
     "name": "Rosa grootbloemig Red Naomi!",
-    "tradeName": "R GR RED NAOMI!"
+    "tradeName": "R GR RED NAOMI!",
+    "genus": "Rosa",
+    "species": null,
+    "cultivar": "\u0027Schemocba\u0027"
   },
   "packing": {
     "bunch": {

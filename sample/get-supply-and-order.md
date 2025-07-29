@@ -15,7 +15,7 @@ Request headers
 Accept: application/vnd.hortiapi.event+json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.14; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.27; .NET 8.0.12; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -34,7 +34,7 @@ Response headers (200)
 ```
 Date: Tue, 27 May 2025 10:26:46 GMT
 Transfer-Encoding: chunked
-Content-Type: application/json; charset=utf-8
+Content-Type: application/vnd.hortiapi.event+json
 ```
 
 Response content
@@ -46,13 +46,6 @@ Response content
       "id": "AAAAAQAAACCbcsO97USSrQ",
       "state": "",
       "article": {
-        "f1": "S20",
-        "f2": "",
-        "f3": "S05",
-        "f4": "S19",
-        "f5": "L11",
-        "f6": "",
-        "f7": "",
         "features": [
           {
             "type": "B01",
@@ -97,9 +90,12 @@ Response content
         "id": "2fd8Au0fvEC97JpuHP6iSA",
         "list": "vbn",
         "code": "27157",
-        "group": null,
+        "group": "cut-flowers",
+        "groupCode": "10100101",
         "name": "Rosa grootbloemig Red Naomi!",
-        "tradeName": "R GR RED NAOMI!"
+        "tradeName": "R GR RED NAOMI!",
+        "genus": "Rosa",
+        "cultivar": "\u0027Schemocba\u0027"
       },
       "supplier": {
         "id": "uWXsD0b-UEiIjVKA3smDDg",
@@ -147,14 +143,13 @@ Response content
       },
       "quantity": {
         "unit": "box",
-        "value": 8
+        "value": 160
       },
       "packing": {
         "bunch": {
           "code": "800",
           "quantity": 10
         },
-        "bundle": null,
         "box": {
           "code": "560",
           "quantity": 8
@@ -175,7 +170,6 @@ Response content
             "unit": "box",
             "value": 1
           },
-          "maximum": null,
           "amount": {
             "value": 1,
             "currency": "EUR"
@@ -203,7 +197,7 @@ Request headers
 Accept: application/json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.14; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.27; .NET 8.0.12; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
