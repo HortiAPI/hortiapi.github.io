@@ -14,7 +14,7 @@ Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.27; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.30; .NET 8.0.12; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
@@ -67,7 +67,7 @@ Request headers
 Accept: application/json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.27; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.30; .NET 8.0.12; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 

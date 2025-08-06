@@ -37,7 +37,7 @@ Import the OpenAPI file into your tool of choice:
 * **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
 * **Python/Java**: OpenAPI Generator templates
 
-Use [`definitions/hortiapi-v3-rc.27.yaml`](/definitions/hortiapi-v3-rc.27.yaml) for the latest.
+Use [`definitions/hortiapi-v3-rc.30.yaml`](/definitions/hortiapi-v3-rc.30.yaml) for the latest.
 
 ## 📋 Samples
 
