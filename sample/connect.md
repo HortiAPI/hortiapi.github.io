@@ -28,35 +28,35 @@ Content-Type: application/json; charset=utf-8
 Response content
 ``` json
 {
-  "resources": [
-    "horti-api/health:healthy"
-  ],
   "application": {
-    "resources": [
-    ],
     "id": "",
-    "name": "sandbox.hortiapi.com application"
+    "name": "sandbox.hortiapi.com application",
+    "resources": [
+    ]
   },
   "companies": [
     {
-      "resources": [],
       "id": "uWXsD0b-UEiIjVKA3smDDg",
       "name": "Lakerfield B.V.",
-      "applications": null
+      "applications": null,
+      "resources": null
     },
     {
-      "resources": [],
       "id": "_N_8wOAl6kiaAXnXzHxLSQ",
       "name": "Algemeen koper",
-      "applications": null
+      "applications": null,
+      "resources": null
     }
   ],
   "company": null,
   "user": {
-    "resources": [],
     "id": "IQ0hBMwEN0yJP2ty3rSZEg",
-    "name": "Michael Lakerveld"
-  }
+    "name": "Michael Lakerveld",
+    "resources": null
+  },
+  "resources": [
+    "horti-api/health:healthy"
+  ]
 }
 ```
 
@@ -81,40 +81,40 @@ Content-Type: application/json; charset=utf-8
 Response content
 ``` json
 {
-  "resources": [
-    "horti-api/health:healthy"
-  ],
   "application": {
-    "resources": [
-    ],
     "id": "",
-    "name": "sandbox.hortiapi.com application"
+    "name": "sandbox.hortiapi.com application",
+    "resources": [
+    ]
   },
   "companies": [
     {
-      "resources": [],
       "id": "uWXsD0b-UEiIjVKA3smDDg",
       "name": "Lakerfield B.V.",
-      "applications": null
+      "applications": null,
+      "resources": null
     },
     {
-      "resources": [],
       "id": "_N_8wOAl6kiaAXnXzHxLSQ",
       "name": "Algemeen koper",
-      "applications": null
+      "applications": null,
+      "resources": null
     }
   ],
   "company": {
-    "resources": [],
     "id": "uWXsD0b-UEiIjVKA3smDDg",
     "name": "Lakerfield B.V.",
-    "applications": null
+    "applications": null,
+    "resources": null
   },
   "user": {
-    "resources": [],
     "id": "IQ0hBMwEN0yJP2ty3rSZEg",
-    "name": "Michael Lakerveld"
-  }
+    "name": "Michael Lakerveld",
+    "resources": null
+  },
+  "resources": [
+    "horti-api/health:healthy"
+  ]
 }
 ```
 

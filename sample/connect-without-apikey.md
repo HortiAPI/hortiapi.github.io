@@ -27,18 +27,18 @@ Content-Type: application/json; charset=utf-8
 Response content
 ``` json
 {
-  "resources": [
-    "horti-api/health:healthy"
-  ],
   "application": {
-    "resources": [
-    ],
     "id": "",
-    "name": "sandbox.hortiapi.com application"
+    "name": "sandbox.hortiapi.com application",
+    "resources": [
+    ]
   },
   "companies": null,
   "company": null,
-  "user": null
+  "user": null,
+  "resources": [
+    "horti-api/health:healthy"
+  ]
 }
 ```
 

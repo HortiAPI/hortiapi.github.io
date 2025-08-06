@@ -85,7 +85,6 @@ Response content
             "f": "L11"
           }
         ],
-        "resources": [],
         "id": "2fd8Au0fvEC97JpuHP6iSA",
         "list": "vbn",
         "code": "27157",

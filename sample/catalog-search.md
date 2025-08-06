@@ -42,14 +42,14 @@ Response content
 ``` json
 [
   {
-    "resources": [],
     "id": "ePmGqwO54kuKVBWCJk9BSA",
     "kind": "",
     "state": "",
     "supplier": {
       "id": "uWXsD0b-UEiIjVKA3smDDg",
       "gln": "8713783483923",
-      "name": "Lakerfield B.V."
+      "name": "Lakerfield B.V.",
+      "resources": null
     },
     "product": {
       "industryId": "27157",
@@ -64,7 +64,8 @@ Response content
       "manufacturer": {
         "id": "uWXsD0b-UEiIjVKA3smDDg",
         "gln": "8713783483923",
-        "name": "Lakerfield B.V."
+        "name": "Lakerfield B.V.",
+        "resources": null
       },
       "features": [
         {
@@ -131,7 +132,6 @@ Response content
           "f": "L11"
         }
       ],
-      "resources": [],
       "id": "2fd8Au0fvEC97JpuHP6iSA",
       "list": "vbn",
       "code": "27157",
@@ -141,7 +141,8 @@ Response content
       "tradeName": "R GR RED NAOMI!",
       "genus": "Rosa",
       "species": null,
-      "cultivar": "\u0027Schemocba\u0027"
+      "cultivar": "\u0027Schemocba\u0027",
+      "resources": null
     },
     "packing": {
       "bunch": {
@@ -182,7 +183,8 @@ Response content
       {
         "url": "https://sandbox.hortiapi.com/photo/sq1k/8KaXG-Ci6ESTofOnPO8iSg.jpg"
       }
-    ]
+    ],
+    "resources": null
   }
 ]
 ```
