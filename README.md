@@ -46,6 +46,7 @@ See the API in action with these practical [example](/sample) scenarios. These i
 * [Connecting](/sample/connect.md)
 * [Catalog search](/sample/catalog-search.md)
 * [Get supply and order](/sample/get-supply-and-order.md)
+* [Direct-debit](/sample/direct-debit.md)
 * [much more...](/sample)
 
 ## 📚 Resources
