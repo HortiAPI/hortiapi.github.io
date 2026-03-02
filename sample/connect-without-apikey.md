@@ -8,23 +8,26 @@ permalink: /sample/connect-without-apikey
 
 Connecting to the HortiApi without apikey
 
-# GET https://v3.sandbox.hortiapi.net/me
+> GET https://v3.sandbox.hortiapi.net/me
 
-Request headers
+> Request headers
 ```
 Accept: application/json
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.30; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.52; .NET 8.0.24; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
-Response headers (200)
+
+---
+
+> Response headers (200)
 ```
 Date: Tue, 27 May 2025 10:26:46 GMT
 Transfer-Encoding: chunked
 Content-Type: application/json; charset=utf-8
 ```
 
-Response content
+> Response content
 ``` json
 {
   "application": {
@@ -33,9 +36,6 @@ Response content
     "resources": [
     ]
   },
-  "companies": null,
-  "company": null,
-  "user": null,
   "resources": [
     "horti-api/health:healthy"
   ]
