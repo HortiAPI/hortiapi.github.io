@@ -8,37 +8,37 @@ permalink: /sample/catalog-search
 
 Get all catalog items with HortiApi
 
-# POST https://v3.sandbox.hortiapi.net/catalog/search
+> POST https://v3.sandbox.hortiapi.net/catalog/search
 
-Request headers
+> Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.30; .NET 8.0.12; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.52; .NET 8.0.24; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
 ```
 
-Request content
+> Request content
 ``` json
 {
-  "id": "",
   "kind": "",
-  "state": "",
-  "method": "none",
-  "limit": 1000
+  "state": ""
 }
 ```
-Response headers (200)
+
+---
+
+> Response headers (200)
 ```
 Date: Tue, 27 May 2025 10:26:46 GMT
 Transfer-Encoding: chunked
 Content-Type: application/json; charset=utf-8
 ```
 
-Response content
+> Response content
 ``` json
 [
   {
@@ -48,8 +48,7 @@ Response content
     "supplier": {
       "id": "uWXsD0b-UEiIjVKA3smDDg",
       "gln": "8713783483923",
-      "name": "Lakerfield B.V.",
-      "resources": null
+      "name": "Lakerfield B.V."
     },
     "product": {
       "industryId": "27157",
@@ -57,15 +56,11 @@ Response content
       "customerId": "",
       "manufacturerId": "",
       "type": "product",
-      "description": {
-        "value": "",
-        "language": "NL"
-      },
+      "description": "",
       "manufacturer": {
         "id": "uWXsD0b-UEiIjVKA3smDDg",
         "gln": "8713783483923",
-        "name": "Lakerfield B.V.",
-        "resources": null
+        "name": "Lakerfield B.V."
       },
       "features": [
         {
@@ -140,19 +135,23 @@ Response content
       "name": "Rosa grootbloemig Red Naomi!",
       "tradeName": "R GR RED NAOMI!",
       "genus": "Rosa",
-      "species": null,
-      "cultivar": "\u0027Schemocba\u0027",
-      "resources": null
+      "cultivar": "'Schemocba'"
     },
     "packing": {
       "bunch": {
         "code": "800",
         "quantity": 10
       },
-      "bundle": null,
       "box": {
         "code": "560",
-        "quantity": 8
+        "quantity": 8,
+        "measurements": [
+          {
+            "type": "grossWeight",
+            "value": 2.5,
+            "unit": "kg"
+          }
+        ]
       },
       "layer": {
         "code": "",
@@ -170,9 +169,8 @@ Response content
           "unit": "box",
           "value": 1
         },
-        "maximum": null,
         "amount": {
-          "value": 1,
+          "value": 2,
           "currency": "EUR"
         }
       }
@@ -183,8 +181,7 @@ Response content
       {
         "url": "https://sandbox.hortiapi.com/photo/sq1k/8KaXG-Ci6ESTofOnPO8iSg.jpg"
       }
-    ],
-    "resources": null
+    ]
   }
 ]
 ```

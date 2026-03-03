@@ -19,7 +19,7 @@ Prepare a complete draft (state = order/direct-debit-state:draft) direct-debit (
 Accept: application/json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.31; .NET 8.0.19; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.52; .NET 8.0.24; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -28,22 +28,22 @@ Content-Type: application/json; charset=utf-8
 > Request content
 ``` json
 {
-  "id": "",
   "state": "order/direct-debit-state:draft",
   "kind": "order/kind:direct-debit",
   "action": "",
-  "orderDate": "2025-08-12T00:00:00+02:00",
-  "shipDate": "2025-08-12T00:00:00+02:00",
-  "invoiceDate": "2025-08-15T00:00:00+02:00",
+  "orderDate": "2026-03-02T00:00:00+01:00",
+  "shipDate": "2026-03-02T00:00:00+01:00",
+  "invoiceDate": "2026-03-05T00:00:00+01:00",
   "description": "my order",
+  "resources": [
+    "reference/supplier:7890"
+  ],
   "supplier": {
-    "id": "",
     "resources": [
       "ai2/account-number:99992"
     ]
   },
   "customer": {
-    "id": "",
     "resources": [
       "ai2/account-number:99991"
     ]
@@ -55,7 +55,6 @@ Content-Type: application/json; charset=utf-8
   },
   "lines": [
     {
-      "id": "",
       "order": "",
       "state": "",
       "kind": "",
@@ -67,19 +66,16 @@ Content-Type: application/json; charset=utf-8
           "currency": "EUR"
         }
       },
-      "supplier": {
-        "id": ""
-      },
-      "buyer": {
-        "id": ""
-      },
+      "resources": [
+        "reference/supplier:1234",
+        "reference/buyer:3456"
+      ],
+      "supplier": {},
+      "buyer": {},
       "product": {
         "industryId": "27157",
         "type": "product",
-        "description": {
-          "value": "",
-          "language": "NL"
-        },
+        "description": "",
         "features": [
           {
             "type": "S20",
@@ -136,15 +132,8 @@ Content-Type: application/json; charset=utf-8
       "photos": [],
       "delivery": {
         "terms": "undefined"
-      },
-      "resources": [
-        "reference/supplier:1234",
-        "reference/buyer:3456"
-      ]
+      }
     }
-  ],
-  "resources": [
-    "reference/supplier:7890"
   ]
 }
 ```
@@ -154,7 +143,7 @@ Content-Type: application/json; charset=utf-8
 > Response headers (201)
 ```
 Date: Tue, 27 May 2025 10:26:46 GMT
-Location: /order/HQq4A1oWCk23HOFxUUDdlQ
+Location: /order/yS_eSuF2X0iE43lJWv5QOw
 Transfer-Encoding: chunked
 Content-Type: application/json; charset=utf-8
 ```
@@ -162,26 +151,23 @@ Content-Type: application/json; charset=utf-8
 > Response content
 ``` json
 {
-  "id": "HQq4A1oWCk23HOFxUUDdlQ",
-  "state": "order/direct-debit-state:draft",
-  "kind": "order/kind:direct-debit",
+  "id": "yS_eSuF2X0iE43lJWv5QOw",
+  "state": "",
+  "kind": "",
   "action": "",
-  "orderDate": "2025-08-11T22:00:00+00:00",
-  "shipDate": "2025-08-11T22:00:00+00:00",
-  "invoiceDate": "2025-08-14T22:00:00+00:00",
+  "orderDate": "2026-03-01T23:00:00+00:00",
+  "shipDate": "2026-03-01T23:00:00+00:00",
+  "invoiceDate": "2026-03-04T23:00:00+00:00",
   "description": "my order",
-  "resources": null,
   "supplier": {
     "id": "623cDkSZ40O8jrBJZdV9NA",
     "gln": "8718288056672",
-    "name": "Test kweker",
-    "resources": null
+    "name": "Test kweker"
   },
   "customer": {
     "id": "0HN-sJqu3UuOq2z3cQQsXg",
     "gln": "8718288056689",
-    "name": "Test koper",
-    "resources": null
+    "name": "Test koper"
   },
   "total": {
     "lines": 0,
@@ -194,16 +180,16 @@ Content-Type: application/json; charset=utf-8
 
 ## Get status of direct-debit
 
-Use the received id (HQq4A1oWCk23HOFxUUDdlQ) and use it to get the status of the direct-debit
+Use the received id (yS_eSuF2X0iE43lJWv5QOw) and use it to get the status of the direct-debit
 
-> GET https://v3.sandbox.hortiapi.net/order/HQq4A1oWCk23HOFxUUDdlQ?IncludeLines=True
+> GET https://v3.sandbox.hortiapi.net/order/yS_eSuF2X0iE43lJWv5QOw?IncludeLines=True
 
 > Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.31; .NET 8.0.19; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.52; .NET 8.0.24; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
@@ -220,26 +206,23 @@ Content-Type: application/json; charset=utf-8
 > Response content
 ``` json
 {
-  "id": "HQq4A1oWCk23HOFxUUDdlQ",
-  "state": "order/direct-debit-state:collection-in-progress",
-  "kind": "order/kind:direct-debit",
+  "id": "yS_eSuF2X0iE43lJWv5QOw",
+  "state": "",
+  "kind": "",
   "action": "",
-  "orderDate": "2025-08-11T22:00:00+00:00",
-  "shipDate": "2025-08-11T22:00:00+00:00",
-  "invoiceDate": "2025-08-14T22:00:00+00:00",
+  "orderDate": "2026-03-01T23:00:00+00:00",
+  "shipDate": "2026-03-01T23:00:00+00:00",
+  "invoiceDate": "2026-03-04T23:00:00+00:00",
   "description": "my order",
-  "resources": null,
   "supplier": {
     "id": "623cDkSZ40O8jrBJZdV9NA",
     "gln": "8718288056672",
-    "name": "Test kweker",
-    "resources": null
+    "name": "Test kweker"
   },
   "customer": {
     "id": "0HN-sJqu3UuOq2z3cQQsXg",
     "gln": "8718288056689",
-    "name": "Test koper",
-    "resources": null
+    "name": "Test koper"
   },
   "total": {
     "lines": 0,
