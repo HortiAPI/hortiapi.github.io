@@ -15,7 +15,7 @@ Get all catalog items with HortiApi
 Accept: application/json
 Authorization: bearer set_here_your_api__key
 x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.52; .NET 8.0.24; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.53; .NET 8.0.24; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -180,6 +180,164 @@ Content-Type: application/json; charset=utf-8
     "photos": [
       {
         "url": "https://sandbox.hortiapi.com/photo/sq1k/8KaXG-Ci6ESTofOnPO8iSg.jpg"
+      }
+    ]
+  },
+  {
+    "id": "vvhNqi8PjkiVXhe2T0Chqg",
+    "kind": "",
+    "state": "",
+    "supplier": {
+      "id": "uWXsD0b-UEiIjVKA3smDDg",
+      "gln": "8713783483923",
+      "name": "Lakerfield B.V."
+    },
+    "product": {
+      "industryId": "107291",
+      "supplierId": "FA2",
+      "customerId": "",
+      "manufacturerId": "",
+      "type": "product",
+      "description": "",
+      "manufacturer": {
+        "id": "uWXsD0b-UEiIjVKA3smDDg",
+        "gln": "8713783483923",
+        "name": "Lakerfield B.V."
+      },
+      "features": [
+        {
+          "type": "S01",
+          "value": "010"
+        },
+        {
+          "type": "S02",
+          "value": "030"
+        },
+        {
+          "type": "S09",
+          "value": "005"
+        },
+        {
+          "type": "S05",
+          "value": "023"
+        },
+        {
+          "type": "S11",
+          "value": "002"
+        },
+        {
+          "type": "S17",
+          "value": "003"
+        },
+        {
+          "type": "S98",
+          "value": "A1"
+        },
+        {
+          "type": "S62",
+          "value": "NL"
+        }
+      ],
+      "classifications": []
+    },
+    "article": {
+      "features": [
+        {
+          "type": "B01",
+          "value": "PA"
+        },
+        {
+          "type": "B03",
+          "value": "849"
+        },
+        {
+          "type": "T01",
+          "value": "001"
+        },
+        {
+          "type": "T02",
+          "value": "001"
+        }
+      ],
+      "regulatoryFeatures": [
+        {
+          "p": "required",
+          "f": "S01"
+        },
+        {
+          "p": "required",
+          "f": "S02"
+        },
+        {
+          "p": "required",
+          "f": "S09"
+        },
+        {
+          "p": "required",
+          "f": "S05"
+        },
+        {
+          "p": "required",
+          "f": "S11"
+        },
+        {
+          "p": "required",
+          "f": "S17"
+        }
+      ],
+      "id": "EKq9ojpZ0UqWPzRMJUTooA",
+      "list": "vbn",
+      "code": "107291",
+      "group": "house-plants",
+      "groupCode": "20900201",
+      "name": "Phalaenopsis Anthura Santos",
+      "tradeName": "PHAL AN SANTOS",
+      "genus": "Phalaenopsis",
+      "cultivar": "'Phalcrazoh'"
+    },
+    "packing": {
+      "bunch": {
+        "code": "800",
+        "quantity": 1
+      },
+      "box": {
+        "code": "315",
+        "quantity": 15,
+        "measurements": [
+          {
+            "type": "grossWeight",
+            "value": 2.5,
+            "unit": "kg"
+          }
+        ]
+      },
+      "layer": {
+        "code": "",
+        "quantity": 4
+      },
+      "carrier": {
+        "code": "",
+        "quantity": 6
+      }
+    },
+    "prices": [
+      {
+        "type": "provisional",
+        "minimum": {
+          "unit": "box",
+          "value": 1
+        },
+        "amount": {
+          "value": 1.85,
+          "currency": "EUR"
+        }
+      }
+    ],
+    "references": [],
+    "notes": [],
+    "photos": [
+      {
+        "url": "https://sandbox.hortiapi.com/photo/sq1k/lo_ZwyJZDEGxM6Ms2JEaEA.jpg"
       }
     ]
   }

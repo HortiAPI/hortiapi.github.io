@@ -13,7 +13,7 @@ Connecting to the HortiApi without apikey
 > Request headers
 ```
 Accept: application/json
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.52; .NET 8.0.24; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.53; .NET 8.0.24; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
