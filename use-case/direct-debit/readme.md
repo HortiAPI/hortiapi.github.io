@@ -8,7 +8,7 @@ permalink: /use-case/direct-debit
 
 The direct-debit order kind (`order/kind:direct-debit`) enables suppliers and buyers in the horticultural supply chain to settle transactions through SEPA B2B direct debit. Instead of the buyer initiating payment, the supplier submits an order that triggers a bank collection from the buyer's account once the invoice date has passed.
 
-The direct-debit process is operated by [AI2](https://ai2.nl), the cooperative IT provider for the Dutch horticultural sector. AI2 runs the batch collection, interfaces with the bank, and handles the settlement to the supplier. If an order is rejected, contact AI2 for follow-up.
+The direct-debit process is operated by [AI2](https://ai2.nl), the independent payment collection service for the ornamental horticulture sector. AI2 runs the batch collection, interfaces with the bank, and handles the settlement to the supplier. If an order is rejected, contact AI2 for follow-up.
 
 ### How it works
 
