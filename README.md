@@ -39,7 +39,11 @@ Import the OpenAPI file into your tool of choice:
 
 Use [`definitions/hortiapi-v3-latest.yaml`](/definitions/hortiapi-v3-latest.yaml) for the latest version.
 
-## 📋 Samples
+## 🔎 Discovery and /.well-known/horti-api
+
+Check the [discovery process](/discovery) details to learn about `/.well-known/horti-api` and more
+
+## 📋 Samples and use cases
 
 See the API in action with these practical [example](/sample) scenarios. These include:
 
@@ -48,6 +52,8 @@ See the API in action with these practical [example](/sample) scenarios. These i
 * [Get supply and order](/sample/get-supply-and-order.md)
 * [Direct-debit](/sample/direct-debit.md)
 * [much more...](/sample)
+
+Read more about the different [use cases](/use-case) of HortiAPI
 
 ## 📚 Resources
 
