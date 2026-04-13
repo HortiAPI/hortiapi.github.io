@@ -16,28 +16,19 @@ A direct-debit order is created via `POST /order` with `kind: order/kind:direct-
 
 Supplier and customer are matched by their AI2 account numbers (e.g. `ai2/account-number:99991`), allowing the server to resolve company details and GLNs automatically.
 
-Once the invoice date has passed, a batch process run by AI2 (Monday–Friday, 13:00–13:30) picks up all draft orders and advances them to `pending`. At that point the order is locked and can no longer be modified. The collection is then submitted to the bank and moves into `collection` state, during which the SEPA B2B return period still applies. Once funds are settled to the supplier, the order reaches `completed`.
+Once the invoice date has passed, a batch process run by AI2 (Monday–Friday, 13:00–13:30, provisional; final timing to be confirmed soon) picks up all draft orders and advances them to `pending`. At that point the order is locked and can no longer be modified. The collection is then submitted to the bank and moves into `collection` state, during which the SEPA B2B return period still applies. Once funds are settled to the supplier, the order reaches `completed`.
 
-### Polling status
+### Order status
 
-Use `GET /order/{id}?IncludeLines=True` to retrieve the full order including enriched line details — the server resolves the VBN article (name, genus, cultivar, regulatory feature requirements) from the submitted `industryId`.
+Use `GET /order/{id}` to retrieve the latest status of the order. The status is updated after batch processing has completed.
 
-## States
+## Order states
 
-The state of this order
-
-Currently defined states
-- `order/state:open`
-- `order/state:closed`
-- `order/state:invoiced`
-
-
-
-### When kind = `order/kind:direct-debit`
+The order.state when kind = `order/kind:direct-debit`
 
 - `order/direct-debit-state:draft`
 
-  The order can be modified. It will be picked up by the AI2 batch process once the invoice date has passed (batch window: Monday–Friday, 13:00–13:30).
+  The order can be modified. It will be picked up by the AI2 batch process once the invoice date has passed (batch window: Monday–Friday, 13:00–13:30, provisional; final timing to be confirmed soon).
 
 - `order/direct-debit-state:pending`
 
