@@ -18,8 +18,8 @@ Prepare a complete draft (state = order/direct-debit-state:draft) direct-debit (
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.53; .NET 8.0.24; +https://hortiapi.com)
+x-company-id: MqVI_H7Tmk6vQFoQEZPQ2A
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.81; .NET 8.0.28; +https://hortiapi.com)
 Transfer-Encoding: chunked
 Accept-Encoding: gzip, deflate, br
 Content-Type: application/json; charset=utf-8
@@ -31,9 +31,10 @@ Content-Type: application/json; charset=utf-8
   "state": "order/direct-debit-state:draft",
   "kind": "order/kind:direct-debit",
   "action": "",
-  "orderDate": "2026-03-03T00:00:00+01:00",
-  "shipDate": "2026-03-03T00:00:00+01:00",
-  "invoiceDate": "2026-03-06T00:00:00+01:00",
+  "orderDate": "2026-07-15T00:00:00+02:00",
+  "dispatchDate": "2026-07-15T00:00:00+02:00",
+  "deliveryDate": "2026-07-15T00:00:00+02:00",
+  "invoiceDate": "2026-07-18T00:00:00+02:00",
   "description": "my order",
   "resources": [
     "reference/supplier:7890"
@@ -47,11 +48,6 @@ Content-Type: application/json; charset=utf-8
     "resources": [
       "ai2/account-number:99991"
     ]
-  },
-  "total": {
-    "lines": 0,
-    "pieces": 0,
-    "price": 0
   },
   "lines": [
     {
@@ -146,7 +142,7 @@ Content-Type: application/json; charset=utf-8
 > Response headers (201)
 ```
 Date: Tue, 27 May 2025 10:26:46 GMT
-Location: /order/DWw2YS4AVECTf_u2EXgXvw
+Location: /order/p_ekZDtxgUqla9EFIb3ezw
 Transfer-Encoding: chunked
 Content-Type: application/json; charset=utf-8
 ```
@@ -154,28 +150,32 @@ Content-Type: application/json; charset=utf-8
 > Response content
 ``` json
 {
-  "id": "DWw2YS4AVECTf_u2EXgXvw",
-  "state": "order/direct-debit-state:draft",
-  "kind": "order/kind:direct-debit",
+  "id": "p_ekZDtxgUqla9EFIb3ezw",
+  "state": "",
+  "kind": "",
   "action": "",
-  "orderDate": "2026-03-02T23:00:00+00:00",
-  "shipDate": "2026-03-02T23:00:00+00:00",
-  "invoiceDate": "2026-03-05T23:00:00+00:00",
+  "orderDate": "2026-07-14T22:00:00+00:00",
+  "dispatchDate": "2026-07-14T22:00:00+00:00",
+  "deliveryDate": "2026-07-14T22:00:00+00:00",
+  "invoiceDate": "2026-07-17T22:00:00+00:00",
   "description": "my order",
+  "total": {
+    "lines": 0,
+    "pieces": 0,
+    "net": {
+      "value": 0,
+      "currency": "EUR"
+    }
+  },
   "supplier": {
     "id": "623cDkSZ40O8jrBJZdV9NA",
-    "gln": "8718288056672",
+    "gln": "9999999999909",
     "name": "Test kweker"
   },
   "customer": {
     "id": "0HN-sJqu3UuOq2z3cQQsXg",
-    "gln": "8718288056689",
+    "gln": "9999999999908",
     "name": "Test koper"
-  },
-  "total": {
-    "lines": 0,
-    "pieces": 0,
-    "price": 0
   },
   "lines": []
 }
@@ -183,16 +183,16 @@ Content-Type: application/json; charset=utf-8
 
 ## Get status of direct-debit
 
-Use the received id (DWw2YS4AVECTf_u2EXgXvw) and use it to get the status of the direct-debit
+Use the received id (p_ekZDtxgUqla9EFIb3ezw) and use it to get the status of the direct-debit
 
-> GET https://v3.sandbox.hortiapi.net/order/DWw2YS4AVECTf_u2EXgXvw?IncludeLines=True
+> GET https://v3.sandbox.hortiapi.net/order/p_ekZDtxgUqla9EFIb3ezw?includeLines=True
 
 > Request headers
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.53; .NET 8.0.24; +https://hortiapi.com)
+x-company-id: MqVI_H7Tmk6vQFoQEZPQ2A
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.81; .NET 8.0.28; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
@@ -209,33 +209,37 @@ Content-Type: application/json; charset=utf-8
 > Response content
 ``` json
 {
-  "id": "DWw2YS4AVECTf_u2EXgXvw",
-  "state": "order/direct-debit-state:draft",
-  "kind": "order/kind:direct-debit",
+  "id": "p_ekZDtxgUqla9EFIb3ezw",
+  "state": "",
+  "kind": "",
   "action": "",
-  "orderDate": "2026-03-02T23:00:00+00:00",
-  "shipDate": "2026-03-02T23:00:00+00:00",
-  "invoiceDate": "2026-03-05T23:00:00+00:00",
+  "orderDate": "2026-07-14T22:00:00+00:00",
+  "dispatchDate": "2026-07-14T22:00:00+00:00",
+  "deliveryDate": "2026-07-14T22:00:00+00:00",
+  "invoiceDate": "2026-07-17T22:00:00+00:00",
   "description": "my order",
+  "total": {
+    "lines": 1,
+    "pieces": 5,
+    "net": {
+      "value": 3.755,
+      "currency": "EUR"
+    }
+  },
   "supplier": {
     "id": "623cDkSZ40O8jrBJZdV9NA",
-    "gln": "8718288056672",
+    "gln": "9999999999909",
     "name": "Test kweker"
   },
   "customer": {
     "id": "0HN-sJqu3UuOq2z3cQQsXg",
-    "gln": "8718288056689",
+    "gln": "9999999999908",
     "name": "Test koper"
-  },
-  "total": {
-    "lines": 1,
-    "pieces": 5,
-    "price": 3.755
   },
   "lines": [
     {
-      "id": "LfgJQaA5IkW-tTBEOWETXA",
-      "order": "DWw2YS4AVECTf_u2EXgXvw",
+      "id": "z0yqcgIJtkaStEd84RNm-Q",
+      "order": "p_ekZDtxgUqla9EFIb3ezw",
       "state": "",
       "kind": "",
       "action": "",
@@ -311,9 +315,9 @@ Content-Type: application/json; charset=utf-8
         "type": "product",
         "description": "",
         "manufacturer": {
-          "id": "623cDkSZ40O8jrBJZdV9NA",
+          "id": "8Cq7MJ8WV027jmDyXeQEBg",
           "gln": "8718288056672",
-          "name": "Test kweker"
+          "name": "#Test kweker"
         },
         "features": [
           {

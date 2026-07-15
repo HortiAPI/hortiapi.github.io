@@ -14,7 +14,7 @@ Connect Sample
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.53; .NET 8.0.24; +https://hortiapi.com)
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.81; .NET 8.0.28; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
@@ -39,16 +39,14 @@ Content-Type: application/json; charset=utf-8
   },
   "companies": [
     {
-      "id": "uWXsD0b-UEiIjVKA3smDDg",
-      "name": "Lakerfield B.V."
-    },
-    {
-      "id": "_N_8wOAl6kiaAXnXzHxLSQ",
-      "name": "Algemeen koper"
+      "id": "Kh0jae0o_k6TNye_shXdLw",
+      "name": "Demo koper"
     }
   ],
+  "facilities": [
+  ],
   "user": {
-    "id": "IQ0hBMwEN0yJP2ty3rSZEg",
+    "id": "O9c35_s_bU6faqPr8EgBxQ",
     "name": "Michael Lakerveld"
   },
   "resources": [
@@ -63,8 +61,8 @@ Content-Type: application/json; charset=utf-8
 ```
 Accept: application/json
 Authorization: bearer set_here_your_api__key
-x-company-id: uWXsD0b-UEiIjVKA3smDDg
-User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.53; .NET 8.0.24; +https://hortiapi.com)
+x-company-id: Kh0jae0o_k6TNye_shXdLw
+User-Agent: HortiApiClient/1.0.0.0, (HortiApi/3.0.0-rc.81; .NET 8.0.28; +https://hortiapi.com)
 Accept-Encoding: gzip, deflate, br
 ```
 
@@ -89,20 +87,19 @@ Content-Type: application/json; charset=utf-8
   },
   "companies": [
     {
-      "id": "uWXsD0b-UEiIjVKA3smDDg",
-      "name": "Lakerfield B.V."
-    },
-    {
-      "id": "_N_8wOAl6kiaAXnXzHxLSQ",
-      "name": "Algemeen koper"
+      "id": "Kh0jae0o_k6TNye_shXdLw",
+      "name": "Demo koper"
     }
   ],
   "company": {
-    "id": "uWXsD0b-UEiIjVKA3smDDg",
-    "name": "Lakerfield B.V."
+    "id": "Kh0jae0o_k6TNye_shXdLw",
+    "name": "Demo koper"
   },
+  "facilities": [
+  ],
+  "facility": null,
   "user": {
-    "id": "IQ0hBMwEN0yJP2ty3rSZEg",
+    "id": "O9c35_s_bU6faqPr8EgBxQ",
     "name": "Michael Lakerveld"
   },
   "resources": [
