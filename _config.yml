@@ -1,2 +1,7 @@
 title: HortiAPI Documentation
 description: Documentation for the HortiAPI
+plugins:
+  - jekyll-readme-index
+
+readme_index:
+  enabled: true
