@@ -1,0 +1,37 @@
+{%- comment -%}
+  Renders the rows of one field list. Expects the variable `fields` (map of path => details).
+{%- endcomment -%}
+<table class="uc-fields">
+<thead><tr><th>Field</th><th>Usage</th><th>Description</th></tr></thead>
+<tbody>
+{%- for f in fields -%}
+  {%- assign d = f[1] -%}
+  {%- assign keyed = d.resources | default: d.features | default: d.references -%}
+  <tr{% if keyed %} class="uc-group"{% endif %}>
+    <td><code>{{ f[0] }}</code></td>
+    <td>{% if d.usage %}<span class="uc-usage uc-{{ d.usage }}">{{ d.usage }}</span>{% endif %}</td>
+    <td>
+      {%- if d.value %}<code>{{ d.value }}</code> {% endif -%}
+      {%- if d.values %}One of: {% for v in d.values %}<code>{{ v }}</code>{% unless forloop.last %}, {% endunless %}{% endfor %} {% endif -%}
+      {{ d.description | markdownify | remove: '<p>' | remove: '</p>' | strip }}
+      {%- if d.when %} <em>When: {{ d.when }}</em>{% endif -%}
+      {%- if d.constraint %} <span class="uc-note">{{ d.constraint }}</span>{% endif -%}
+      {%- for m in d.mapping %} <span class="uc-note">{{ m[0] }} column {{ m[1] }}</span>{% endfor -%}
+    </td>
+  </tr>
+  {%- for k in keyed -%}
+  {%- assign e = k[1] -%}
+  <tr class="uc-sub">
+    <td>↳ <code>{{ k[0] }}</code></td>
+    <td><span class="uc-usage uc-{{ e.usage }}">{{ e.usage }}</span></td>
+    <td>
+      {{ e.description | markdownify | remove: '<p>' | remove: '</p>' | strip }}
+      {%- if e.when %} <em>When: {{ e.when }}</em>{% endif -%}
+      {%- if e.constraint %} <span class="uc-note">{{ e.constraint }}</span>{% endif -%}
+      {%- for m in e.mapping %} <span class="uc-note">{{ m[0] }} column {{ m[1] }}</span>{% endfor -%}
+    </td>
+  </tr>
+  {%- endfor -%}
+{%- endfor -%}
+</tbody>
+</table>

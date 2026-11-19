@@ -1,0 +1,287 @@
+# DRAFT - prototype of the use-case profile format.
+#
+# A profile describes one business scenario on top of the generic HortiApi schema:
+# which steps exist, and per step which fields are read (request) or filled (response).
+#
+# usage:
+#   required    must be present
+#   optional    may be present, is used when present
+#   conditional required under the condition given in `when`
+#   not-used    deliberately not part of this use-case (covers the whole object)
+# Fields that are not listed are ignored by the server.
+#
+# `call` repeats method and path of `operationId` for readability.
+# `after` marks a step that can be called at any time after the named step.
+#
+# Paths are relative to the request/response model of the operation, `[]` marks an array.
+# Lists with keyed entries are described per key: `resources`, `features`, `references`.
+
+id: use-case/direct-debit:1
+title: Direct Debit
+summary: >-
+  A supplier submits an order that is collected from the buyer's bank account
+  by AI2 through SEPA direct debit, once the invoice date has passed.
+hortiapi: ">=3.0.0-rc.85"
+docs: https://hortiapi.com/use-case/direct-debit
+
+steps:
+
+  create:
+    actor: client
+    level: core
+    title: Submit draft order
+    description: Submit the complete order including all lines.
+    operationId: HAPI3OrderUpdate
+    call: POST /order
+    request:
+      kind:
+        usage: required
+        value: order/kind:direct-debit
+      state:
+        usage: required
+        value: order/direct-debit-state:draft
+      orderDate:
+        usage: required
+        description: Transaction date.
+        mapping: { ai2-file: 12 }
+      invoiceDate:
+        usage: required
+        description: Collection date (NL incassodatum). The AI2 batch picks up the order once this date has passed.
+        mapping: { ai2-file: 14 }
+      dispatchDate:
+        usage: optional
+      deliveryDate:
+        usage: optional
+      description:
+        usage: optional
+        description: Reference of the collection order (NL opdrachtreferentie).
+        constraint: max 35 characters
+        mapping: { ai2-file: 20 }
+      supplier.resources:
+        resources:
+          ai2/account-number:
+            usage: required
+            description: AI2 account number of the delivering party. The server resolves the company and GLN from it.
+            mapping: { ai2-file: 3 }
+      customer.resources:
+        resources:
+          ai2/account-number:
+            usage: required
+            description: AI2 account number of the receiving party, whose account is debited.
+            mapping: { ai2-file: 4 }
+      resources:
+        resources:
+          reference/supplier:
+            usage: optional
+            description: The supplier's own id for this order.
+      charges:
+        usage: not-used
+        description: Charges are not collected; the amount is derived from the lines only.
+      lines:
+        usage: required
+        description: At least one line.
+      lines[].product.industryId:
+        usage: required
+        description: VBN product code.
+        mapping: { ai2-file: 6 }
+      lines[].product.manufacturer.gln:
+        usage: required
+        description: GLN of the grower.
+      lines[].product.description:
+        usage: optional
+        description: Alternative article description.
+        constraint: max 50 characters
+        mapping: { ai2-file: 21 }
+      lines[].product.features:
+        features:
+          S20: { usage: conditional, when: Prescribed by VBN for the product code., description: Minimum stem length., mapping: { ai2-file: 15 } }
+          S05: { usage: conditional, when: Prescribed by VBN for the product code., description: Maturity stage., mapping: { ai2-file: 17 } }
+          S19: { usage: conditional, when: Prescribed by VBN for the product code., description: Minimum bud height., mapping: { ai2-file: 18 } }
+          L11: { usage: optional, description: Number of stems per bunch. }
+          S98: { usage: optional, description: Quality group., mapping: { ai2-file: 19 } }
+          S62: { usage: optional, description: Country of origin (ISO 3166-1)., mapping: { ai2-file: 22 } }
+      lines[].quantity.value:
+        usage: required
+        description: Number of units.
+        mapping: { ai2-file: 7 }
+      lines[].quantity.unit:
+        usage: required
+        value: box
+        mapping: { ai2-file: 8 }
+      lines[].packing.box.quantity:
+        usage: required
+        description: Number of pieces per unit.
+        constraint: 1 to 9999
+        mapping: { ai2-file: 9 }
+      lines[].packing.box.code:
+        usage: required
+        description: Packaging code (NL emballagecode).
+        mapping: { ai2-file: 11 }
+      lines[].price.type:
+        usage: required
+        value: invoice
+      lines[].price.amount.value:
+        usage: required
+        description: Price per piece.
+        constraint: max 3 decimals
+        mapping: { ai2-file: 10 }
+      lines[].price.amount.currency:
+        usage: required
+        value: EUR
+      lines[].references:
+        references:
+          VN:  { usage: optional, description: Transaction line id of the supplier., constraint: max 26 characters, mapping: { ai2-file: 27 } }
+          ACL: { usage: optional, description: Order reference of the buyer., constraint: max 26 characters, mapping: { ai2-file: 29 } }
+          ON:  { usage: optional, description: Order reference of the buyer., constraint: max 26 characters, mapping: { ai2-file: 29 } }
+      lines[].resources:
+        resources:
+          reference/supplier: { usage: optional, description: The supplier's own id for this line. }
+          reference/buyer:    { usage: optional, description: The buyer's own id for this line. }
+      lines[].charges:
+        usage: not-used
+        description: See `charges`.
+    response:
+      id:
+        usage: required
+        description: Id to use in all following steps.
+      state:
+        usage: required
+        value: order/direct-debit-state:draft
+      supplier.id:   { usage: required, description: Company resolved from the AI2 account number. }
+      supplier.gln:  { usage: required }
+      supplier.name: { usage: required }
+      customer.id:   { usage: required, description: Company resolved from the AI2 account number. }
+      customer.gln:  { usage: required }
+      customer.name: { usage: required }
+    errors:
+      - type: bad-request/ai2-account-unknown
+        proposed: true
+        when: The AI2 account number of the supplier or customer is not known.
+      - type: forbidden/order-owner
+        when: The calling company is not the supplier of the order.
+    next: [modify, modify-lines, collect]
+
+  modify:
+    actor: client
+    level: extended
+    title: Change draft order
+    description: Send the order again with its id. Same fields as `create`.
+    extends: create
+    when: state is order/direct-debit-state:draft
+    request:
+      id:
+        usage: required
+    errors:
+      - type: conflict/order-not-draft
+        proposed: true
+        when: The order is no longer in draft.
+    next: [modify, modify-lines, collect]
+
+  modify-lines:
+    actor: client
+    level: extended
+    title: Add or change a single line
+    description: Line fields are the same as `lines[]` in `create`, without the `lines[].` prefix.
+    operationId: HAPI3OrderLineUpdate
+    call: POST /order-line
+    when: state is order/direct-debit-state:draft
+    request:
+      order:
+        usage: required
+        description: Id of the order the line belongs to.
+      id:
+        usage: conditional
+        when: Changing an existing line.
+    errors:
+      - type: conflict/order-not-draft
+        proposed: true
+        when: The order is no longer in draft.
+    next: [modify, modify-lines, collect]
+
+  collect:
+    actor: server
+    title: AI2 batch picks up the order
+    trigger: Monday to Friday 13:00-13:30 (provisional), for orders whose invoiceDate has passed.
+    changes:
+      state:
+        from: order/direct-debit-state:draft
+        to: order/direct-debit-state:pending
+    description: The order is locked and can no longer be modified.
+    next: [submit-to-bank, reject]
+
+  submit-to-bank:
+    actor: server
+    title: Collection is submitted to the bank
+    changes:
+      state:
+        from: order/direct-debit-state:pending
+        to: order/direct-debit-state:collection
+      resources:
+        add: [ai2/collection-batch]
+    description: The SEPA return period still applies to received funds.
+    next: [settle, reject]
+
+  settle:
+    actor: server
+    title: Funds are settled to the supplier
+    changes:
+      state:
+        from: order/direct-debit-state:collection
+        to: order/direct-debit-state:completed
+      resources:
+        add: [ai2/payment-batch]
+
+  reject:
+    actor: server
+    title: Order is rejected
+    changes:
+      state:
+        to: order/direct-debit-state:rejected
+    description: The order is not processed further. Contact AI2 for follow-up.
+
+  status:
+    actor: client
+    level: core
+    title: Follow progress
+    after: create
+    description: Poll the order to see how far AI2 has processed it.
+    operationId: HAPI3OrderGet
+    call: GET /order/{orderId}
+    parameters:
+      includeLines:
+        usage: optional
+        description: Set to true to also receive the lines.
+    response:
+      state:
+        usage: required
+        values:
+          - order/direct-debit-state:draft
+          - order/direct-debit-state:pending
+          - order/direct-debit-state:collection
+          - order/direct-debit-state:completed
+          - order/direct-debit-state:rejected
+          - order/direct-debit-state:cancelled
+      resources:
+        resources:
+          ai2/collection-batch: { usage: conditional, when: From state collection., description: Number of the AI2 collection batch. }
+          ai2/payment-batch:    { usage: conditional, when: From state completed., description: Number of the AI2 payment batch. }
+      total.lines:  { usage: required }
+      total.pieces: { usage: required }
+      total.net:    { usage: required, description: Amount that is collected. }
+      lines[].id:   { usage: required }
+      lines[].article:
+        usage: optional
+        description: VBN article resolved by the server from `product.industryId`.
+      lines[].packing:
+        usage: optional
+        description: Completed by the server with the defaults of the packaging code.
+    errors:
+      - type: not-found/order
+        when: The id is not known on this server.
+      - type: forbidden/order-owner
+        when: The calling company is not a party of the order.
+
+open:
+  - How does a client cancel a draft (state `cancelled`)? No order action or step is defined for it yet.
+  - From which states can AI2 reject an order?
+  - Error types marked `proposed` do not exist under /error yet.
