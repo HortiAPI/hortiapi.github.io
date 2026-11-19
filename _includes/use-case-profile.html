@@ -1,0 +1,151 @@
+{%- comment -%}
+  Renders a use-case profile from _data/use-case/<page.profile>.yaml.
+  Usage in a use-case page: set `profile: direct-debit-1` in the front matter and include
+  this file between kramdown nomarkdown markers (see use-case/direct-debit/readme.md).
+{%- endcomment -%}
+{%- assign profile = site.data["use-case"][page.profile] -%}
+<div class="uc">
+<style>
+.uc table.uc-fields { width: 100%; border-collapse: collapse; margin: .5em 0 1.2em; font-size: .9em; display: table; }
+.uc table.uc-fields th, .uc table.uc-fields td { border: 1px solid #d0d7de; padding: 5px 8px; vertical-align: top; text-align: left; }
+.uc table.uc-fields th { background: #f6f8fa; color: #1f2328; }
+.uc tr.uc-group td { background: #fafbfc; color: #1f2328; }
+.uc table.uc-fields td code { word-break: break-word; }
+.uc tr.uc-sub td:first-child { padding-left: 22px; }
+.uc .uc-usage, .uc .uc-badge { display: inline-block; padding: 0 7px; border-radius: 10px; font-size: .8em; white-space: nowrap; border: 1px solid transparent; color: #1f2328; }
+.uc .uc-required { background: #ddf4ff; border-color: #54aeff; }
+.uc .uc-optional { background: #f6f8fa; border-color: #d0d7de; }
+.uc .uc-conditional { background: #fff8c5; border-color: #d4a72c; }
+.uc .uc-not-used { background: #ffebe9; border-color: #ff8182; text-decoration: line-through; }
+.uc .uc-client { background: #ddf4ff; border-color: #54aeff; }
+.uc .uc-server { background: #fbefff; border-color: #c297ff; }
+.uc .uc-core { background: #dafbe1; border-color: #4ac26b; }
+.uc .uc-extended { background: #f6f8fa; border-color: #d0d7de; }
+.uc .uc-note { color: #57606a; font-size: .85em; white-space: nowrap; }
+.uc .uc-note::before { content: "· "; }
+.uc .uc-step { border-top: 1px solid #d0d7de; margin-top: 1.5em; padding-top: .3em; }
+.uc .uc-step h3 { margin-bottom: .2em; }
+.uc .uc-meta { color: #57606a; }
+.uc pre.mermaid { background: none; border: 0; text-align: center; }
+</style>
+
+<h2 id="workflow">Workflow</h2>
+<p>
+  Profile <code>{{ profile.id }}</code>, for HortiApi {{ profile.hortiapi }}.
+  <span class="uc-badge uc-client">client</span> steps are API calls,
+  <span class="uc-badge uc-server">server</span> steps happen without a call.
+  Dashed steps are optional for a client.
+</p>
+
+<pre class="mermaid">
+flowchart TD
+{%- for s in profile.steps %}
+{%- assign id = s[0] | replace: "-", "_" %}
+{%- if s[1].actor == "server" %}
+  {{ id }}(["{{ s[1].title }}"]):::server
+{%- elsif s[1].level == "extended" %}
+  {{ id }}["{{ s[1].title }}"]:::extended
+{%- else %}
+  {{ id }}["{{ s[1].title }}"]:::client
+{%- endif %}
+{%- endfor %}
+{%- for s in profile.steps %}
+{%- assign id = s[0] | replace: "-", "_" %}
+{%- for n in s[1].next %}
+{%- if n != s[0] %}
+  {{ id }} --> {{ n | replace: "-", "_" }}
+{%- endif %}
+{%- endfor %}
+{%- if s[1].after %}
+  {{ s[1].after | replace: "-", "_" }} -. any time .-> {{ id }}
+{%- endif %}
+{%- endfor %}
+  classDef client fill:#ddf4ff,stroke:#54aeff,color:#1f2328
+  classDef extended fill:#ddf4ff,stroke:#54aeff,color:#1f2328,stroke-dasharray:5 4
+  classDef server fill:#fbefff,stroke:#c297ff,color:#1f2328
+</pre>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+
+{%- for s in profile.steps %}
+{%- assign step = s[1] %}
+<div class="uc-step" id="step-{{ s[0] }}">
+  <h3>{{ step.title }}</h3>
+  <p>
+    <span class="uc-badge uc-{{ step.actor }}">{{ step.actor }}</span>
+    {% if step.level %}<span class="uc-badge uc-{{ step.level }}">{{ step.level }}</span>{% endif %}
+    {% assign call = step.call | default: profile.steps[step.extends].call %}{% if call %}<code>{{ call }}</code>{% endif %}
+    {% if step.when %}<span class="uc-meta">· only when {{ step.when }}</span>{% endif %}
+    {% if step.after %}<span class="uc-meta">· any time after <a href="#step-{{ step.after }}">{{ step.after }}</a></span>{% endif %}
+  </p>
+  {% if step.description %}<p>{{ step.description | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>{% endif %}
+
+  {%- if step.trigger %}
+  <p><strong>Trigger:</strong> {{ step.trigger }}</p>
+  {%- endif %}
+
+  {%- if step.changes %}
+  <p><strong>Changes:</strong></p>
+  <ul>
+    {%- if step.changes.state %}
+    <li><code>state</code>{% if step.changes.state.from %} from <code>{{ step.changes.state.from }}</code>{% endif %} to <code>{{ step.changes.state.to }}</code></li>
+    {%- endif %}
+    {%- for r in step.changes.resources.add %}
+    <li>adds <code>{{ r }}</code> to <code>resources</code></li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+
+  {%- if step.parameters %}
+  <h4>Parameters</h4>
+  {%- assign fields = step.parameters %}
+  {% include use-case-fields.html %}
+  {%- endif %}
+
+  {%- if step.extends or step.request %}
+  <h4>Request</h4>
+  {%- if step.extends %}
+  <p>Same fields as <a href="#step-{{ step.extends }}">{{ step.extends }}</a>, plus:</p>
+  {%- endif %}
+  {%- if step.request %}
+  {%- assign fields = step.request %}
+  {% include use-case-fields.html %}
+  {%- endif %}
+  {%- endif %}
+
+  {%- if step.response %}
+  <h4>Response</h4>
+  {%- assign fields = step.response %}
+  {% include use-case-fields.html %}
+  {%- endif %}
+
+  {%- if step.errors %}
+  <h4>Errors</h4>
+  <ul>
+    {%- for e in step.errors %}
+    <li>
+      {%- if e.proposed %}<code>{{ e.type }}</code> <span class="uc-note">proposed</span>
+      {%- else %}<a href="/error/{{ e.type }}"><code>{{ e.type }}</code></a>
+      {%- endif %} – {{ e.when }}
+    </li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+
+  {%- if step.next %}
+  <p><strong>Next:</strong>
+    {% for n in step.next %}<a href="#step-{{ n }}">{{ profile.steps[n].title }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}
+  </p>
+  {%- endif %}
+</div>
+{%- endfor %}
+
+{%- if profile.open %}
+<div class="uc-step">
+  <h3>Open questions</h3>
+  <ul>{% for q in profile.open %}<li>{{ q | markdownify | remove: '<p>' | remove: '</p>' | strip }}</li>{% endfor %}</ul>
+</div>
+{%- endif %}
+</div>

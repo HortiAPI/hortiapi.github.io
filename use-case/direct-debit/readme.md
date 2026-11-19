@@ -2,6 +2,7 @@
 layout: default
 title: direct-debit use-case
 permalink: /use-case/direct-debit
+profile: direct-debit-1
 ---
 
 # Direct Debit
@@ -51,6 +52,10 @@ The follwing `order.state` values apply when `kind` is `order/kind:direct-debit`
 - `order/direct-debit-state:cancelled`
 
   The order has been cancelled and will not be processed.
+
+{::nomarkdown}
+{% include use-case-profile.html %}
+{:/nomarkdown}
 
 ### See also
 
