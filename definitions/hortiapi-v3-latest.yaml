@@ -4,7 +4,7 @@ info:
 
   title: HortiApi
 
-  version: 3.0.0-rc.81
+  version: 3.0.0-rc.85
 
   description: |-
     Definition of the HortiApi, OpenAPI 3.1-compliant YAML document describing horticultural API endpoints.
@@ -16,8 +16,6 @@ info:
     Some useful links:
     - [hortiapi.com](https://hortiapi.com)
     - [github.com/hortiapi](https://github.com/hortiapi)
-    - [rapidocweb.com](https://rapidocweb.com)
-    - [swagger.io](https://swagger.io)
   
   termsOfService: https://hortiapi.com/terms-of-service
   
@@ -36,9 +34,18 @@ externalDocs:
 
 servers:
   - url: http://localhost/horti-api/v3
-  - url: https://v3.sandbox.hortiapi.net
-  - url: https://v3.hortiapi.net
-  - url: https://api.ai2.nl/v3
+  - url: "{protocol}://{hostname}/{path}"
+    description: custom server  
+    variables:
+      protocol:
+        default: https
+        enum:
+          - https
+          - http
+      hostname:
+        default: hortiapi.net
+      path:
+        default: horti-api/v3
 
 tags:
   - name: Article
@@ -290,6 +297,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -464,6 +473,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -638,6 +649,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -812,6 +825,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -830,6 +845,7 @@ paths:
       summary: Get discovery document
       description: |-
         Retrieve the details of this api implementation.
+      security: []
       responses:
         '200':
           description: OK
@@ -837,6 +853,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HortiApiDiscoveryDocument'
+
+  /.well-known/horti-api:
+    servers:
+      - url: "{protocol}://{hostname}"
+        description: root of the host or company website, not under the API base URL
+        variables:
+          protocol:
+            default: https
+            enum:
+              - https
+              - http
+          hostname:
+            default: hortiapi.net
+    get:
+      tags:
+        - Discovery
+      operationId: HAPI3WellKnownGet
+      summary: Find the HortiApi servers of a host
+      description: A company puts this document on its own website to tell where its HortiApi server is. The response has one entry per major version of HortiApi; follow `discovery` of the entry for the version you support to read the discovery document.
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HortiApiWellKnownEntry'
+              example:
+                - version: "3"
+                  discovery: https://example-company.com/horti-api/v3/discovery
+                  openapi: https://example-company.com/horti-api/v3/hortiapi-v3.yaml
 
 
 # document
@@ -1050,6 +1099,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -1224,6 +1275,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -1566,6 +1619,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -1740,6 +1795,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -1950,6 +2007,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -2131,6 +2190,8 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -2305,6 +2366,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -2362,6 +2425,8 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -2457,6 +2522,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -2631,6 +2698,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '406':
+          $ref: '#/components/responses/NotAcceptableError'
         '410':
           $ref: '#/components/responses/GoneError'
         '500':
@@ -2843,7 +2912,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -2879,22 +2947,18 @@ components:
         list:
           $ref: '#/components/schemas/ArticleList'
         code:
-          type: string
-          default: ''
+          type: [string, 'null']
           example: '27157'
         name:
-          type: string
-          default: ''
+          type: [string, 'null']
           example: 'Red Naomi'
         tradeName:
-          type: string
-          default: ''
+          type: [string, 'null']
           example: 'RED NAOMI'
         group:
           $ref: '#/components/schemas/ArticleGroup'
         groupCode:
-          type: string
-          default: ''
+          type: [string, 'null']
           example: '10100101'
         resources:
           $ref: '#/components/schemas/Resources'
@@ -2959,21 +3023,21 @@ components:
           $ref: '#/components/schemas/Id'
         kind:
           description: Kind of this catalog item, is a Resource of type [catalog/kind](https://hortiapi.com/resource/catalog/kind)
-          type: string
+          type: [string, 'null']
           default: ''
           x-resource: catalog/kind
           externalDocs:
             url: https://hortiapi.com/resource/catalog/kind
         state:
           description: State of this catalog, is a Resource of type [catalog/state](https://hortiapi.com/resource/catalog/state)
-          type: string
+          type: [string, 'null']
           default: ''
           x-resource: catalog/state
           externalDocs:
             url: https://hortiapi.com/resource/catalog/state
         action:
           description: Action for this catalog, is a Resource of type [catalog/action](https://hortiapi.com/resource/catalog/action)
-          type: string
+          type: [string, 'null']
           default: ''
           x-resource: catalog/action
           externalDocs:
@@ -3012,7 +3076,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -3037,7 +3100,7 @@ components:
           $ref: '#/components/schemas/Id'
         kind:
           description: Kind of this catalog item, is a Resource of type [catalog/kind](https://hortiapi.com/resource/catalog/kind)
-          type: string
+          type: [string, 'null']
           default: ''
           x-resource: catalog/kind
           externalDocs:
@@ -3178,24 +3241,19 @@ components:
       additionalProperties: false
 
     Company:
-      required:
-        - kind
-        - role
       type: object
       properties:
         id:
           $ref: '#/components/schemas/Id'
         role:
           description: Role of this company, is a Resource of type [company/role](https://hortiapi.com/resource/company/role)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: company/role
           externalDocs:
             url: https://hortiapi.com/resource/company/role
         kind:
           description: Kind of this company, is a Resource of type [company/kind](https://hortiapi.com/resource/company/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: company/kind
           externalDocs:
             url: https://hortiapi.com/resource/company/kind
@@ -3251,16 +3309,13 @@ components:
       additionalProperties: false
 
     CompanyContact:
-      required:
-        - kind
       type: object
       properties:
         id:
           $ref: '#/components/schemas/Id'
         kind:
           description: Kind of this company contact, is a Resource of type [company-contact/kind](https://hortiapi.com/resource/company-contact/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: company-contact/kind
           externalDocs:
             url: https://hortiapi.com/resource/company-contact/kind
@@ -3293,21 +3348,19 @@ components:
         role:
           description: Role of this company, is a Resource of type [company/role](https://hortiapi.com/resource/company/role)
           type: [string, 'null']
-          default: ''
           x-resource: company/role
           externalDocs:
             url: https://hortiapi.com/resource/company/role
         kind:
           description: Kind of this company, is a Resource of type [company/kind](https://hortiapi.com/resource/company/kind)
           type: [string, 'null']
-          default: ''
           x-resource: company/kind
           externalDocs:
             url: https://hortiapi.com/resource/company/kind
         code:
-          type: string
+          type: [string, 'null']
         gln:
-          type: string
+          type: [string, 'null']
         resources:
           $ref: '#/components/schemas/Resources'
       additionalProperties: false
@@ -3317,8 +3370,7 @@ components:
       properties:
         kind:
           description: Kind of this company registration, is a Resource of type [company-registration/kind](https://hortiapi.com/resource/company-registration/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: company-registration/kind
           externalDocs:
             url: https://hortiapi.com/resource/company-registration/kind
@@ -3334,7 +3386,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -3371,7 +3422,6 @@ components:
         kind:
           description: Kind of this data, is a Resource of type [data/kind](https://hortiapi.com/resource/data/kind)
           type: [string, 'null']
-          default: ''
           x-resource: data/kind
           externalDocs:
             url: https://hortiapi.com/resource/data/kind
@@ -3385,7 +3435,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -3411,7 +3460,6 @@ components:
         kind:
           description: Kind of this data, is a Resource of type [data/kind](https://hortiapi.com/resource/data/kind)
           type: [string, 'null']
-          default: ''
           x-resource: data/kind
           externalDocs:
             url: https://hortiapi.com/resource/data/kind
@@ -3448,8 +3496,6 @@ components:
       additionalProperties: false
 
     Document:
-      required:
-        - kind
       type: object
       properties:
         id:
@@ -3458,10 +3504,10 @@ components:
           type: string
         kind:
           description: Kind of this document, is a Resource of type [document/kind](https://hortiapi.com/resource/document/kind)
-          type: string
+          type: [string, 'null']
           x-resource: document/kind
           externalDocs:
-            url: https://hortiapi.com/resource/document/kind
+            url: https://hortiapi.com/resource/document/kind          
         title:
           type: string
         createdAt:
@@ -3477,7 +3523,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -3501,11 +3546,10 @@ components:
         id:
           $ref: '#/components/schemas/Id'
         owner:
-          type: string
+          type: [string, 'null']
         kind:
           description: Kind of this document, is a Resource of type [document/kind](https://hortiapi.com/resource/document/kind)
           type: [string, 'null']
-          default: ''
           x-resource: document/kind
           externalDocs:
             url: https://hortiapi.com/resource/document/kind
@@ -3517,14 +3561,13 @@ components:
       description: Reference to a Document on the /document endpoint. Server-populated and informational, values supplied by a client are ignored.
       required:
         - id
-        - kind
       type: object
       properties:
         id:
           $ref: '#/components/schemas/Id'
         kind:
           description: Kind of the referenced document, is a Resource of type [document/kind](https://hortiapi.com/resource/document/kind)
-          type: string
+          type: [string, 'null']
           x-resource: document/kind
           externalDocs:
             url: https://hortiapi.com/resource/document/kind
@@ -3542,17 +3585,9 @@ components:
           $ref: '#/components/schemas/Id'
         company:
           $ref: '#/components/schemas/Id'
-        # role:
-        #   description: Role of this facility, is a Resource of type [facility/role](https://hortiapi.com/resource/facility/role)
-        #   type: string
-        #   default: ''
-        #   x-resource: facility/role
-        #   externalDocs:
-        #     url: https://hortiapi.com/resource/facility/role
         capability:
           description: Capabilities of this facility, is a Resource of type [facility/capability](https://hortiapi.com/resource/facility/capability)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: facility/capability
           externalDocs:
             url: https://hortiapi.com/resource/facility/capability
@@ -3592,8 +3627,7 @@ components:
           $ref: '#/components/schemas/Id'
         capabilities:
           description: Capabilities of a facility, is a Resource of type [facility/capability](https://hortiapi.com/resource/facility/capability)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: facility/capability
           externalDocs:
             url: https://hortiapi.com/resource/facility/capability
@@ -3605,7 +3639,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -3647,7 +3680,6 @@ components:
           example: 'S20'
         description:
           $ref: '#/components/schemas/Texts'
-          # example: 'Minimum length of flower stem'
         values:
           type: array
           description: The available values for this feature
@@ -3663,8 +3695,7 @@ components:
         list:
           $ref: '#/components/schemas/ArticleList'
         type:
-          type: string
-          default: ''
+          type: [string, 'null']
         resources:
           $ref: '#/components/schemas/Resources'
       additionalProperties: false
@@ -3678,7 +3709,6 @@ components:
           example: '060'
         description:
           $ref: '#/components/schemas/Texts'
-          # example: '60 cm'
       additionalProperties: false
 
     Good:
@@ -3700,15 +3730,13 @@ components:
           description: Id of the source from which this good is derived. A good can represent a partial quantity of a stock or orderline.
         state:
           description: State of this good, is a Resource of type [good/state](https://hortiapi.com/resource/good/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: good/state
           externalDocs:
             url: https://hortiapi.com/resource/good/state
         action:
           description: Action for this good, is a Resource of type [good/action](https://hortiapi.com/resource/good/action)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: good/action
           externalDocs:
             url: https://hortiapi.com/resource/good/action
@@ -3744,7 +3772,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -3768,13 +3795,12 @@ components:
         id:
           $ref: '#/components/schemas/Id'
         stock:
-          type: string
+          type: [string, 'null']
         facility:
-          type: string
+          type: [string, 'null']
         state:
           description: State of this good, is a Resource of type [good/state](https://hortiapi.com/resource/good/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: good/state
           externalDocs:
             url: https://hortiapi.com/resource/good/state
@@ -3792,8 +3818,9 @@ components:
         - apiBaseUrl
         - version
         - openapi
+        - useCases
         - capabilities
-#
+        - sse
       properties:
         schemaVersion:
           type: integer
@@ -3826,49 +3853,57 @@ components:
         status:
           type: string
           description: Important status message about the server (show the end-user).
+        useCases:
+          type: array
+          description: The use cases this server supports, as resource `<party>/use-case:<name>`. Use cases of HortiApi are documented at https://hortiapi.com/use-case
+          items:
+            type: string
+            pattern: '^[a-z][a-z0-9-]*/use-case:[a-z][a-z0-9-]*$'
+          example:
+            - horti-api/use-case:direct-debit
+            - horti-api/use-case:supply-order
         capabilities:
           type: array
-          minItems: 0
-          description: List of capability declarations supported by this server.
+          description: Names of the capabilities (modules, equal to the first part of the path) that are available on this server. A capability that is not listed answers with 501 Not Implemented.
           items:
-            $ref: "#/components/schemas/HortiApiCapability"
+            type: string
+          example:
+            - order
+            - order-line
+            - supply
+        sse:
+          type: array
+          description: Names of the capabilities that can answer with a Server-Sent Events stream when the request has Accept 'text/event-stream'. A capability that is not listed answers such a request with 406 Not Acceptable.
+          items:
+            type: string
+          example:
+            - supply
 
-    HortiApiCapability:
+    HortiApiWellKnownEntry:
       type: object
       additionalProperties: false
       required:
-        - apiVersion
-        - name
-        - enabled
-        - protocols
-        - resources
+        - version
+        - discovery
       properties:
-        name:
+        version:
           type: string
-          description: Capability/module name/endpoint prefix.
-          example: stock
-        enabled:
-          type: boolean
-          description: Whether this capability is enabled on this server.
-        status:
+          description: Major version of HortiApi of this entry.
+          example: "3"
+        discovery:
           type: string
-          description: Important status message about the capability (show the end-user).
-        protocols:
-          $ref: "#/components/schemas/HortiApiCapabilityProtocols"
-        resources:
-          $ref: '#/components/schemas/Resources'
-
-    HortiApiCapabilityProtocols:
-      type: object
-      additionalProperties: false
-      properties:
-        sse:
-          type: boolean
-          description: Whether this capability supports SSE.
+          format: uri
+          description: URL of the discovery document of this version.
+          example: https://example-company.com/horti-api/v3/discovery
+        openapi:
+          type: string
+          format: uri
+          description: URL of the OpenAPI document of this version.
+          example: https://example-company.com/horti-api/v3/hortiapi-v3.yaml
 
     Id:
         type: [string, 'null']
-        description: ID of the entity. A 128‑bit GUID (UUID) encoded in Base64‐URL (RFC 4648 §5), without "+" or "/" (uses "-" and "_"), no padding, exactly 22 characters.
+        description: ID of the entity. A 128-bit GUID (UUID) encoded in Base64-URL (RFC 4648 §5), without "+" or "/" (uses "-" and "_"), no padding, exactly 22 characters.
         example: ''
         pattern: '^[A-Za-z0-9_-]{22}$'
 
@@ -3899,21 +3934,19 @@ components:
           $ref: '#/components/schemas/Id'
         state:
           description: State of this invoice, is a Resource of type [invoice/state](https://hortiapi.com/resource/invoice/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: invoice/state
           externalDocs:
             url: https://hortiapi.com/resource/invoice/state
         kind:
           description: Kind of this invoice, is a Resource of type [invoice/kind](https://hortiapi.com/resource/invoice/kind)
-          type: string
+          type: [string, 'null']
           x-resource: invoice/kind
           externalDocs:
             url: https://hortiapi.com/resource/invoice/kind
         action:
           description: Action for this invoice, is a Resource of type [invoice/action](https://hortiapi.com/resource/invoice/action)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: invoice/action
           externalDocs:
             url: https://hortiapi.com/resource/invoice/action
@@ -3947,7 +3980,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -3973,7 +4005,6 @@ components:
         state:
           description: State of this invoice, is a Resource of type [invoice/state](https://hortiapi.com/resource/invoice/state)
           type: [string, 'null']
-          default: ''
           x-resource: invoice/state
           externalDocs:
             url: https://hortiapi.com/resource/invoice/state
@@ -4163,21 +4194,19 @@ components:
           $ref: '#/components/schemas/Id'
         state:
           description: State of this order, is a Resource of type [order/state](https://hortiapi.com/resource/order/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: order/state
           externalDocs:
             url: https://hortiapi.com/resource/order/state
         kind:
           description: Kind of this order, is a Resource of type [order/kind](https://hortiapi.com/resource/order/kind)
-          type: string
+          type: [string, 'null']
           x-resource: order/kind
           externalDocs:
             url: https://hortiapi.com/resource/order/kind
         action:
           description: Action for this order, is a Resource of type [order/action](https://hortiapi.com/resource/order/action)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: order/action
           externalDocs:
             url: https://hortiapi.com/resource/order/action
@@ -4190,13 +4219,13 @@ components:
           type: string
         dispatchDate:
           format: date-time
-          type: string
+          type: [string, 'null']
         deliveryDate:
           format: date-time
-          type: string
+          type: [string, 'null']
         invoiceDate:
           format: date-time
-          type: string
+          type: [string, 'null']
         description:
           type: string
           default: ''
@@ -4220,7 +4249,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -4246,7 +4274,6 @@ components:
         state:
           description: State of the orders, is a Resource of type [order/state](https://hortiapi.com/resource/order/state)
           type: [string, 'null']
-          default: ''
           x-resource: order/state
           externalDocs:
             url: https://hortiapi.com/resource/order/state
@@ -4266,10 +4293,16 @@ components:
         orderDateTill:
           format: date-time
           type: [string, 'null']
-        shipDateFrom:
+        dispatchDateFrom:
           format: date-time
           type: [string, 'null']
-        shipDateTill:
+        dispatchDateTill:
+          format: date-time
+          type: [string, 'null']
+        deliveryDateFrom:
+          format: date-time
+          type: [string, 'null']
+        deliveryDateTill:
           format: date-time
           type: [string, 'null']
         invoiceDateFrom:
@@ -4278,9 +4311,6 @@ components:
         invoiceDateTill:
           format: date-time
           type: [string, 'null']
-        # description:
-        #   type: string
-        #   default: ''
         resources:
           $ref: '#/components/schemas/Resources'
       additionalProperties: false
@@ -4296,22 +4326,19 @@ components:
           description: Id of the order containing the orderline, or empty to use the default
         state:
           description: State of this orderline, is a Resource of type [order-line/state](https://hortiapi.com/resource/order-line/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: order-line/state
           externalDocs:
             url: https://hortiapi.com/resource/order-line/state
         kind:
           description: Kind of this orderline, is a Resource of type [order-line/kind](https://hortiapi.com/resource/order-line/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: order-line/kind
           externalDocs:
             url: https://hortiapi.com/resource/order-line/kind
         action:
           description: Action for this orderline, is a Resource of type [order-line/action](https://hortiapi.com/resource/order-line/action)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: order-line/action
           externalDocs:
             url: https://hortiapi.com/resource/order-line/action
@@ -4343,8 +4370,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PhotoUrl'
-        delivery:
-          $ref: '#/components/schemas/Delivery'
         resources:
           $ref: '#/components/schemas/Resources'
       additionalProperties: false
@@ -4353,7 +4378,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -4383,7 +4407,6 @@ components:
         state:
           description: State of the orderlines, is a Resource of type [order-line/state](https://hortiapi.com/resource/order-line/state)
           type: [string, 'null']
-          default: ''
           x-resource: order-line/state
           externalDocs:
             url: https://hortiapi.com/resource/order-line/state
@@ -4569,13 +4592,17 @@ components:
       type: [array, 'null']
       example: 
       - 'custom/name:value1'
-      - 'custom/name:value2'
+      - 'custom/name:value2,value3'
+      - 'custom/other:value%2Cwith%20comma'
+      - 'stock/action:create?pieces=20'
+      - 'order/action:invoice?vat=false&mail=true,print-invoice'
       items:
         type: string
-        description: Resource identifier
-        pattern: '^([a-zA-Z0-9\-]+/[a-zA-Z0-9\-]+):([a-zA-Z0-9\-@.?=]+(,[a-zA-Z0-9\-@.?=]+)*)$'
+        description: Resource identifier "target/name:value1,value2". A value may carry parameters like a web query, "name?key=value&key2=value2". Name, keys and values are percent-encoded (RFC 3986), so a comma, '?', '=' or '&' inside one of them is "%2C", "%3F", "%3D" or "%26".
+        pattern: '^[a-zA-Z0-9\-]+/[a-zA-Z0-9\-]+:(?:[a-zA-Z0-9\-_.~@?=&]|%[0-9A-Fa-f]{2})+(?:,(?:[a-zA-Z0-9\-_.~@?=&]|%[0-9A-Fa-f]{2})+)*$'
 
     StreamEventType:
+        description: Type of a stream event. `add`, `update` and `delete` carry an item in `data`; `reset` and `live` are markers without `data`. See https://hortiapi.com/streaming
         enum:
             - reset
             - add
@@ -4593,22 +4620,19 @@ components:
           $ref: '#/components/schemas/Id'
         kind:
           description: Kind of this stock item, is a Resource of type [stock/kind](https://hortiapi.com/resource/stock/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: stock/kind
           externalDocs:
             url: https://hortiapi.com/resource/stock/kind
         state:
           description: State of this stock, is a Resource of type [stock/state](https://hortiapi.com/resource/stock/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: stock/state
           externalDocs:
             url: https://hortiapi.com/resource/stock/state
         action:
           description: Action for this stock item, is a Resource of type [stock/action](https://hortiapi.com/resource/stock/action)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: stock/action
           externalDocs:
             url: https://hortiapi.com/resource/stock/action
@@ -4648,7 +4672,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -4673,15 +4696,13 @@ components:
           $ref: '#/components/schemas/Id'
         kind:
           description: Kind of this stock item, is a Resource of type [stock/kind](https://hortiapi.com/resource/stock/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: stock/kind
           externalDocs:
             url: https://hortiapi.com/resource/stock/kind
         state:
           description: State of the stock, is a Resource of type [stock/state](https://hortiapi.com/resource/stock/state)
           type: [string, 'null']
-          default: ''
           x-resource: stock/state
           externalDocs:
             url: https://hortiapi.com/resource/stock/state
@@ -4698,8 +4719,7 @@ components:
           $ref: '#/components/schemas/Id'
         state:
           description: State of this supply, is a Resource of type [supply/state](https://hortiapi.com/resource/supply/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: supply/state
           externalDocs:
             url: https://hortiapi.com/resource/supply/state
@@ -4743,7 +4763,6 @@ components:
       type: object
       required:
         - event
-        - data
       properties:
         id:
           type: string
@@ -4758,7 +4777,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         id:
           type: string
@@ -4798,8 +4816,7 @@ components:
           $ref: '#/components/schemas/Id'
         state:
           description: State of this supply order, is a Resource of type [supply-order/state](https://hortiapi.com/resource/supply-order/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: supply-order/state
           externalDocs:
             url: https://hortiapi.com/resource/supply-order/state
@@ -4845,8 +4862,7 @@ components:
           type: string
         state:
           description: State of this transaction, is a Resource of type [supply-transaction/state](https://hortiapi.com/resource/supply-transaction/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: supply-transaction/state
           externalDocs:
             url: https://hortiapi.com/resource/supply-transaction/state
@@ -4862,7 +4878,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -4904,8 +4919,7 @@ components:
           $ref: '#/components/schemas/Id'
         state:
           description: State of this transaction, is a Resource of type [supply-transaction/state](https://hortiapi.com/resource/supply-transaction/state)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: supply-transaction/state
           externalDocs:
             url: https://hortiapi.com/resource/supply-transaction/state
@@ -5034,8 +5048,7 @@ components:
         #   type: string
         kind:
           description: Kind of this user, is a Resource of type [user/kind](https://hortiapi.com/resource/user/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: user/kind
           externalDocs:
             url: https://hortiapi.com/resource/user/kind
@@ -5089,7 +5102,6 @@ components:
       type: object
       required: 
         - event
-        - data
       properties:
         event:
           $ref: '#/components/schemas/StreamEventType'
@@ -5114,8 +5126,7 @@ components:
           $ref: '#/components/schemas/Id'
         kind:
           description: Kind of this user, is a Resource of type [user/kind](https://hortiapi.com/resource/user/kind)
-          type: string
-          default: ''
+          type: [string, 'null']
           x-resource: user/kind
           externalDocs:
             url: https://hortiapi.com/resource/user/kind
@@ -5141,6 +5152,9 @@ components:
 # ProblemDetails / RFC 7807 / ApiError
     HortiApiProblemDetails:
       type: object
+      required:
+        - title
+        - status
       properties:
         type:
           type: string
@@ -5164,9 +5178,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/HortiApiProblemDetailsContext'
-      required:
-        - title
-        - status
 
     HortiApiProblemDetailsContext:
       type: object
@@ -5254,6 +5265,20 @@ components:
             status: 409
             detail: "The request could not be completed due to a conflict with the current state of the resource."
             instance: "/stock"
+            context: []
+
+    NotAcceptableError:
+      description: Not Acceptable
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HortiApiProblemDetails'
+          example:
+            type: "https://hortiapi.com/error/not-acceptable"
+            title: "Not Acceptable"
+            status: 406
+            detail: "This server can not answer with 'text/event-stream' for this capability."
+            instance: "/supply"
             context: []
 
     GoneError:

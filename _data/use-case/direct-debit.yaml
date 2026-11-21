@@ -20,11 +20,11 @@
 
 id: horti-api/use-case:direct-debit
 title: Direct Debit
-status: proposed
+status: draft
 summary: >-
   A supplier submits an order that is collected from the buyer's bank account
   by AI2 through SEPA direct debit, once the invoice date has passed.
-hortiapi: ">=3.0.0-rc.85"
+hortiapi: ">=3.0.0-rc.90"
 docs: https://hortiapi.com/use-case/direct-debit
 
 steps:
@@ -223,7 +223,7 @@ steps:
     changes:
       state:
         from: order/direct-debit-state:draft
-        to: order/direct-debit-state:pending
+        to: order/direct-debit-state:awaiting-processing
     description: The order is locked and can no longer be modified.
     next: [submit-to-bank]
 
@@ -232,8 +232,8 @@ steps:
     title: Collection is submitted to the bank
     changes:
       state:
-        from: order/direct-debit-state:pending
-        to: order/direct-debit-state:collection
+        from: order/direct-debit-state:awaiting-processing
+        to: order/direct-debit-state:collection-in-progress
       resources:
         add: [ai2/collection-batch]
     description: The SEPA return period still applies to received funds.
@@ -244,8 +244,8 @@ steps:
     title: Funds are settled to the supplier
     changes:
       state:
-        from: order/direct-debit-state:collection
-        to: order/direct-debit-state:completed
+        from: order/direct-debit-state:collection-in-progress
+        to: order/direct-debit-state:payout-settled
       resources:
         add: [ai2/payment-batch]
 
@@ -278,15 +278,15 @@ steps:
         usage: required
         values:
           - order/direct-debit-state:draft
-          - order/direct-debit-state:pending
-          - order/direct-debit-state:collection
-          - order/direct-debit-state:completed
+          - order/direct-debit-state:awaiting-processing
+          - order/direct-debit-state:collection-in-progress
+          - order/direct-debit-state:payout-settled
           - order/direct-debit-state:rejected
-          - order/direct-debit-state:cancelled
+          - order/direct-debit-state:deleted
       resources:
         resources:
-          ai2/collection-batch: { usage: conditional, when: From state collection., description: Number of the AI2 collection batch. }
-          ai2/payment-batch:    { usage: conditional, when: From state completed., description: Number of the AI2 payment batch. }
+          ai2/collection-batch: { usage: conditional, when: From state collection-in-progress., description: Number of the AI2 collection batch. }
+          ai2/payment-batch:    { usage: conditional, when: From state payout-settled., description: Number of the AI2 payment batch. }
       total.lines:  { usage: required }
       total.pieces: { usage: required }
       total.net:    { usage: required, description: Amount that is collected. }
@@ -304,4 +304,4 @@ steps:
         when: The calling company is not a party of the order.
 
 open:
-  - When is the state `order/direct-debit-state:cancelled` reached, now that a draft is withdrawn by deleting it?
+  - After deleting a draft, is the order still returned with state `order/direct-debit-state:deleted`, or does `GET /order/{orderId}` return `not-found/order`?

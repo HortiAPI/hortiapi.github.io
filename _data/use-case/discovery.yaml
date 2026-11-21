@@ -1,0 +1,154 @@
+# yaml-language-server: $schema=./use-case-profile.schema.json
+#
+# Use-case profile: how a client finds a HortiApi server and learns who it is connected as.
+# Draft, written from the schema, HortiApi.Server and the connect samples. See `open` for what is not decided.
+
+id: horti-api/use-case:discovery
+title: Discovery and connect
+status: draft
+summary: >-
+  A client reads what a HortiApi server supports and learns for which companies its API key can be used.
+  When only the website of a company is known, the client first finds the server from there.
+hortiapi: ">=3.0.0-rc.90"
+docs: https://hortiapi.com/use-case/discovery
+
+steps:
+
+  discovery:
+    actor: client
+    level: core
+    title: Read the discovery document
+    description: >-
+      The first call of a client: it is on the same host and base URL as the rest of the API.
+      Can be called without API key. With an API key the server may return more capabilities.
+    operationId: HAPI3DiscoveryGet
+    call: GET /discovery
+    response:
+      schemaVersion:
+        usage: required
+        value: 1
+        description: Version of the discovery document itself.
+      service:
+        usage: required
+        description: Name of the product that implements the server.
+      issuer:
+        usage: required
+      apiBaseUrl:
+        usage: required
+        description: Base URL for all other calls.
+      version:
+        usage: required
+        description: Version of the implementation, not of HortiApi.
+      openapi:
+        usage: required
+        description: URL of the OpenAPI document of this server.
+      status:
+        usage: optional
+        description: Message about the server, to show to the end-user.
+      useCases:
+        usage: required
+        description: >-
+          The use cases the server supports, each as `<party>/use-case:<name>`, for example `horti-api/use-case:direct-debit`. A client checks that the use case it implements is listed.
+      capabilities:
+        usage: required
+        description: >-
+          Names of the capabilities that are available, equal to the first part of the path, for example `order` or `supply`. A capability that is not listed answers with 501.
+      sse:
+        usage: required
+        description: >-
+          Names of the capabilities that can answer with a Server-Sent Events stream. For a capability that is not listed, a request with `Accept: text/event-stream` is answered with 406 and the client asks for JSON instead.
+    next: [identity]
+
+  identity:
+    actor: client
+    level: core
+    title: Read the identity of the API key
+    description: >-
+      The API key is sent as `Authorization: bearer <key>`. The response lists the companies the key can be used for.
+      The client picks one and sends its id as header `x-company-id` on every later call.
+      Without API key only `application` and `resources` are returned.
+    operationId: HAPI3MeGet
+    call: GET /me
+    response:
+      application.name:
+        usage: optional
+        description: Name of the application on the server.
+      user.id:   { usage: required }
+      user.name: { usage: optional }
+      companies[].id:
+        usage: required
+        description: Value for the header `x-company-id`.
+      companies[].name:
+        usage: optional
+      facilities[].id:
+        usage: optional
+        description: Value for the header `x-facility-id`.
+      facilities[].name:
+        usage: optional
+      resources:
+        resources:
+          horti-api/health:
+            usage: optional
+            description: Health of the server, `healthy`, `degraded` or `unhealthy`.
+    errors:
+      - type: unauthorized/no-authorization-header
+        when: The header is missing or does not start with `Bearer`.
+      - type: unauthorized/invalid-token
+        when: The API key is not known on this server.
+      - type: unauthorized/no-api-user
+        when: The user of the API key has not enabled the use of the API.
+    next: [identity-company]
+
+  identity-company:
+    actor: client
+    level: extended
+    title: Read the identity for one company
+    description: The same call with a company selected. Not needed before other calls, the header alone is enough.
+    operationId: HAPI3MeGet
+    call: GET /me
+    parameters:
+      x-company-id:
+        usage: required
+        description: An `id` from `companies` in `identity`.
+    response:
+      company.id:    { usage: required }
+      company.name:  { usage: optional }
+      facility.id:
+        usage: conditional
+        when: A facility is selected with `x-facility-id`.
+    errors:
+      - type: unauthorized/company-invalid
+        when: The value of `x-company-id` is not a valid id.
+      - type: unauthorized/company-not-found
+        when: The company is not known on this server.
+      - type: unauthorized/company-not-allowed
+        when: The user has no rights for the company.
+
+  well-known:
+    actor: client
+    level: extended
+    title: Find the server from a website
+    description: >-
+      Only needed when the address of the API is not known. A company puts this document on the root of its own website
+      to tell where its HortiApi server is; the server can be on another host. It is called without API key.
+      The response is a list with one entry per major version of HortiApi (3, 4, ...), not per minor version.
+    operationId: HAPI3WellKnownGet
+    call: GET /.well-known/horti-api
+    when: the client has the address of a website and not the base URL of the API
+    response:
+      version:
+        usage: required
+        value: "3"
+        description: Major version of HortiApi of this entry.
+      discovery:
+        usage: required
+        description: URL of the discovery document, used in `discovery`.
+      openapi:
+        usage: optional
+        description: URL of the OpenAPI document of this server.
+    next: [discovery]
+
+open:
+  - Which fields of the discovery document must a client check before it continues, for example `status` or `horti-api/health`?
+  - How does a client get the API key and the host name? Is that outside this use case?
+  - When are `facilities` filled, and when must a client send `x-facility-id`?
