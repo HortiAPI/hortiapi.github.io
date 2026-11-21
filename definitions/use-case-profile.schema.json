@@ -5,7 +5,7 @@
   "description": "Describes one business scenario on top of the generic HortiApi schema: which steps exist and, per step, which fields are read (request) or filled (response). Fields that are not listed are ignored by the server.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "title", "hortiapi", "steps"],
+  "required": ["id", "title", "status", "hortiapi", "steps"],
   "properties": {
     "id": {
       "description": "Resource identifier of the use-case. The value equals the file name of the profile. A breaking change gets a new use-case with a numbered suffix, for example `direct-debit-2`.",
@@ -14,6 +14,10 @@
       "examples": ["horti-api/use-case:direct-debit", "horti-api/use-case:direct-debit-2"]
     },
     "title": { "type": "string" },
+    "status": {
+      "description": "draft: being written, anything can change. proposed: complete and open for review. accepted: agreed, only non-breaking changes. final: in production use, a breaking change becomes a new use-case.",
+      "enum": ["draft", "proposed", "accepted", "final"]
+    },
     "summary": { "description": "One or two sentences describing the scenario.", "type": "string" },
     "hortiapi": {
       "description": "HortiApi schema versions this profile applies to.",

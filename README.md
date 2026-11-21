@@ -7,7 +7,7 @@ A **use case** describes one such scenario: the steps of the workflow and, per s
 ## 🎯 Choose your use case
 
 {::nomarkdown}
-{% include use-case-table.html %}
+{% include use-case-cards.html %}
 {:/nomarkdown}
 
 Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/issues) to discuss a new use case.
@@ -22,7 +22,7 @@ Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/i
 
 ## 📖 Reference
 
-| | |
+| Topic | What you find there |
 | --- | --- |
 | [API docs v3](/v3) | Interactive viewer of the OpenAPI 3.1 schema: endpoints by tag, field definitions and try-it-out. Legacy: [v2](/v2), [v1](/v1) (swagger 2.0) |
 | [OpenAPI definition](/definitions/hortiapi-v3-latest.yaml) | The latest v3 schema as YAML, to generate a client or server |
@@ -43,11 +43,20 @@ Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/i
 
 ### ⚙️ Other languages
 
-Import [`definitions/hortiapi-v3-latest.yaml`](/definitions/hortiapi-v3-latest.yaml) into your tool of choice:
+For other languages, generate a client or server from [`definitions/hortiapi-v3-latest.yaml`](/definitions/hortiapi-v3-latest.yaml). Commonly used generators:
 
-* **.NET**: NSwag or AutoRest → generates C# client/server stubs
-* **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
-* **Python/Java**: OpenAPI Generator templates
+| Language | Generator |
+| --- | --- |
+| TypeScript / JavaScript | [openapi-typescript](https://openapi-ts.dev/) (types and fetch client) or [OpenAPI Generator](https://openapi-generator.tech/docs/generators) `typescript-fetch` |
+| Java | [OpenAPI Generator](https://openapi-generator.tech/docs/generators) `java` (client) or `spring` (server) |
+| Kotlin | [OpenAPI Generator](https://openapi-generator.tech/docs/generators) `kotlin` |
+| Python | [openapi-python-client](https://github.com/openapi-generators/openapi-python-client) or [OpenAPI Generator](https://openapi-generator.tech/docs/generators) `python` |
+| Go | [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) |
+| PHP | [OpenAPI Generator](https://openapi-generator.tech/docs/generators) `php` |
+| Swift | [Swift OpenAPI Generator](https://github.com/apple/swift-openapi-generator) |
+| Several languages | [Kiota](https://learn.microsoft.com/openapi/kiota/overview) |
+
+More generators are listed on [openapi.tools](https://openapi.tools/). The schema is OpenAPI 3.1, so check that the generator of your choice supports that version.
 
 ### 🌷 Product classification
 

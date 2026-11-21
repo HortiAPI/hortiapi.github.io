@@ -20,6 +20,7 @@
 
 id: horti-api/use-case:direct-debit
 title: Direct Debit
+status: proposed
 summary: >-
   A supplier submits an order that is collected from the buyer's bank account
   by AI2 through SEPA direct debit, once the invoice date has passed.
