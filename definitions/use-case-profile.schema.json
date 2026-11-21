@@ -22,7 +22,7 @@
     "hortiapi": {
       "description": "HortiApi schema versions this profile applies to.",
       "type": "string",
-      "examples": [">=3.0.0-rc.85"]
+      "examples": [">=3.0.0-rc.90"]
     },
     "docs": { "description": "Page with the narrative description of the use-case.", "type": "string", "format": "uri" },
     "steps": {
@@ -91,12 +91,12 @@
         "when": { "description": "Precondition for this step, for example a required state.", "type": "string" },
         "after": { "description": "This step can be done at any time after the named step.", "$ref": "#/$defs/stepId" },
         "parameters": {
-          "description": "Path and query parameters of the operation, keyed by name.",
+          "description": "Path, query and header parameters of the operation, keyed by name.",
           "type": "object",
           "additionalProperties": { "$ref": "#/$defs/field" }
         },
         "request": { "description": "Fields of the request body the server reads.", "$ref": "#/$defs/fields" },
-        "response": { "description": "Fields of the response body the client can rely on.", "$ref": "#/$defs/fields" },
+        "response": { "description": "Fields of the response body the client can rely on. For an operation that returns a list or a stream, the paths describe one item.", "$ref": "#/$defs/fields" },
         "errors": {
           "description": "Errors specific to this use-case. Generic errors (401, 500, ...) are not listed.",
           "type": "array",

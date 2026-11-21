@@ -34,15 +34,15 @@ The follwing `order.state` values apply when `kind` is `order/kind:direct-debit`
 
   The order can be modified. It will be picked up by the AI2 batch process once the invoice date has passed (batch window: Monday–Friday, 13:00–13:30, provisional; final timing to be confirmed).
 
-- `order/direct-debit-state:pending`
+- `order/direct-debit-state:awaiting-processing`
 
   The order has been submitted and can no longer be modified. It is awaiting collection.
 
-- `order/direct-debit-state:collection`
+- `order/direct-debit-state:collection-in-progress`
 
   The direct debit has been submitted to the bank and is in the collection phase. Any received funds may still be subject to the SEPA B2B return period.
 
-- `order/direct-debit-state:completed`
+- `order/direct-debit-state:payout-settled`
 
   The payment has been settled to the supplier and the process is fully completed.
 
@@ -50,9 +50,9 @@ The follwing `order.state` values apply when `kind` is `order/kind:direct-debit`
 
   The order has been rejected and will not be processed further. Contact AI2 for more information.
 
-- `order/direct-debit-state:cancelled`
+- `order/direct-debit-state:deleted`
 
-  The order has been cancelled and will not be processed.
+  The order has been deleted and will not be processed.
 
 {::nomarkdown}
 {% include use-case-profile.html %}

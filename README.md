@@ -31,6 +31,7 @@ Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/i
 | [Resources](/resource) | Standardized identifiers such as order kinds, order states and company roles |
 | [Errors](/error) | Error types of the RFC 7807 Problem Details responses |
 | [Discovery](/discovery) | How a client finds a server through `/.well-known/horti-api` |
+| [Streaming](/streaming) | Lists and Server-Sent Events: event types, continuing with `Last-Event-ID` and limiting results |
 
 ### 🧩 Official .NET libraries
 
@@ -40,6 +41,8 @@ Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/i
 | [`HortiApi.Resources`](https://www.nuget.org/packages/HortiApi.Resources)     | Well-known resource string definitions            |
 | [`HortiApi.Client.Rest`](https://www.nuget.org/packages/HortiApi.Client.Rest) | Client implementation for HortiAPI endpoints      |
 | [`HortiApi.Server`](https://www.nuget.org/packages/HortiApi.Server)           | Abstract ASP.NET 8.0 server base classes          |
+
+See the [C# examples](/dotnet) for recognising errors, reading resources and returning errors from a server.
 
 ### ⚙️ Other languages
 
