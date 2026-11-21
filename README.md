@@ -1,26 +1,38 @@
-# HortiAPI Reference
+# HortiAPI
 
-Welcome to the interactive reference for the HortiAPI OpenAPI definitions. This site renders the API design authored and maintained in the [HortiAPI/HortiAPI](https://github.com/HortiAPI/HortiAPI) repository, where the schema, resources, and implementation guidelines are collaboratively developed. Use the links below to explore endpoints, schemas, and examples for each version.
+HortiAPI is the open API standard for exchanging catalog, supply, stock, order and document data in the horticulture industry. The API is generic on purpose: one set of endpoints and models serves many business scenarios.
 
-Supports the Linnaeus model for standardized flower & plant classification. Linnaeus provides a rigorously defined ontology for horticultural entities—distinguishing fixed taxonomic attributes (genus, species) from variable transactional data (inventory, pricing). By aligning with this industry‑recognized standard, HortiAPI ensures that data exchanged among growers, exporters, wholesalers, and service providers remains interoperable and unambiguous, reducing integration effort and preventing misclassification across the supply chain.
+A **use case** describes one such scenario: the steps of the workflow and, per step, the fields that are used. Implementing HortiAPI means implementing one or more use cases, so that is the place to start.
 
-## ▶️ Versioned API Docs
+## 🎯 Choose your use case
 
-* [HortiApi v3 (latest)](/v3) *OpenAPI 3.1 schema*
-* [HortiApi v2 (legacy)](/v2) *swagger 2.0 schema*
-* [HortiApi v1 (legacy)](/v1) *swagger 2.0 schema*
+{::nomarkdown}
+{% include use-case-table.html %}
+{:/nomarkdown}
 
-## 🔍 Exploring the API
+Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/issues) to discuss a new use case.
 
-Each version’s viewer provides:
+## 🚀 How to implement a use case
 
-* **Endpoint list**: Browse by tag (Catalog, Supply, Stock, Orders, Documents, Companies, Users)
-* **Schema details**: Field definitions, data types, and resource references
-* **Try-it-out**: Execute sample requests against your local or staging HortiAPI server
+1. **Read the workflow.** The use case page shows every step, who performs it (client or server) and which fields the step reads and returns. Fields that are not listed are ignored by the server.
+2. **Connect.** Find the server and its settings through [discovery](/discovery) and `/.well-known/horti-api`, see the [connecting sample](/sample/connect).
+3. **Build the `core` steps first.** These are the minimum for a working client. Steps marked `extended` are optional for a client; a server that offers the use case supports both.
+4. **Compare with the sample.** Every use case links to a [sample](/sample) with the complete HTTP requests and responses.
+5. **Handle the errors of the use case.** Each step lists the [errors](/error) that are specific to it.
 
-## 🧩 Official .NET Libraries
+## 📖 Reference
 
-For C#/.NET consumers and servers, HortiAPI publishes these NuGet packages:
+| | |
+| --- | --- |
+| [API docs v3](/v3) | Interactive viewer of the OpenAPI 3.1 schema: endpoints by tag, field definitions and try-it-out. Legacy: [v2](/v2), [v1](/v1) (swagger 2.0) |
+| [OpenAPI definition](/definitions/hortiapi-v3-latest.yaml) | The latest v3 schema as YAML, to generate a client or server |
+| [Use cases](/use-case) | All use cases with their workflow and fields |
+| [Samples](/sample) | HTTP transcripts, for example [connecting](/sample/connect), [catalog search](/sample/catalog-search) and [get supply and order](/sample/get-supply-and-order) |
+| [Resources](/resource) | Standardized identifiers such as order kinds, order states and company roles |
+| [Errors](/error) | Error types of the RFC 7807 Problem Details responses |
+| [Discovery](/discovery) | How a client finds a server through `/.well-known/horti-api` |
+
+### 🧩 Official .NET libraries
 
 | Package                                                                       | Contents                                          |
 | ----------------------------------------------------------------------------- | ------------------------------------------------- |
@@ -29,49 +41,18 @@ For C#/.NET consumers and servers, HortiAPI publishes these NuGet packages:
 | [`HortiApi.Client.Rest`](https://www.nuget.org/packages/HortiApi.Client.Rest) | Client implementation for HortiAPI endpoints      |
 | [`HortiApi.Server`](https://www.nuget.org/packages/HortiApi.Server)           | Abstract ASP.NET 8.0 server base classes          |
 
-## ⚙️ Generating other clients
+### ⚙️ Other languages
 
-Import the OpenAPI file into your tool of choice:
+Import [`definitions/hortiapi-v3-latest.yaml`](/definitions/hortiapi-v3-latest.yaml) into your tool of choice:
 
 * **.NET**: NSwag or AutoRest → generates C# client/server stubs
 * **JavaScript/TypeScript**: OpenAPI Generator → fetch-based SDK
 * **Python/Java**: OpenAPI Generator templates
 
-Use [`definitions/hortiapi-v3-latest.yaml`](/definitions/hortiapi-v3-latest.yaml) for the latest version.
+### 🌷 Product classification
 
-## 🔎 Discovery and /.well-known/horti-api
-
-Check the [discovery process](/discovery) details to learn about `/.well-known/horti-api` and more
-
-## 📋 Samples and use cases
-
-See the API in action with these practical [example](/sample) scenarios. These include:
-
-* [Connecting](/sample/connect.md)
-* [Catalog search](/sample/catalog-search.md)
-* [Get supply and order](/sample/get-supply-and-order.md)
-* [Direct-debit](/sample/direct-debit.md)
-* [much more...](/sample)
-
-Read more about the different [use cases](/use-case) of HortiAPI
-
-## 📚 Resources
-
-The v3 schema references shared [resource](/resource). These include:
-
-* Company kinds, roles, and statuses
-* Order states and document types
-
-These standardized identifiers ensure semantic consistency across all implementations.
-
-## ⚠️ Errors
-
-HortiAPI uses structured error responses (RFC7807 Problem Details) that reference these standardized [error](/error) types. These include:
-
-* Bad Request
-* Forbidden
-* Not Implemented
+HortiAPI supports the Linnaeus model for standardized flower & plant classification. Linnaeus distinguishes fixed taxonomic attributes (genus, species) from variable transactional data (inventory, pricing), so data exchanged among growers, exporters, wholesalers and service providers stays interoperable and unambiguous.
 
 ## ℹ️ Support
 
-For issues or questions on the spec itself, open an issue in the main API repo: [HortiAPI/HortiAPI](https://github.com/HortiAPI/HortiAPI/issues).
+The schema, resources and implementation guidelines are developed in the [HortiAPI/HortiAPI](https://github.com/HortiAPI/HortiAPI) repository. For issues or questions on the spec itself, [open an issue](https://github.com/HortiAPI/HortiAPI/issues) there.
