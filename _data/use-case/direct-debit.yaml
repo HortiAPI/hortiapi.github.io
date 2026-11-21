@@ -1,4 +1,6 @@
-# DRAFT - prototype of the use-case profile format.
+# yaml-language-server: $schema=./use-case-profile.schema.json
+#
+# DRAFT - prototype of the use-case profile format. The format is defined in use-case-profile.schema.json.
 #
 # A profile describes one business scenario on top of the generic HortiApi schema:
 # which steps exist, and per step which fields are read (request) or filled (response).
@@ -16,7 +18,7 @@
 # Paths are relative to the request/response model of the operation, `[]` marks an array.
 # Lists with keyed entries are described per key: `resources`, `features`, `references`.
 
-id: use-case/direct-debit:1
+id: horti-api/use-case:direct-debit
 title: Direct Debit
 summary: >-
   A supplier submits an order that is collected from the buyer's bank account
@@ -155,11 +157,10 @@ steps:
       customer.name: { usage: required }
     errors:
       - type: bad-request/ai2-account-unknown
-        proposed: true
         when: The AI2 account number of the supplier or customer is not known.
       - type: forbidden/order-owner
         when: The calling company is not the supplier of the order.
-    next: [modify, modify-lines, collect]
+    next: [modify, modify-lines, delete, collect]
 
   modify:
     actor: client
@@ -173,9 +174,8 @@ steps:
         usage: required
     errors:
       - type: conflict/order-not-draft
-        proposed: true
         when: The order is no longer in draft.
-    next: [modify, modify-lines, collect]
+    next: [modify, modify-lines, delete, collect]
 
   modify-lines:
     actor: client
@@ -194,9 +194,26 @@ steps:
         when: Changing an existing line.
     errors:
       - type: conflict/order-not-draft
-        proposed: true
         when: The order is no longer in draft.
-    next: [modify, modify-lines, collect]
+    next: [modify, modify-lines, delete, collect]
+
+  delete:
+    actor: client
+    level: extended
+    title: Delete draft order
+    description: Withdraw the order before AI2 has picked it up.
+    operationId: HAPI3OrderDelete
+    call: DELETE /order/{orderId}
+    when: state is order/direct-debit-state:draft
+    parameters:
+      orderId:
+        usage: required
+        description: The `id` received in `create`.
+    errors:
+      - type: conflict/order-not-draft
+        when: The order is no longer in draft.
+      - type: not-found/order
+        when: The id is not known on this server.
 
   collect:
     actor: server
@@ -207,7 +224,7 @@ steps:
         from: order/direct-debit-state:draft
         to: order/direct-debit-state:pending
     description: The order is locked and can no longer be modified.
-    next: [submit-to-bank, reject]
+    next: [submit-to-bank]
 
   submit-to-bank:
     actor: server
@@ -219,7 +236,7 @@ steps:
       resources:
         add: [ai2/collection-batch]
     description: The SEPA return period still applies to received funds.
-    next: [settle, reject]
+    next: [settle]
 
   settle:
     actor: server
@@ -234,10 +251,11 @@ steps:
   reject:
     actor: server
     title: Order is rejected
+    after: create
     changes:
       state:
         to: order/direct-debit-state:rejected
-    description: The order is not processed further. Contact AI2 for follow-up.
+    description: AI2 can reject the order from every state. The order is not processed further, contact AI2 for follow-up.
 
   status:
     actor: client
@@ -248,6 +266,9 @@ steps:
     operationId: HAPI3OrderGet
     call: GET /order/{orderId}
     parameters:
+      orderId:
+        usage: required
+        description: The `id` received in `create`.
       includeLines:
         usage: optional
         description: Set to true to also receive the lines.
@@ -282,6 +303,4 @@ steps:
         when: The calling company is not a party of the order.
 
 open:
-  - How does a client cancel a draft (state `cancelled`)? No order action or step is defined for it yet.
-  - From which states can AI2 reject an order?
-  - Error types marked `proposed` do not exist under /error yet.
+  - When is the state `order/direct-debit-state:cancelled` reached, now that a draft is withdrawn by deleting it?

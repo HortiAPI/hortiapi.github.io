@@ -1,0 +1,40 @@
+{%- comment -%}
+  Table of all use-case pages (every page below /use-case/). Title, summary and operations come from
+  the profile in _data/use-case/ when the page sets `profile`, otherwise from the front matter of the page
+  (`summary`). The sample link comes from `sample: <file name in /sample>` in the front matter.
+  Include between kramdown nomarkdown markers.
+{%- endcomment -%}
+{%- assign usecase_pages = site.pages | where_exp: "p", "p.url contains '/use-case/'" | sort: "title" -%}
+<style>
+.uc-table { width: 100%; border-collapse: collapse; display: table; }
+.uc-table th, .uc-table td { border: 1px solid #d0d7de; padding: 6px 10px; vertical-align: top; text-align: left; }
+.uc-table th { background: #f6f8fa; color: #1f2328; }
+.uc-table td.uc-ops code { white-space: nowrap; }
+.uc-table .uc-id { font-size: .85em; }
+</style>
+<table class="uc-table">
+<thead><tr><th>Use case</th><th>What it does</th><th>Operations</th><th>Sample</th></tr></thead>
+<tbody>
+{%- for p in usecase_pages -%}
+  {%- assign profile = site.data["use-case"][p.profile] -%}
+  {%- assign calls = "" -%}
+  {%- for s in profile.steps -%}
+    {%- if s[1].call -%}{%- assign calls = calls | append: s[1].call | append: "|" -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign calls = calls | split: "|" | uniq -%}
+  {%- assign fallback = p.title | remove: " use-case" | replace: "-", " " | capitalize -%}
+  <tr>
+    <td>
+      <a href="{{ p.url }}"><strong>{{ profile.title | default: fallback }}</strong></a>
+      {%- if profile.id %}<br><code class="uc-id">{{ profile.id }}</code>{% endif -%}
+    </td>
+    <td>{{ profile.summary | default: p.summary }}</td>
+    <td class="uc-ops">
+      {%- for c in calls %}<code>{{ c }}</code>{% unless forloop.last %}<br>{% endunless %}{% endfor -%}
+      {%- if calls.size == 0 %}<a href="{{ p.url }}">see page</a>{% endif -%}
+    </td>
+    <td>{% if p.sample %}<a href="/sample/{{ p.sample }}">{{ p.sample }}</a>{% endif %}</td>
+  </tr>
+{%- endfor -%}
+</tbody>
+</table>

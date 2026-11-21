@@ -1,6 +1,6 @@
 {%- comment -%}
   Renders a use-case profile from _data/use-case/<page.profile>.yaml.
-  Usage in a use-case page: set `profile: direct-debit-1` in the front matter and include
+  Usage in a use-case page: set `profile: direct-debit` in the front matter and include
   this file between kramdown nomarkdown markers (see use-case/direct-debit/readme.md).
 {%- endcomment -%}
 {%- assign profile = site.data["use-case"][page.profile] -%}

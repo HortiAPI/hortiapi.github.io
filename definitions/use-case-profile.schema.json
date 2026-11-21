@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hortiapi.com/definitions/use-case-profile.schema.json",
+  "title": "HortiApi use-case profile",
+  "description": "Describes one business scenario on top of the generic HortiApi schema: which steps exist and, per step, which fields are read (request) or filled (response). Fields that are not listed are ignored by the server.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "hortiapi", "steps"],
+  "properties": {
+    "id": {
+      "description": "Resource identifier of the use-case. The value equals the file name of the profile. A breaking change gets a new use-case with a numbered suffix, for example `direct-debit-2`.",
+      "type": "string",
+      "pattern": "^horti-api/use-case:[a-z][a-z0-9-]*$",
+      "examples": ["horti-api/use-case:direct-debit", "horti-api/use-case:direct-debit-2"]
+    },
+    "title": { "type": "string" },
+    "summary": { "description": "One or two sentences describing the scenario.", "type": "string" },
+    "hortiapi": {
+      "description": "HortiApi schema versions this profile applies to.",
+      "type": "string",
+      "examples": [">=3.0.0-rc.85"]
+    },
+    "docs": { "description": "Page with the narrative description of the use-case.", "type": "string", "format": "uri" },
+    "steps": {
+      "description": "The steps of the workflow, keyed by step id. The first step is the entry point.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/$defs/stepId" },
+      "additionalProperties": { "$ref": "#/$defs/step" }
+    },
+    "open": {
+      "description": "Open questions about this profile. Remove when answered.",
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+
+  "$defs": {
+
+    "stepId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+
+    "step": {
+      "type": "object",
+      "required": ["actor", "title"],
+      "properties": {
+        "actor": {
+          "description": "client: an API call made by the client. server: something that happens on the server without a call.",
+          "enum": ["client", "server"]
+        }
+      },
+      "if": { "properties": { "actor": { "const": "server" } } },
+      "then": { "$ref": "#/$defs/serverStep" },
+      "else": { "$ref": "#/$defs/clientStep" }
+    },
+
+    "clientStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor", "title", "level"],
+      "if": { "required": ["extends"] },
+      "else": { "required": ["operationId", "call"] },
+      "properties": {
+        "actor": { "const": "client" },
+        "level": {
+          "description": "core: needed for a minimal client implementation. extended: optional for a client. A server that declares the use-case supports both.",
+          "enum": ["core", "extended"]
+        },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "operationId": {
+          "description": "operationId of the operation in the HortiApi schema.",
+          "type": "string",
+          "pattern": "^HAPI3[A-Za-z]+$"
+        },
+        "call": {
+          "description": "Method and path of `operationId`, repeated for readability.",
+          "type": "string",
+          "pattern": "^(GET|POST|PUT|PATCH|DELETE) /\\S*$"
+        },
+        "extends": {
+          "description": "Step whose operation and request/response fields are inherited. Fields listed here are added or overridden.",
+          "$ref": "#/$defs/stepId"
+        },
+        "when": { "description": "Precondition for this step, for example a required state.", "type": "string" },
+        "after": { "description": "This step can be done at any time after the named step.", "$ref": "#/$defs/stepId" },
+        "parameters": {
+          "description": "Path and query parameters of the operation, keyed by name.",
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/field" }
+        },
+        "request": { "description": "Fields of the request body the server reads.", "$ref": "#/$defs/fields" },
+        "response": { "description": "Fields of the response body the client can rely on.", "$ref": "#/$defs/fields" },
+        "errors": {
+          "description": "Errors specific to this use-case. Generic errors (401, 500, ...) are not listed.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/error" }
+        },
+        "next": { "$ref": "#/$defs/next" }
+      }
+    },
+
+    "serverStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actor", "title", "changes"],
+      "properties": {
+        "actor": { "const": "server" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "trigger": { "description": "What makes the server perform this step.", "type": "string" },
+        "after": { "description": "This step can happen at any time after the named step.", "$ref": "#/$defs/stepId" },
+        "changes": {
+          "description": "What the client sees changed afterwards.",
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "state": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["to"],
+              "properties": {
+                "from": { "description": "State before the step. Omit when the step can happen from any state.", "$ref": "#/$defs/resourceValue" },
+                "to": { "$ref": "#/$defs/resourceValue" }
+              }
+            },
+            "resources": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "add": {
+                  "description": "Resource keys added to `resources`.",
+                  "type": "array",
+                  "items": { "$ref": "#/$defs/resourceKey" }
+                }
+              }
+            }
+          }
+        },
+        "next": { "$ref": "#/$defs/next" }
+      }
+    },
+
+    "next": {
+      "description": "Steps that can follow this step.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/stepId" }
+    },
+
+    "fields": {
+      "description": "Fields keyed by path, relative to the request or response model. `[]` marks an array, for example `lines[].price.amount.value`.",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z][A-Za-z0-9]*(\\[\\])?(\\.[A-Za-z][A-Za-z0-9]*(\\[\\])?)*$"
+      },
+      "additionalProperties": { "$ref": "#/$defs/field" }
+    },
+
+    "usage": {
+      "description": "required: must be present. optional: used when present. conditional: required under the condition in `when`. not-used: deliberately not part of this use-case, covers the whole object.",
+      "enum": ["required", "optional", "conditional", "not-used"]
+    },
+
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "usage": { "$ref": "#/$defs/usage" },
+        "value": { "description": "The fixed value of this field in this use-case.", "type": ["string", "number", "boolean"] },
+        "values": {
+          "description": "The values this field can have in this use-case.",
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": ["string", "number", "boolean"] }
+        },
+        "description": { "description": "Business meaning of the field in this use-case.", "type": "string" },
+        "when": { "description": "Condition for usage `conditional`.", "type": "string" },
+        "constraint": { "description": "Restriction on the value, for example a maximum length.", "type": "string" },
+        "mapping": { "$ref": "#/$defs/mapping" },
+        "resources": {
+          "description": "Entries of a resources array, keyed by resource key `target/name`.",
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "#/$defs/resourceKey" },
+          "additionalProperties": { "$ref": "#/$defs/entry" }
+        },
+        "features": {
+          "description": "Entries of a features array, keyed by feature type, for example the VBN code `S20`.",
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/entry" }
+        },
+        "references": {
+          "description": "Entries of a references array, keyed by reference name, for example `VN`.",
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/entry" }
+        }
+      },
+      "dependentSchemas": {
+        "value": { "properties": { "values": false } }
+      },
+      "allOf": [
+        { "$ref": "#/$defs/conditionalNeedsWhen" },
+        {
+          "if": {
+            "anyOf": [
+              { "required": ["resources"] },
+              { "required": ["features"] },
+              { "required": ["references"] }
+            ]
+          },
+          "else": { "required": ["usage"] }
+        }
+      ]
+    },
+
+    "entry": {
+      "description": "One keyed entry of a resources, features or references array.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["usage"],
+      "properties": {
+        "usage": { "$ref": "#/$defs/usage" },
+        "value": { "type": ["string", "number", "boolean"] },
+        "description": { "type": "string" },
+        "when": { "type": "string" },
+        "constraint": { "type": "string" },
+        "mapping": { "$ref": "#/$defs/mapping" }
+      },
+      "allOf": [{ "$ref": "#/$defs/conditionalNeedsWhen" }]
+    },
+
+    "conditionalNeedsWhen": {
+      "if": { "properties": { "usage": { "const": "conditional" } }, "required": ["usage"] },
+      "then": { "required": ["when"] }
+    },
+
+    "mapping": {
+      "description": "Where this field is found in another format, keyed by format name. For example the column number in the AI2 file.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": ["string", "integer"] }
+    },
+
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "when"],
+      "properties": {
+        "type": {
+          "description": "Error type `category/key`, documented at https://hortiapi.com/error/<type>.",
+          "type": "string",
+          "pattern": "^[a-z][a-z-]*/[a-z0-9][a-z0-9-]*$"
+        },
+        "when": { "description": "Situation in which this error is returned.", "type": "string" },
+        "proposed": { "description": "True while the error type has no documentation page yet.", "type": "boolean" }
+      }
+    },
+
+    "resourceKey": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-]+/[a-zA-Z0-9-]+$",
+      "examples": ["ai2/account-number"]
+    },
+
+    "resourceValue": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-]+/[a-zA-Z0-9-]+:.+$",
+      "examples": ["order/direct-debit-state:draft"]
+    }
+  }
+}
