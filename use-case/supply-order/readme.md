@@ -4,6 +4,7 @@ title: supply-order use-case
 permalink: /use-case/supply-order
 summary: Buyers retrieve available supply from a supplier and place an order for specific products.
 sample: get-supply-and-order
+status: draft
 ---
 
 # Supply Order
