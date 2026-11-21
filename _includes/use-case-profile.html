@@ -60,6 +60,9 @@ flowchart TD
   {{ s[1].after | replace: "-", "_" }} -. any time .-> {{ id }}
 {%- endif %}
 {%- endfor %}
+{%- for s in profile.steps %}
+  click {{ s[0] | replace: "-", "_" }} href "#step-{{ s[0] }}" "Go to {{ s[1].title }}"
+{%- endfor %}
   classDef client fill:#ddf4ff,stroke:#54aeff,color:#1f2328
   classDef extended fill:#ddf4ff,stroke:#54aeff,color:#1f2328,stroke-dasharray:5 4
   classDef server fill:#fbefff,stroke:#c297ff,color:#1f2328
