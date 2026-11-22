@@ -29,6 +29,7 @@ Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/i
 | [Use cases](/use-case) | All use cases with their workflow and fields |
 | [Samples](/sample) | HTTP transcripts, for example [connecting](/sample/connect), [catalog search](/sample/catalog-search) and [get supply and order](/sample/get-supply-and-order) |
 | [Resources](/resource) | Standardized identifiers such as order kinds, order states and company roles |
+| [Resource strings](/resource-string) | How a resource string is built, and how to read, compare and change it |
 | [Errors](/error) | Error types of the RFC 7807 Problem Details responses |
 | [Discovery](/discovery) | How a client finds a server through `/.well-known/horti-api` |
 | [Streaming](/streaming) | Lists and Server-Sent Events: event types, continuing with `Last-Event-ID` and limiting results |
