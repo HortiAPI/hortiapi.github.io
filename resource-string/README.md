@@ -62,9 +62,21 @@ The names in these examples only show the form; they are not defined resources.
 - Numbers use `.` as decimal separator: `?weight=1.5`.
 - Yes or no is `true` or `false`. `1` and `0` are also read as yes and no.
 
+## Date and time
+
+A point in time in a value is always written in UTC, in this form:
+
+```text
+ai2/collection-date:2026-11-24T14:30:00Z
+```
+
+- The form is `yyyy-MM-ddTHH:mm:ssZ`, the same as the date and time fields in the rest of the API.
+- It always ends with `Z`. A time zone offset such as `+01:00` is not used. Convert a local time to UTC before you write it.
+- The seconds are always written, also when they are `00`.
+
 ## Special characters
 
-The characters `,` `?` `&` `=` `:` and `/` have a meaning in a resource string. When a value name, a parameter key or a parameter value contains one of them, it is percent-encoded (RFC 3986), the same way as in a web address.
+The characters `,` `?` `&` `=` and `%` have a meaning in the values of a resource string. When a value name, a parameter key or a parameter value contains one of them, it is percent-encoded (RFC 3986), the same way as in a web address.
 
 | Character | Written as |
 | --- | --- |
@@ -72,10 +84,12 @@ The characters `,` `?` `&` `=` `:` and `/` have a meaning in a resource string. 
 | `?` | `%3F` |
 | `&` | `%26` |
 | `=` | `%3D` |
-| `:` | `%3A` |
-| `/` | `%2F` |
 | space | `%20` |
 | `%` | `%25` |
+
+The characters `:` and `/` are written as they are. The identifier ends at the first `:`, so a `:` or `/` after it is always part of a value: `example/website:https://example.com/shop`.
+
+When you read, also accept the encoded forms `%3A` and `%2F`. They mean the same as `:` and `/`.
 
 When you read a resource string, split it first and decode after that:
 

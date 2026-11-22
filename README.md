@@ -33,6 +33,7 @@ Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/i
 | [Errors](/error) | Error types of the RFC 7807 Problem Details responses |
 | [Discovery](/discovery) | How a client finds a server through `/.well-known/horti-api` |
 | [Streaming](/streaming) | Lists and Server-Sent Events: event types, continuing with `Last-Event-ID` and limiting results |
+| [Compatibility](/compatibility) | How a client keeps working when a later version adds properties, and which properties are reserved |
 
 ### 🧩 Official .NET libraries
 
@@ -60,7 +61,7 @@ For other languages, generate a client or server from [`definitions/hortiapi-v3-
 | Swift | [Swift OpenAPI Generator](https://github.com/apple/swift-openapi-generator) |
 | Several languages | [Kiota](https://learn.microsoft.com/openapi/kiota/overview) |
 
-More generators are listed on [openapi.tools](https://openapi.tools/). The schema is OpenAPI 3.1, so check that the generator of your choice supports that version.
+More generators are listed on [openapi.tools](https://openapi.tools/). The schema is OpenAPI 3.1, so check that the generator of your choice supports that version. See [Compatibility](/compatibility) for the setting that lets a generated client accept properties that are added later.
 
 ### 🌷 Product classification
 

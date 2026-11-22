@@ -20,7 +20,7 @@ The supplier and customer are matched by their AI2 account numbers (e.g. `ai2/ac
 
 Once the invoice date has passed, a batch process run by AI2 (Monday–Friday, 13:00–13:30, provisional; final timing to be confirmed) picks up all eligible draft orders and advances them to `pending`. At that point the order is locked and can no longer be modified. The collection is then submitted to the bank, and the order moves into the `collection` state, during which the SEPA B2B or SEPA Core return period still applies. Once the funds have been settled to the supplier, the order reaches `completed`.
 
-The AI2 batch number is incremented for every batch run. Normally, one batch is processed per business day, although technically multiple batches can be processed on the same day. The corresponding batch numbers are added to the order's resources using `ai2/collection-batch:1234` for collection batches and `ai2/payment-batch:1238` for payment batches.
+The AI2 batch number is incremented for every batch run. Normally, one batch is processed per business day, although technically multiple batches can be processed on the same day. The corresponding batch numbers are added to the order's resources using `ai2/collection-batch:1234` for collection batches and `ai2/payment-batch:1238` for payment batches. Together with the batch number, the point in time the batch ran is added, in UTC: `ai2/collection-date:2026-11-24T14:30:00Z` and `ai2/payment-date:2026-11-26T14:30:00Z`.
 
 ### Order status
 
@@ -63,4 +63,6 @@ The follwing `order.state` values apply when `kind` is `order/kind:direct-debit`
 - [Direct-debit sample](/sample/direct-debit) — full request/response walkthrough
 - [resource ai2/account-number](/resource/ai2/account-number)
 - [resource ai2/collection-batch](/resource/ai2/collection-batch)
+- [resource ai2/collection-date](/resource/ai2/collection-date)
 - [resource ai2/payment-batch](/resource/ai2/payment-batch)
+- [resource ai2/payment-date](/resource/ai2/payment-date)

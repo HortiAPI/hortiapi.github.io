@@ -160,6 +160,24 @@ order.AddResource(WellKnownResources.Ai2.AccountNumber.Build("67890"));
 order.RemoveResourceIdentifier(WellKnownResources.Ai2.AccountNumber.Identifier);
 ```
 
+### Read or set a date
+
+A point in time in a resource is always written in UTC, for example `ai2/collection-date:2026-11-24T14:30:00Z` (see [date and time](/resource-string#date-and-time)). The resources with a date have a `Build` that takes a `DateTimeOffset` and a `Read` that gives it back.
+
+```csharp
+// read: null when the resource is not present or the value is not a point in time in UTC
+DateTimeOffset? collected = WellKnownResources.Ai2.CollectionDate.Read(
+  order.Resources.GetByIdentifier(WellKnownResources.Ai2.CollectionDate.Identifier));
+
+if (collected is not null)
+  Console.WriteLine($"Collected at {collected.Value.ToLocalTime():g}");
+
+// set: any time zone is converted to UTC
+order.SetResource(WellKnownResources.Ai2.CollectionDate.Build(DateTimeOffset.Now));
+```
+
+For a date in a resource of your own, `ResourceDateTime.ToValue` and `ResourceDateTime.Parse` write and read the same form.
+
 ### Limit the number of results
 
 ```csharp

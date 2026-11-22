@@ -235,7 +235,7 @@ steps:
         from: order/direct-debit-state:awaiting-processing
         to: order/direct-debit-state:collection-in-progress
       resources:
-        add: [ai2/collection-batch]
+        add: [ai2/collection-batch, ai2/collection-date]
     description: The SEPA return period still applies to received funds.
     next: [settle]
 
@@ -247,7 +247,7 @@ steps:
         from: order/direct-debit-state:collection-in-progress
         to: order/direct-debit-state:payout-settled
       resources:
-        add: [ai2/payment-batch]
+        add: [ai2/payment-batch, ai2/payment-date]
 
   reject:
     actor: server
@@ -286,7 +286,9 @@ steps:
       resources:
         resources:
           ai2/collection-batch: { usage: conditional, when: From state collection-in-progress., description: Number of the AI2 collection batch. }
+          ai2/collection-date:  { usage: conditional, when: From state collection-in-progress., description: "Point in time the AI2 collection batch ran, in UTC, for example 2026-11-24T14:30:00Z." }
           ai2/payment-batch:    { usage: conditional, when: From state payout-settled., description: Number of the AI2 payment batch. }
+          ai2/payment-date:     { usage: conditional, when: From state payout-settled., description: "Point in time the AI2 payment batch ran, in UTC, for example 2026-11-24T14:30:00Z." }
       total.lines:  { usage: required }
       total.pieces: { usage: required }
       total.net:    { usage: required, description: Amount that is collected. }
