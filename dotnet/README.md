@@ -123,6 +123,8 @@ if (order.State == WellKnownResources.Order.DirectDebitState.Draft)
 }
 ```
 
+`==` compares the whole text, including upper and lower case. See [resource strings](/resource-string) for all rules.
+
 Use `==` and not `Equals`: `WellKnownResources.Order.Kind.DirectDebit.Equals(order.Kind)` compares a `ResourceString` with a `string` and is always false.
 
 ### Read a resource
