@@ -10,7 +10,7 @@ A **use case** describes one such scenario: the steps of the workflow and, per s
 {% include use-case-cards.html %}
 {:/nomarkdown}
 
-Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/issues) to discuss a new use case.
+Is your scenario missing? [Open an issue](https://github.com/HortiAPI/HortiAPI/issues) or contact HortiNL support at [support@hortinl.com](mailto:support@hortinl.com) to discuss a new use case.
 
 ## 🚀 How to implement a use case
 
@@ -69,4 +69,4 @@ HortiAPI supports the Linnaeus model for standardized flower & plant classificat
 
 ## ℹ️ Support
 
-The schema, resources and implementation guidelines are developed in the [HortiAPI/HortiAPI](https://github.com/HortiAPI/HortiAPI) repository. For issues or questions on the spec itself, [open an issue](https://github.com/HortiAPI/HortiAPI/issues) there.
+The schema, resources and implementation guidelines are developed in the [HortiAPI/HortiAPI](https://github.com/HortiAPI/HortiAPI) repository. For issues or questions on the spec itself, [open an issue](https://github.com/HortiAPI/HortiAPI/issues) there or contact HortiNL support at [support@hortinl.com](mailto:support@hortinl.com).
