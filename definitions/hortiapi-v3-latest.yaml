@@ -4,7 +4,7 @@ info:
 
   title: HortiApi
 
-  version: 3.0.0-rc.85
+  version: 3.0.0-rc.86
 
   description: |-
     Definition of the HortiApi, OpenAPI 3.1-compliant YAML document describing horticultural API endpoints.
@@ -2830,7 +2830,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     AddressType:
       enum:
@@ -2853,7 +2852,6 @@ components:
         currency:
           type: string
           default: EUR
-      additionalProperties: false
 
     Application:
       type: object
@@ -2864,7 +2862,6 @@ components:
           type: string
           default: ''
           example: 'Application XYZ'
-      additionalProperties: false
 
     Article:
       type: [object, 'null']
@@ -2906,7 +2903,6 @@ components:
             $ref: '#/components/schemas/ArticleRegulatoryFeature'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     ArticleSseEvent:
       type: object
@@ -2927,7 +2923,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Article'
-      additionalProperties: false
 
     ArticleFeaturePrescription:
       enum:
@@ -2962,7 +2957,6 @@ components:
           example: '10100101'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     ArticleGroup:
       enum:
@@ -3014,7 +3008,6 @@ components:
           default: ''
         p:
           $ref: '#/components/schemas/ArticleFeaturePrescription'
-      additionalProperties: false
 
     Catalog:
       type: object
@@ -3068,9 +3061,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PhotoUrl'
+        # variants:
+        #   description: Reserved for a later version, a server does not send it yet and a client ignores it. The item itself is always complete and can be used without its variants.
+        #   type: [array, 'null']
+        #   items:
+        #     $ref: '#/components/schemas/Catalog'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     CatalogSseEvent:
       type: object
@@ -3091,7 +3088,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Catalog'
-      additionalProperties: false
 
     CatalogFilter:
       type: object
@@ -3116,7 +3112,6 @@ components:
           $ref: '#/components/schemas/Party'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Charge:
       oneOf:
@@ -3156,7 +3151,6 @@ components:
           $ref: '#/components/schemas/ValueAddedTaxRate'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     AmountCharge:
       allOf:
@@ -3171,7 +3165,6 @@ components:
                 - amount
             amount:
               $ref: '#/components/schemas/Amount'
-          additionalProperties: false
 
     PercentageCharge:
       allOf:
@@ -3188,7 +3181,6 @@ components:
               type: number
               format: decimal
               description: Percentage value, for example 12.5 means 12.5%.
-          additionalProperties: false
 
     ChargeKind:
       type: string
@@ -3238,7 +3230,6 @@ components:
           default: ''
           description: Classification code (ClassCode)
           example: '06031100'
-      additionalProperties: false
 
     Company:
       type: object
@@ -3293,7 +3284,6 @@ components:
             $ref: '#/components/schemas/CompanyApplication'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     CompanyApplication:
       required:
@@ -3306,7 +3296,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     CompanyContact:
       type: object
@@ -3327,7 +3316,6 @@ components:
           type: [string, 'null']
         phone:
           type: [string, 'null']
-      additionalProperties: false
 
     CompanyFacility:
       type: object
@@ -3338,7 +3326,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     CompanyFilter:
       type: object
@@ -3363,7 +3350,6 @@ components:
           type: [string, 'null']
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     CompanyRegistration:
       type: object
@@ -3380,7 +3366,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     CompanySseEvent:
       type: object
@@ -3401,7 +3386,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Company'
-      additionalProperties: false
 
     CompanyUser:
       type: object
@@ -3412,7 +3396,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Data:
       type: object
@@ -3429,7 +3412,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     DataSseEvent:
       type: object
@@ -3450,7 +3432,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Data'
-      additionalProperties: false
 
     DataFilter:
       type: object
@@ -3465,7 +3446,6 @@ components:
             url: https://hortiapi.com/resource/data/kind
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Delivery:
       type: object
@@ -3493,7 +3473,6 @@ components:
           $ref: '#/components/schemas/Location'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Document:
       type: object
@@ -3517,7 +3496,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     DocumentSseEvent:
       type: object
@@ -3538,7 +3516,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Document'
-      additionalProperties: false
 
     DocumentFilter:
       type: object
@@ -3555,7 +3532,6 @@ components:
             url: https://hortiapi.com/resource/document/kind
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     DocumentLink:
       description: Reference to a Document on the /document endpoint. Server-populated and informational, values supplied by a client are ignored.
@@ -3576,7 +3552,6 @@ components:
         date:
           format: date-time
           type: string
-      additionalProperties: false
 
     Facility:
       type: [object, 'null']
@@ -3607,7 +3582,6 @@ components:
             $ref: '#/components/schemas/FacilityUser'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     FacilityCompany:
       type: object
@@ -3618,7 +3592,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     FacilityFilter:
       type: object
@@ -3633,7 +3606,6 @@ components:
             url: https://hortiapi.com/resource/facility/capability
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     FacilitySseEvent:
       type: object
@@ -3654,7 +3626,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Facility'
-      additionalProperties: false
 
     FacilityUser:
       type: object
@@ -3665,7 +3636,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Feature:
       type: object
@@ -3685,7 +3655,6 @@ components:
           description: The available values for this feature
           items:
             $ref: '#/components/schemas/FeatureValue'
-      additionalProperties: false
 
     FeatureFilter:
       type: object
@@ -3698,7 +3667,6 @@ components:
           type: [string, 'null']
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     FeatureValue:
       type: object
@@ -3709,7 +3677,6 @@ components:
           example: '060'
         description:
           $ref: '#/components/schemas/Texts'
-      additionalProperties: false
 
     Good:
       type: [object, 'null']
@@ -3766,7 +3733,6 @@ components:
             $ref: '#/components/schemas/Good'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     GoodSseEvent:
       type: object
@@ -3787,7 +3753,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Good'
-      additionalProperties: false
 
     GoodFilter:
       type: object
@@ -3806,11 +3771,9 @@ components:
             url: https://hortiapi.com/resource/good/state
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     HortiApiDiscoveryDocument:
       type: object
-      additionalProperties: false
       required:
         - schemaVersion
         - service
@@ -3881,7 +3844,6 @@ components:
 
     HortiApiWellKnownEntry:
       type: object
-      additionalProperties: false
       required:
         - version
         - discovery
@@ -3974,7 +3936,6 @@ components:
           $ref: '#/components/schemas/Totals'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     InvoiceSseEvent:
       type: object
@@ -3995,7 +3956,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Invoice'
-      additionalProperties: false
 
     InvoiceFilter:
       type: object
@@ -4026,7 +3986,6 @@ components:
           type: [string, 'null']
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     ItemFeature:
       type: object
@@ -4039,7 +3998,6 @@ components:
           type: string
           default: ''
           example: '060'
-      additionalProperties: false
 
     LanguageMode:
       description: |
@@ -4076,7 +4034,6 @@ components:
           default: ''
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Me:
       type: object
@@ -4102,7 +4059,6 @@ components:
           $ref: '#/components/schemas/MeUser'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     MeApplication:
       type: object
@@ -4113,7 +4069,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     MeCompany:
       type: object
@@ -4128,7 +4083,6 @@ components:
             $ref: '#/components/schemas/MeApplication'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     MeFacility:
       type: object
@@ -4139,7 +4093,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     MeUser:
       type: object
@@ -4150,7 +4103,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Measurement:
       type: object
@@ -4183,7 +4135,6 @@ components:
         value:
           type: string
           default: ''
-      additionalProperties: false
 
     Order:
       required:
@@ -4243,7 +4194,6 @@ components:
           $ref: '#/components/schemas/Totals'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     OrderSseEvent:
       type: object
@@ -4264,7 +4214,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Order'
-      additionalProperties: false
 
     OrderFilter:
       type: object
@@ -4313,7 +4262,6 @@ components:
           type: [string, 'null']
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     OrderLine:
       type: object
@@ -4372,7 +4320,6 @@ components:
             $ref: '#/components/schemas/PhotoUrl'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     OrderLineSseEvent:
       type: object
@@ -4393,7 +4340,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/OrderLine'
-      additionalProperties: false
 
     OrderLineFilter:
       type: object
@@ -4422,7 +4368,6 @@ components:
           $ref: '#/components/schemas/Party'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Package:
       required:
@@ -4440,7 +4385,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Measurement'
-      additionalProperties: false
 
     Packing:
       type: object
@@ -4457,7 +4401,6 @@ components:
           $ref: '#/components/schemas/Package'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Party:
       type: [object, 'null']
@@ -4472,7 +4415,6 @@ components:
           example: 'Company ABC'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     PhotoUrl:
       type: object
@@ -4480,7 +4422,6 @@ components:
         url:
           type: string
           example: 'https://hortiapi.com/photos/1234567890.jpg'
-      additionalProperties: false
 
     Price:
       required:
@@ -4495,7 +4436,6 @@ components:
           $ref: '#/components/schemas/Quantity'
         maximum:
           $ref: '#/components/schemas/Quantity'
-      additionalProperties: false
 
     PriceType:
       enum:
@@ -4546,7 +4486,6 @@ components:
           $ref: '#/components/schemas/Party'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     ProductType:
       enum:
@@ -4571,7 +4510,6 @@ components:
           type: number
           default: 0
           example: 1
-      additionalProperties: false
 
     Reference:
       description: Reference to a related document or transaction, as a name/value pair. Comparable to ReferencedDocument in UN/CEFACT and the RFF segment in EDIFACT.
@@ -4583,7 +4521,6 @@ components:
         value:
           type: string
           default: ''
-      additionalProperties: false
 
     Resources:
       description: Array with resource identifiers
@@ -4666,7 +4603,6 @@ components:
             $ref: '#/components/schemas/PhotoUrl'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     StockSseEvent:
       type: object
@@ -4687,7 +4623,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Stock'
-      additionalProperties: false
 
     StockFilter:
       type: object
@@ -4710,7 +4645,6 @@ components:
           $ref: '#/components/schemas/Party'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Supply:
       type: object
@@ -4755,9 +4689,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Delivery'
+        # variants:
+        #   description: Reserved for a later version, a server does not send it yet and a client ignores it. The item itself is always complete and can be used without its variants.
+        #   type: [array, 'null']
+        #   items:
+        #     $ref: '#/components/schemas/Supply'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     SupplyEvent:
       type: object
@@ -4771,7 +4709,6 @@ components:
           $ref: '#/components/schemas/StreamEventType'
         data:
           $ref: '#/components/schemas/Supply'
-      additionalProperties: false
 
     SupplySseEvent:
       type: object
@@ -4792,7 +4729,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/Supply'
-      additionalProperties: false
 
     SupplyFilter:
       required:
@@ -4803,7 +4739,6 @@ components:
           $ref: '#/components/schemas/Id'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     SupplyOrder:
       type: object
@@ -4850,7 +4785,6 @@ components:
           $ref: '#/components/schemas/Delivery'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     SupplyTransaction:
       type: object
@@ -4872,7 +4806,6 @@ components:
             $ref: '#/components/schemas/SupplyTransactionInteraction'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     SupplyTransactionSseEvent:
       type: object
@@ -4893,7 +4826,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/SupplyTransaction'
-      additionalProperties: false
 
     SupplyTransactionInteraction:
       type: object
@@ -4910,7 +4842,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     SupplyTransactionFilter:
       type: object
@@ -4935,7 +4866,6 @@ components:
           type: [string, 'null']
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     Text:
       type: object
@@ -4946,7 +4876,6 @@ components:
         language:
           type: string
           example: 'NL'
-      additionalProperties: false
 
     Texts:
       description: Accepts a string (mapped to default language), a single Text object, or an array of Text.
@@ -4985,7 +4914,6 @@ components:
           description: VAT specification per rate
           items:
             $ref: '#/components/schemas/TotalVat'
-      additionalProperties: false
 
     TotalVat:
       description: VAT amount for a single rate, part of the VAT specification in Totals
@@ -5007,7 +4935,6 @@ components:
         amount:
           $ref: '#/components/schemas/Amount'
           description: VAT amount
-      additionalProperties: false
 
     Unit:
       type: string
@@ -5074,7 +5001,6 @@ components:
             $ref: '#/components/schemas/UserFacility'
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     UserCompany:
       type: object
@@ -5085,7 +5011,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     UserFacility:
       type: object
@@ -5096,7 +5021,6 @@ components:
           type: string
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     UserSseEvent:
       type: object
@@ -5117,7 +5041,6 @@ components:
           contentMediaType: application/json
           contentSchema:
             $ref: '#/components/schemas/User'
-      additionalProperties: false
 
     UserFilter:
       type: object
@@ -5132,7 +5055,6 @@ components:
             url: https://hortiapi.com/resource/user/kind
         resources:
           $ref: '#/components/schemas/Resources'
-      additionalProperties: false
 
     ValueAddedTaxRate:
       type: string

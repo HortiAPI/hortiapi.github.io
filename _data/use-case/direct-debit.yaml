@@ -20,11 +20,11 @@
 
 id: horti-api/use-case:direct-debit
 title: Direct Debit
-status: draft
+status: proposed
 summary: >-
-  A supplier submits an order that is collected from the buyer's bank account
+  A supplier submits an order that is collected from the customer's bank account
   by AI2 through SEPA direct debit, once the invoice date has passed.
-hortiapi: ">=3.0.0-rc.90"
+hortiapi: ">=3.0.0-rc.86"
 docs: https://hortiapi.com/use-case/direct-debit
 
 steps:
@@ -33,7 +33,7 @@ steps:
     actor: client
     level: core
     title: Submit draft order
-    description: Submit the complete order including all lines.
+    description: Submit the order as a draft, with or without its lines.
     operationId: HAPI3OrderUpdate
     call: POST /order
     request:
@@ -47,30 +47,44 @@ steps:
         usage: required
         description: Transaction date.
         mapping: { ai2-file: 12 }
-      invoiceDate:
-        usage: required
-        description: Collection date (NL incassodatum). The AI2 batch picks up the order once this date has passed.
-        mapping: { ai2-file: 14 }
       dispatchDate:
         usage: optional
       deliveryDate:
         usage: optional
+      invoiceDate:
+        usage: required
+        description: Collection date (NL incassodatum). The AI2 batch picks up an order when its invoice date and time have passed.
+        mapping: { ai2-file: 14 }
       description:
         usage: optional
         description: Reference of the collection order (NL opdrachtreferentie).
         constraint: max 35 characters
         mapping: { ai2-file: 20 }
+      supplier.id:
+        usage: optional
+        description: Id of the supplier party on this server. Prefer the GLN or the AI2 account number; when the id is given it is used first.
+      supplier.gln:
+        usage: optional
+        description: GLN of the supplier (NL verkoper) party.
       supplier.resources:
         resources:
           ai2/account-number:
-            usage: required
-            description: AI2 account number of the delivering party. The server resolves the company and GLN from it.
+            usage: conditional
+            when: The supplier can not be found with the id or the GLN.
+            description: AI2 account number of the supplier (NL verkoper) party.
             mapping: { ai2-file: 3 }
+      customer.id:
+        usage: optional
+        description: Id of the customer party on this server. Prefer the GLN or the AI2 account number; when the id is given it is used first.
+      customer.gln:
+        usage: optional
+        description: GLN of the customer (NL koper) party.
       customer.resources:
         resources:
           ai2/account-number:
-            usage: required
-            description: AI2 account number of the receiving party, whose account is debited.
+            usage: conditional
+            when: The customer can not be found with the id or the GLN.
+            description: AI2 account number of the customer (NL koper) party.
             mapping: { ai2-file: 4 }
       resources:
         resources:
@@ -81,39 +95,37 @@ steps:
         usage: not-used
         description: Charges are not collected; the amount is derived from the lines only.
       lines:
-        usage: required
-        description: At least one line.
+        usage: optional
+        description: The lines of the order. Leave empty to add the lines with `modify-lines`.
       lines[].product.industryId:
         usage: required
         description: VBN product code.
         mapping: { ai2-file: 6 }
       lines[].product.manufacturer.gln:
-        usage: required
+        usage: optional
         description: GLN of the grower.
       lines[].product.description:
-        usage: optional
-        description: Alternative article description.
+        usage: required
+        description: Article description.
         constraint: max 50 characters
         mapping: { ai2-file: 21 }
       lines[].product.features:
         features:
-          S20: { usage: conditional, when: Prescribed by VBN for the product code., description: Minimum stem length., mapping: { ai2-file: 15 } }
-          S05: { usage: conditional, when: Prescribed by VBN for the product code., description: Maturity stage., mapping: { ai2-file: 17 } }
-          S19: { usage: conditional, when: Prescribed by VBN for the product code., description: Minimum bud height., mapping: { ai2-file: 18 } }
+          "*": { usage: conditional, when: Prescribed by VBN for the product code., description: The sorting features that VBN prescribes for the product. The API takes any number of features., mapping: { ai2-file: "15-18" } }
           L11: { usage: optional, description: Number of stems per bunch. }
           S98: { usage: optional, description: Quality group., mapping: { ai2-file: 19 } }
           S62: { usage: optional, description: Country of origin (ISO 3166-1)., mapping: { ai2-file: 22 } }
       lines[].quantity.value:
         usage: required
-        description: Number of units.
+        description: Number of units (boxes). Use a negative value for a credit.
+        constraint: -9999 to 9999
         mapping: { ai2-file: 7 }
       lines[].quantity.unit:
         usage: required
         value: box
-        mapping: { ai2-file: 8 }
       lines[].packing.box.quantity:
         usage: required
-        description: Number of pieces per unit.
+        description: Number of pieces per (box) unit.
         constraint: 1 to 9999
         mapping: { ai2-file: 9 }
       lines[].packing.box.code:
@@ -133,13 +145,14 @@ steps:
         value: EUR
       lines[].references:
         references:
-          VN:  { usage: optional, description: Transaction line id of the supplier., constraint: max 26 characters, mapping: { ai2-file: 27 } }
-          ACL: { usage: optional, description: Order reference of the buyer., constraint: max 26 characters, mapping: { ai2-file: 29 } }
-          ON:  { usage: optional, description: Order reference of the buyer., constraint: max 26 characters, mapping: { ai2-file: 29 } }
+          VN:  { usage: optional, description: Transaction reference of the supplier (as in EDI/VMP - NL kweker)., constraint: max 26 characters, mapping: { ai2-file: 27 } }
+          ACL: { usage: optional, description: Service code (legacy)., constraint: max 4 characters, mapping: { ai2-file: 28 } }
+          ON:  { usage: optional, description: Transaction reference of the customer (as in EDI/VMP - NL koper)., constraint: max 26 characters, mapping: { ai2-file: 29 } }
+          BT:  { usage: optional, description: Logistic barcode., constraint: max 32 characters, mapping: { ai2-file: 30 } }
       lines[].resources:
         resources:
           reference/supplier: { usage: optional, description: The supplier's own id for this line. }
-          reference/buyer:    { usage: optional, description: The buyer's own id for this line. }
+          reference/customer: { usage: optional, description: The customer's own id for this line. }
       lines[].charges:
         usage: not-used
         description: See `charges`.
@@ -150,15 +163,15 @@ steps:
       state:
         usage: required
         value: order/direct-debit-state:draft
-      supplier.id:   { usage: required, description: Company resolved from the AI2 account number. }
+      supplier.id:   { usage: required }
       supplier.gln:  { usage: required }
       supplier.name: { usage: required }
-      customer.id:   { usage: required, description: Company resolved from the AI2 account number. }
+      customer.id:   { usage: required }
       customer.gln:  { usage: required }
       customer.name: { usage: required }
     errors:
-      - type: bad-request/ai2-account-unknown
-        when: The AI2 account number of the supplier or customer is not known.
+      - type: bad-request/party-unknown
+        when: The supplier or customer can not be found with the given id, GLN or AI2 account number.
       - type: forbidden/order-owner
         when: The calling company is not the supplier of the order.
     next: [modify, modify-lines, delete, collect]
@@ -167,12 +180,14 @@ steps:
     actor: client
     level: extended
     title: Change draft order
-    description: Send the order again with its id. Same fields as `create`.
+    description: Send the order again with its id. Same fields as `create`, without the lines; change lines with `modify-lines`.
     extends: create
     when: state is order/direct-debit-state:draft
     request:
       id:
         usage: required
+      lines:
+        usage: not-used
     errors:
       - type: conflict/order-not-draft
         when: The order is no longer in draft.
@@ -182,7 +197,7 @@ steps:
     actor: client
     level: extended
     title: Add or change a single line
-    description: Line fields are the same as `lines[]` in `create`, without the `lines[].` prefix.
+    description: Add a line to the order or change one. Line fields are the same as `lines[]` in `create`, without the `lines[].` prefix.
     operationId: HAPI3OrderLineUpdate
     call: POST /order-line
     when: state is order/direct-debit-state:draft
@@ -202,7 +217,7 @@ steps:
     actor: client
     level: extended
     title: Delete draft order
-    description: Withdraw the order before AI2 has picked it up.
+    description: Withdraw the order before AI2 has picked it up. After this the order is gone, `status` answers with `not-found/order`.
     operationId: HAPI3OrderDelete
     call: DELETE /order/{orderId}
     when: state is order/direct-debit-state:draft
@@ -224,7 +239,7 @@ steps:
       state:
         from: order/direct-debit-state:draft
         to: order/direct-debit-state:awaiting-processing
-    description: The order is locked and can no longer be modified.
+    description: The order is locked and can no longer be modified or deleted.
     next: [submit-to-bank]
 
   submit-to-bank:
@@ -236,7 +251,7 @@ steps:
         to: order/direct-debit-state:collection-in-progress
       resources:
         add: [ai2/collection-batch, ai2/collection-date]
-    description: The SEPA return period still applies to received funds.
+    description: The order has been submitted to the bank for collection. AI2 is waiting to receive the funds from the bank. (The SEPA return period still applies to received funds).
     next: [settle]
 
   settle:
@@ -248,6 +263,7 @@ steps:
         to: order/direct-debit-state:payout-settled
       resources:
         add: [ai2/payment-batch, ai2/payment-date]
+    description: AI2 has received the funds from the bank and has paid the collected amount to the supplier in a payment batch.
 
   reject:
     actor: server
@@ -282,7 +298,6 @@ steps:
           - order/direct-debit-state:collection-in-progress
           - order/direct-debit-state:payout-settled
           - order/direct-debit-state:rejected
-          - order/direct-debit-state:deleted
       resources:
         resources:
           ai2/collection-batch: { usage: conditional, when: From state collection-in-progress., description: Number of the AI2 collection batch. }
@@ -301,9 +316,6 @@ steps:
         description: Completed by the server with the defaults of the packaging code.
     errors:
       - type: not-found/order
-        when: The id is not known on this server.
+        when: The id is not known on this server, or the draft order was deleted.
       - type: forbidden/order-owner
         when: The calling company is not a party of the order.
-
-open:
-  - After deleting a draft, is the order still returned with state `order/direct-debit-state:deleted`, or does `GET /order/{orderId}` return `not-found/order`?
