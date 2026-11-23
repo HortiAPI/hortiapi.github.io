@@ -256,11 +256,17 @@ return httpContext.GenerateProblemTask(
 
 ### Check a resource in a request
 
+A client can send its own id for an order in the resource [`reference/supplier`](/resource/reference/supplier). This example reads it and keeps it with the order.
+
 ```csharp
 public Task<IResult> OrderUpdate(HttpContext httpContext, Order request, string idempotencyKey, string xCompanyId, string xFacilityId)
 {
-  if (!request.Resources.ContainsIdentifier(WellKnownResources.Ai2.AccountNumber.Identifier))
-    return httpContext.GenerateProblemTask(WellKnownResources.Errors.BadRequest.Ai2AccountUnknown, "AI2 account number is missing");
+  // the supplier's own id for this order, or null when the client did not send it
+  string? reference = request.Resources.GetValueOrDefault(WellKnownResources.Reference.Supplier.Identifier);
+
+  // keep it with the order in your own storage, and return it when the order is read
+  if (reference is not null)
+    SaveSupplierReference(request.Id, reference);
 
   // ...
 }

@@ -193,7 +193,7 @@
           "additionalProperties": { "$ref": "#/$defs/entry" }
         },
         "features": {
-          "description": "Entries of a features array, keyed by feature type, for example the VBN code `S20`.",
+          "description": "Entries of a features array, keyed by feature type, for example the VBN code `S20`. The key `*` stands for every feature type that has no entry of its own.",
           "type": "object",
           "minProperties": 1,
           "additionalProperties": { "$ref": "#/$defs/entry" }
