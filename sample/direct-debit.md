@@ -6,6 +6,8 @@ permalink: /sample/direct-debit
 
 # Direct debit
 
+**Note:** this sample will be updated soon, as soon as the sandbox has been updated. Until then it can differ from the [direct-debit use case](/use-case/direct-debit).
+
 Create a order for direct debt with HortiApi
 
 ## Submit draft direct-debt to server
